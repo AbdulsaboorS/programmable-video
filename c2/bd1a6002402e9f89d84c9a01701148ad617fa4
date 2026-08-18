@@ -1,0 +1,21 @@
+apps/studio/src/App.tsx
+  s_2059376bcf538e::t_fafbd3f9447305 35-41,206-215,384-385
+SESSION_CONTEXT.md
+  s_2059376bcf538e::t_fab80f1759095a 27-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c2bd1a6002402e9f89d84c9a01701148ad617fa4",
+  "prompts": {},
+  "sessions": {
+    "s_2059376bcf538e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_feeec5869ffeZuE9pcPNujL9Wc",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
