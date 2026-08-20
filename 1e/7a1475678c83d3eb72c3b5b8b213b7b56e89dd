@@ -1,0 +1,148 @@
+docs/stage-4-authoring-evaluation.md
+  s_f46d15de0e3eb2::t_c148a80f5e034a 89
+  s_157128a7d5f131::t_c76f3c96579cde 156-164,166-168
+  s_f46d15de0e3eb2::t_5aca1c6de48486 1-88,91-155
+  s_f46d15de0e3eb2::t_a2e618b1e1da76 90
+  s_157128a7d5f131::t_e6a10c534456f0 165
+docs/stage-6b-isolated-preview.md
+  s_3b90d75c54d251::t_eb69a3812f11ef 61-62,113
+  s_c299b3c7b882ef::t_404933e3dbadcd 107,129,138,143,152,154-155,163-170,172
+  s_ef9bb88cab1371::t_afbec3a4d42693 5,9,104,153,156-161
+  s_c299b3c7b882ef::t_df25897255bafb 162
+  s_3b90d75c54d251::t_43c4b25db56074 1-4,6-8,10-60,63-103,105-106,108-112,114-128,130-137,139-142,144-151,171,173-179
+SESSION_CONTEXT.md
+  s_c299b3c7b882ef::t_98c451a7dbee14 9,23,25-30,35,37-44
+  s_ef9bb88cab1371::t_afbec3a4d42693 7-8,10-22,24,31-33
+  s_157128a7d5f131::t_c76f3c96579cde 4
+  s_d00c353e4caa99::t_994e7fca5c0bdb 5-6
+  s_c299b3c7b882ef::t_81de0640d7c64d 34,36
+  s_d00c353e4caa99::t_35fb7828866a90 3
+docs/stage-4-agent-authoring.md
+  s_d00c353e4caa99::t_6ee360dadbd200 5,168
+  s_1ead5b9ae90238::t_bd3d4fecc2a8d3 96,151
+  s_1ead5b9ae90238::t_15bc8f18f7ecbd 59,61-64,78-81,85,87-91,93-94,110,112-115,130-131,141,144-145,148,150,160,162,181-182
+  s_1ead5b9ae90238::t_16a5d60ef4ef12 1-4,6-58,60,65-77,82-84,86,92,95,97-109,111,116-129,132-140,142-143,146-147,149,152-159,161,163-167,169-180,183-189
+docs/project-brief.md
+  s_d00c353e4caa99::t_6ee360dadbd200 9,11,23,65,67-77,81-84,86-89,147,158-161,171-172,190-191,268-270,308-318,339-342,356-360
+  s_1ead5b9ae90238::t_16a5d60ef4ef12 301-307
+  s_1ead5b9ae90238::t_5fd0d2a569a4c5 182
+  s_c299b3c7b882ef::t_895b2a1e5a9372 5,63,85,91-92,101,103,107,113,118-120,127,133,135,254,260,263-264,320,324,349
+  s_c299b3c7b882ef::t_d772fb67086a70 265
+.agents/skills/video-composer/SKILL.md
+  s_cca22854053efb::t_1cb4a575dd68ed 1-117
+README.md
+  s_1ead5b9ae90238::t_5fd0d2a569a4c5 7-8,10,87-94,97-99,109-114,121
+  s_c299b3c7b882ef::t_e93b2aab6474bd 123
+  s_567a0d17e3dc2e::t_736408a78cf477 95-96,103-105
+  s_c299b3c7b882ef::t_2c6215ff8b5725 28,118
+  s_d00c353e4caa99::t_6ee360dadbd200 3,11-14,16-25,27,106
+  s_567a0d17e3dc2e::t_0e9f4e81930afc 101-102
+  s_3e355cf2bf3041::t_dea77179c7cc85 39,100,107,115,119
+  s_cca22854053efb::t_1cb4a575dd68ed 41,44-55,61-62,65-67
+  s_ef9bb88cab1371::t_afbec3a4d42693 5,15,26,108,116-117,125
+  s_157128a7d5f131::t_c76f3c96579cde 9,75
+  s_cca22854053efb::t_18a2c823a8bc18 68
+docs/stage-5-managed-projects.md
+  s_3b90d75c54d251::t_262fda98cd9fd8 5,93-94
+  s_3e355cf2bf3041::t_dea77179c7cc85 67,84-90
+  s_d00c353e4caa99::t_6ee360dadbd200 1-4,6-66,68-83,95,97,100-103
+  s_3b90d75c54d251::t_59e6e5664d1696 92
+  s_c299b3c7b882ef::t_404933e3dbadcd 96,98-99
+  s_3e355cf2bf3041::t_b2bb37429d3136 91
+docs/stage-6a-revisions.md
+  s_c299b3c7b882ef::t_404933e3dbadcd 51-53
+  s_3b90d75c54d251::t_262fda98cd9fd8 5,23,35,41-42,44,46-49,58-59
+  s_567a0d17e3dc2e::t_736408a78cf477 1-4,6-22,24-34,36,39-40,43,45,50,54-57
+  s_3b90d75c54d251::t_59e6e5664d1696 37-38
+AGENTS.md
+  s_d00c353e4caa99::t_6ee360dadbd200 5,31-32,53
+  s_cca22854053efb::t_1cb4a575dd68ed 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1e7a1475678c83d3eb72c3b5b8b213b7b56e89dd",
+  "prompts": {},
+  "sessions": {
+    "s_157128a7d5f131": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe4d31209ffe27GmnCq1ygaUBe",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_1ead5b9ae90238": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fea43ed6bffejPm9LVQqZ5fe2x",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_3b90d75c54d251": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdfaa5b85ffe0xpKgdFf9JJ2j1",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_3e355cf2bf3041": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdfe98a4fffewtTLonRIIwO1M7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_567a0d17e3dc2e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdfce6d82ffe1wkYQshvDdMGsm",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_c299b3c7b882ef": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdf4132ccffeVXlQXAj1O2aIQV",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_cca22854053efb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe4b0d481ffeaP9Og9ZEo3g0OI",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_d00c353e4caa99": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe005a2eeffeJ3fvtRbJvFnblV",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_ef9bb88cab1371": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdf8b7eb9ffeLV7A2m8IUi8aGV",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_f46d15de0e3eb2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe43dc0a6ffecmJPE01zVcmURQ",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
