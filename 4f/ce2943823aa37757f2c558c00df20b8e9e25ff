@@ -1,0 +1,90 @@
+starters/product-project/pnpm-workspace.yaml
+  s_3e355cf2bf3041::t_199b728942455e 1-2
+starters/product-project/src/story.ts
+  s_3e355cf2bf3041::t_199b728942455e 1-23,26-27
+  s_3e355cf2bf3041::t_d97927dcc5d5eb 24-25
+starters/product-project/index.html
+  s_3e355cf2bf3041::t_199b728942455e 1-12
+starters/product-project/src/render.css
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-8
+starters/product-project/tsconfig.json
+  s_3e355cf2bf3041::t_199b728942455e 1-21
+starters/product-project/AGENTS.md
+  s_3e355cf2bf3041::t_199b728942455e 1-8
+starters/product-project/.gitignore
+  s_3e355cf2bf3041::t_199b728942455e 1-2
+starters/product-project/test/timeline.test.ts
+  s_3e355cf2bf3041::t_199b728942455e 1-25,28-29
+  s_3e355cf2bf3041::t_a2f333efbb11cf 26-27
+starters/product-project/test/render-bridge.test.ts
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-63,69-73,85-92
+  s_662d73fbda27a7::t_4b5bd114eee62b 74-84
+  s_662d73fbda27a7::t_bab3b9dbcf12f0 64-68
+starters/product-project/src/main.tsx
+  s_3e355cf2bf3041::t_199b728942455e 1-41
+starters/product-project/README.md
+  s_ef9bb88cab1371::t_a72d5a3d5776af 23-25
+  s_3e355cf2bf3041::t_199b728942455e 1-22
+starters/product-project/src/preview.css
+  s_3e355cf2bf3041::t_199b728942455e 1-40
+starters/product-project/src/composition.css
+  s_3e355cf2bf3041::t_199b728942455e 1-171
+starters/product-project/src/timeline.ts
+  s_3e355cf2bf3041::t_a2f333efbb11cf 15,18
+  s_3e355cf2bf3041::t_199b728942455e 1-14,16-17,19-21,27-34
+  s_3e355cf2bf3041::t_d97927dcc5d5eb 22-26
+starters/product-project/src/render-bridge.ts
+  s_662d73fbda27a7::t_bab3b9dbcf12f0 56-58
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-11,24-55,59-124
+  s_ef9bb88cab1371::t_030bebe4fcbc32 12-23
+starters/product-project/package.json
+  s_3e355cf2bf3041::t_199b728942455e 1-29
+starters/product-project/src/render-types.d.ts
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-7
+starters/product-project/src/render.tsx
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-10
+starters/product-project/test/story.test.ts
+  s_3e355cf2bf3041::t_199b728942455e 1-17,20-25
+  s_3e355cf2bf3041::t_d97927dcc5d5eb 18-19
+starters/product-project/render.html
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 1-12
+starters/product-project/vite.config.ts
+  s_662d73fbda27a7::t_e28ebbd60dc1a5 2,4-29
+  s_3e355cf2bf3041::t_199b728942455e 1,3,30
+starters/product-project/src/ProductComposition.tsx
+  s_3e355cf2bf3041::t_199b728942455e 1-68
+starters/product-project/pnpm-lock.yaml
+  s_3e355cf2bf3041::t_b35920955a358a 1-1301
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4fce2943823aa37757f2c558c00df20b8e9e25ff",
+  "prompts": {},
+  "sessions": {
+    "s_3e355cf2bf3041": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdfe98a4fffewtTLonRIIwO1M7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_662d73fbda27a7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdf7f6f86ffevMyLcJwyXa3Xzx",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_ef9bb88cab1371": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdf8b7eb9ffeLV7A2m8IUi8aGV",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
