@@ -1,0 +1,28 @@
+SESSION_CONTEXT.md
+  s_9943146f73be97::t_39205e28bf8526 55
+  s_9943146f73be97::t_2a8ff607e1dbc8 28,31-34,40,51,56-57
+docs/project-brief.md
+  s_9943146f73be97::t_2a8ff607e1dbc8 5
+docs/creator-journey.md
+  s_9943146f73be97::t_2a8ff607e1dbc8 103-104,169
+docs/voice-playground-test.md
+  s_9943146f73be97::t_2a8ff607e1dbc8 1-35,37-39,47-70
+  s_9943146f73be97::t_8c9ee62649e795 40-46
+  s_9943146f73be97::t_39205e28bf8526 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "569bde42ecc722b0151fc6c9495bb9cb72afcb6f",
+  "prompts": {},
+  "sessions": {
+    "s_9943146f73be97": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdd876f85ffeEBOIc7nv5xeG2q",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
