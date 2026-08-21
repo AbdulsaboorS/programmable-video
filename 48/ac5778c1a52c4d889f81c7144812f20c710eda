@@ -1,0 +1,26 @@
+docs/iteration-model.md
+  s_9943146f73be97::t_ba6d72d6d3dd08 1-71
+SESSION_CONTEXT.md
+  s_9943146f73be97::t_ba6d72d6d3dd08 10,50,54-57
+docs/project-brief.md
+  s_9943146f73be97::t_ba6d72d6d3dd08 107-108,115-116,167
+  s_9943146f73be97::t_a30390c1481737 168
+docs/creator-journey.md
+  s_9943146f73be97::t_ba6d72d6d3dd08 103-106,166-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "48ac5778c1a52c4d889f81c7144812f20c710eda",
+  "prompts": {},
+  "sessions": {
+    "s_9943146f73be97": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fdd876f85ffeEBOIc7nv5xeG2q",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
