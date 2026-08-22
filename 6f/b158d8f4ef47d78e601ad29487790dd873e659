@@ -1,0 +1,23 @@
+docs/stage-6b-isolated-preview.md
+  s_3f250be741d7ec::t_7116f38de9412a 176-182
+SESSION_CONTEXT.md
+  s_3f250be741d7ec::t_7116f38de9412a 18,31-34,38,48
+docs/stage-5-managed-projects.md
+  s_3f250be741d7ec::t_7116f38de9412a 88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6fb158d8f4ef47d78e601ad29487790dd873e659",
+  "prompts": {},
+  "sessions": {
+    "s_3f250be741d7ec": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fd5251840ffegnur83axkC4gVT",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
