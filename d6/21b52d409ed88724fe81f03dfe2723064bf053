@@ -1,0 +1,21 @@
+apps/studio/src/ProjectPanel.tsx
+  s_359c7e0ec516c8::t_a78347d8bd792a 35-36,168-171,189-197,386-393,424,428-440,446-464,479,504-508,921,982-988
+packages/contracts/src/managed-project.ts
+  s_359c7e0ec516c8::t_4e3feeda2b4dd4 3-4,7,61-106,115-116,142-144,146-147,149-151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d621b52d409ed88724fe81f03dfe2723064bf053",
+  "prompts": {},
+  "sessions": {
+    "s_359c7e0ec516c8": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcc04c96dffe6D0yGeBNyAnnj9",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
