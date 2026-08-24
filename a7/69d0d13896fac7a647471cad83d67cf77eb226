@@ -1,0 +1,175 @@
+apps/studio/worker/index.ts
+  s_fbce858b29d40e::t_c500c4dfe59977 477-484
+  s_237bf117c1632b::t_f64a6febd0c12c 41-44,401-420,438
+  s_fbce858b29d40e::t_5b1d795c8c0831 26,496-513
+  s_540963c70cf471::t_64f137d2105832 514-515
+packages/contracts/src/managed-project.test.ts
+  s_237bf117c1632b::t_ab8c2e0b959b81 71-77,96
+  s_237bf117c1632b::t_cc4c91c5079115 6-8,46,48-70,78-95,97
+  s_237bf117c1632b::t_815ba20fda45b7 98-103
+docs/product-overview.md
+  s_a899ff8598b4ac::t_d9087e6b6524da 3-5
+  s_a899ff8598b4ac::t_887c8ca2aea0ca 1-2,6-13,15-52,54-75
+  s_a899ff8598b4ac::t_eaca4722aaae8d 14,53
+SESSION_CONTEXT.md
+  s_a899ff8598b4ac::t_2851dfcfef4267 14
+  s_fbce858b29d40e::t_b5cc840e9b2608 30,56
+  s_237bf117c1632b::t_cd86a68a781235 28-29,42-44,48,51,57
+  s_77c143cc85eeaa::t_1de4113683b4fc 37-38,55
+apps/studio/worker/project-references.test.ts
+  s_237bf117c1632b::t_8e0ad276edee80 114,154,163-168
+  s_237bf117c1632b::t_2ac8794380ce16 137-146,149,186-187
+  s_237bf117c1632b::t_1fdde94c19ddac 2,212-224,231
+  s_237bf117c1632b::t_9be934b9688d08 240
+  s_237bf117c1632b::t_d7a7bf7b29c7c3 37-38,156-162,225-230,241-244,294-295
+  s_237bf117c1632b::t_8eb673ea3367f6 1,3-36,39-113,115-136,147-148,150-153,155,169-185,188-211,232-239,245-293,296-308
+docs/project-brief.md
+  s_fbce858b29d40e::t_87a79531827947 117,133,167
+apps/studio/worker/projects.ts
+  s_237bf117c1632b::t_8e0ad276edee80 63,650
+  s_237bf117c1632b::t_f64a6febd0c12c 50-54,639,647-649,651-655
+apps/studio/src/ProjectPanel.tsx
+  s_fbce858b29d40e::t_66b10d7ba464de 1485-1487,1490-1491,1503-1504
+  s_237bf117c1632b::t_a1812c786140f8 3-4,38,171,189-196,218,377-378,382-384,388-392,394-395,399-403,411,1022-1044,1046-1047,1049,1052,1082-1096,1101-1119,1142,1174,1522-1524,1530,1538-1540,1542-1546,1550,1553-1554,1557,1566
+  s_fbce858b29d40e::t_10e2373b6e4a76 571-573,575,613-618
+  s_fbce858b29d40e::t_9978667d397a63 176,1248-1249
+  s_237bf117c1632b::t_0519d979f6c0ca 225,393
+  s_237bf117c1632b::t_e3d7c8ef70332c 172-175,223-224,226-227,1045,1048,1050-1051,1053,1058-1061,1069-1072,1076-1081,1234,1238,1253-1254,1256-1258
+  s_237bf117c1632b::t_ecf7d3d250c450 471-475,1541
+  s_237bf117c1632b::t_8e0ad276edee80 463-466
+  s_fbce858b29d40e::t_c500c4dfe59977 594
+  s_237bf117c1632b::t_ae1dd55ba3f384 1547-1549
+  s_237bf117c1632b::t_922ee6e782bd52 374-376,380
+  s_fbce858b29d40e::t_952c0f6938bbc1 8,36,177-181,569-570,574,578-593,595-612,1143-1144,1147-1173,1235-1237,1245-1247,1255
+  s_237bf117c1632b::t_d7a7bf7b29c7c3 557-559,1054-1057,1062-1068,1073-1075,1097-1100
+  s_540963c70cf471::t_d3bf225b8c20e4 222,576-577
+apps/studio/src/app.css
+  s_fbce858b29d40e::t_9978667d397a63 890-894
+  s_fbce858b29d40e::t_175ed68cdde8bf 853-889,895-917
+  s_237bf117c1632b::t_a1812c786140f8 578-592,594-601,630-648,650-656,658-661,663-669,671-701,1257-1276,1412-1413
+  s_237bf117c1632b::t_e3d7c8ef70332c 593,602-629,649,657,662,670
+  s_fbce858b29d40e::t_c133c2a8a76dab 1414-1415
+packages/contracts/src/project-revision.ts
+  s_fbce858b29d40e::t_aa803f9606687b 269-271,275-282,286,300-301,309,311-313,322-328,334
+  s_fbce858b29d40e::t_9a9f6f2d63c048 259-268,272-274,335,400
+  s_fbce858b29d40e::t_3cc320aa114143 283-285,287-299,302-308,310,314-321,329-333
+apps/studio/worker/worker-configuration.d.ts
+  s_237bf117c1632b::t_d7a7bf7b29c7c3 6
+  s_237bf117c1632b::t_a7aeb26b2526e1 2
+packages/contracts/src/index.ts
+  s_fbce858b29d40e::t_9a9f6f2d63c048 111,128
+  s_237bf117c1632b::t_cc4c91c5079115 68,76-78,83
+packages/contracts/src/managed-project.ts
+  s_237bf117c1632b::t_cc4c91c5079115 11,13,45,76-79,160-161
+  s_237bf117c1632b::t_0519d979f6c0ca 9-10,50,64
+  s_237bf117c1632b::t_cb708437b3c407 12
+  s_237bf117c1632b::t_815ba20fda45b7 56-63,65-74
+  s_237bf117c1632b::t_33657273858e2e 75
+apps/studio/src/project-api.ts
+  s_fbce858b29d40e::t_a4cfe3ef058f67 11,24,85-96
+  s_237bf117c1632b::t_a1812c786140f8 111-112,114-116,120,127-131
+  s_fbce858b29d40e::t_d5c289a7c5bfec 97-98
+  s_237bf117c1632b::t_84fe5b7c688ca1 132-133
+apps/studio/wrangler.jsonc
+  s_237bf117c1632b::t_f64a6febd0c12c 46-49
+README.md
+  s_237bf117c1632b::t_815ba20fda45b7 91-96,123
+  s_fbce858b29d40e::t_87a79531827947 125,131
+apps/studio/worker/project-references.ts
+  s_237bf117c1632b::t_0519d979f6c0ca 11-12,55,74,101,270,274-275,322-324,348-350,355
+  s_237bf117c1632b::t_661aa870fd0a0a 351-354
+  s_237bf117c1632b::t_f64a6febd0c12c 1-7,9-10,13-38,46-53,58-61,78-80,84-94,98-99,104-105,110-112,114,119-134,136-145,149-180,182-244,251-252,259,363,399,401-402,450,454-457,463-487
+  s_237bf117c1632b::t_14aea8cdb863c2 264,269,312,331,333-334,341-342
+  s_237bf117c1632b::t_cb708437b3c407 8,62-73,75-77,113,181,256,260-263,265-268,271-273,276-287,291-311,313-321,325-330,332,337-340,343-347,358-362,364-398,400,407-449,488-489
+  s_237bf117c1632b::t_d7a7bf7b29c7c3 54,56-57,81-83,95-97,100,102-103,106-109,115-118,253-255,257-258,288-290,403-406,458-462
+  s_237bf117c1632b::t_8e0ad276edee80 135,146-148,451-453
+  s_237bf117c1632b::t_8eb673ea3367f6 39-45,245-250
+  s_237bf117c1632b::t_ae1dd55ba3f384 356-357
+  s_237bf117c1632b::t_1fdde94c19ddac 335-336
+apps/studio/src/ProjectPanel.test.tsx
+  s_fbce858b29d40e::t_74afa934026bf8 203-205,226-228,716-721,723-724,1064-1066
+  s_237bf117c1632b::t_a54cb7c587a29a 685-715,722,725-732,745-750,754,757-759
+  s_fbce858b29d40e::t_98309b60ba621c 206-214,216-225
+  s_fbce858b29d40e::t_3cc320aa114143 199-202,215,839-842,861,864-866,868,870-872,876-877
+  s_237bf117c1632b::t_ab8c2e0b959b81 740-741,751-753
+  s_237bf117c1632b::t_5a99207dfdbf83 335
+  s_fbce858b29d40e::t_b2cbfc7cb13b0a 805-838,843-860,862-863,867,869,878-880
+  s_fbce858b29d40e::t_07b7aeff5bd3ee 873-875,1090
+  s_fbce858b29d40e::t_48dbcdf3138b9b 786
+  s_fbce858b29d40e::t_aef843ba30d2ad 760-785,788-792,796-804
+  s_fbce858b29d40e::t_9978667d397a63 787,793-795
+  s_237bf117c1632b::t_3aa48db6079715 236,244-251,261-263,322-323,325-326,328,332,404,412-419,1167-1169
+  s_fbce858b29d40e::t_082156c2dac340 1087-1088
+  s_237bf117c1632b::t_9be934b9688d08 733-739,755-756
+  s_237bf117c1632b::t_ae1dd55ba3f384 742-744
+packages/contracts/src/project-revision.test.ts
+  s_fbce858b29d40e::t_5acdfdcf93c024 193-212,219,222-225,227-237,256-259
+  s_fbce858b29d40e::t_3cc320aa114143 238-255
+  s_fbce858b29d40e::t_9a9f6f2d63c048 9,189-192,213-218,220-221,226,260-274
+  s_fbce858b29d40e::t_3ac5875c5e8622 275-276
+apps/studio/worker/revisions.test.ts
+  s_fbce858b29d40e::t_10e2373b6e4a76 308-311
+apps/studio/worker/revision-provenance.test.ts
+  s_fbce858b29d40e::t_999c7484f8d434 1-2,4-39,60-152,156-157
+  s_fbce858b29d40e::t_98309b60ba621c 40-59
+  s_fbce858b29d40e::t_9978667d397a63 3,153-155
+docs/internal-beta-launch-plan.md
+  s_fbce858b29d40e::t_87a79531827947 50,52,82-85
+  s_237bf117c1632b::t_cd86a68a781235 43,45-49
+apps/studio/worker/revisions.ts
+  s_fbce858b29d40e::t_260ae0e86d50d2 4,20,89-99,366-415,487,501,517,537,542-549
+  s_fbce858b29d40e::t_9978667d397a63 538-541
+  s_fbce858b29d40e::t_4ff39986c73bea 550
+apps/studio/migrations/0006_reference_uploads.sql
+  s_237bf117c1632b::t_0519d979f6c0ca 20
+  s_237bf117c1632b::t_cc4c91c5079115 1-19,25-37
+  s_237bf117c1632b::t_cb708437b3c407 21-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a769d0d13896fac7a647471cad83d67cf77eb226",
+  "prompts": {},
+  "sessions": {
+    "s_237bf117c1632b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcbd5f190ffe549971awDcFpVN",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_540963c70cf471": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcb87ab5dffe2qL9J4NqOEZwFk",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_77c143cc85eeaa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcb787de1ffebwmP1PMoptR8K5",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_a899ff8598b4ac": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcbfdc6b6ffeYEOv14JiX3Jwad",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_fbce858b29d40e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fcb81cad3ffeym4FSb07exwi9O",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
