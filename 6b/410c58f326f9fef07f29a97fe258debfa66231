@@ -1,0 +1,19 @@
+.gitlab-ci.yml
+  s_f6febbeebc75c0::t_3cc61c8c3ccb67 11-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6b410c58f326f9fef07f29a97fe258debfa66231",
+  "prompts": {},
+  "sessions": {
+    "s_f6febbeebc75c0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa21d2a0ffeffKGz53LZoSNIm",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
