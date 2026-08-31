@@ -1,0 +1,563 @@
+apps/renderer/test/validate-audio.test.ts
+  s_55bfc107b644a2::t_af83e2bbbad745 1-4,21,47,53,86
+apps/studio/src/ProjectPanel.tsx
+  s_a46a906a5a390b::t_820ba2b1e0149e 12,725-726,1756-1757
+  s_46f98c2b8d6687::t_a19583c99be537 605-607
+  s_46f98c2b8d6687::t_9300682f7e4629 9,732-735,737
+  s_46f98c2b8d6687::t_d61ee8a304f714 27,50,201-202,296-300,363,365,474,476-478,530-532,549-551,568-570,662-664,701-703,736,781,787,797-799,816-818,820,874,878-880,1373
+  s_a46a906a5a390b::t_71e2a42b2685d2 1730,1754
+tools/oxlint/anti-slop/shared/reflect-method.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-35
+tools/oxlint/anti-slop/rules/no-unknown-type-aliases.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-70
+apps/studio/src/project-api.ts
+  s_46f98c2b8d6687::t_5920954ffe82e7 42-46,48-51,53-56,62-63,67-68,71
+apps/studio/worker/worker-utils.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 1-15,22-24,26-29
+  s_f78b1aa74e7724::t_8b6dbf3185727c 16-21,25,30-34
+  s_f78b1aa74e7724::t_077056571692db 35-37
+apps/studio/worker/revisions.ts
+  s_f78b1aa74e7724::t_596aad04c8b818 30-32
+  s_f78b1aa74e7724::t_9bcbf0e71b69f3 289-290,298
+  s_639e8a37c841bd::t_8eb64ca6c3cbd0 460
+  s_639e8a37c841bd::t_b3e045043030af 469,500-511
+  s_f78b1aa74e7724::t_e8f94c0b8b3e25 4,13,27-28,159,281-282,299,301
+  s_f78b1aa74e7724::t_abbd9b13655d71 29
+  s_639e8a37c841bd::t_f6048b164805b3 512-513
+tools/oxlint/anti-slop/rules/no-object-parameters.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-126
+apps/studio/worker/project-media.test.ts
+  s_9e98e12b384035::t_b6c42e37b01ac7 160
+  s_d337553df27b9c::t_309bb5af2c3cf4 3-7,24,400-402,637-640,712
+  s_9e98e12b384035::t_1b4c255f52a84a 2,8,57-58,80,126-139,147-159,161-162,164-173,176,234-235,500-502,568,620,691-693,695-705,724
+  s_a46a906a5a390b::t_a612e6df06f07f 403-422
+tools/oxlint/anti-slop/rules/no-chained-type-assertions.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-77
+tools/oxlint/anti-slop/rules/no-reflect-get.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-28
+tools/oxlint/anti-slop/rules/no-unknown-parameters.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-83
+apps/renderer/src/capture-still.ts
+  s_452074f78fd047::t_da5e5ffc05b6fc 12
+  s_09afbb6ac60d1b::t_01907ea9490b74 8
+  s_83e72131448962::t_5599e00c979eff 4,47,50-54,58-59
+apps/studio/worker/revisions.test.ts
+  s_9e98e12b384035::t_5011a6c97175f7 39,41
+  s_9e98e12b384035::t_9c14fce51a1f4b 1,3,40,79-87,124-127,129-130,138,172,182,254,264
+  s_639e8a37c841bd::t_69064fd7263540 198
+  s_9e98e12b384035::t_523e209b82e08e 114-122
+  s_9e98e12b384035::t_83afe6c0eca8a0 17-38
+  s_639e8a37c841bd::t_b3e045043030af 194-197,199-238,244-251
+  s_639e8a37c841bd::t_90af319b22ecd8 239-243
+packages/composition-registry/src/browser.ts
+  s_452074f78fd047::t_8d273494124d5e 54-57
+starters/product-project/src/review-bridge.ts
+  s_8bba816e340b59::t_ce3b18d15b4fc4 47
+apps/studio/src/review-protocol.ts
+  s_46f98c2b8d6687::t_5920954ffe82e7 31,33
+  s_46f98c2b8d6687::t_2cc7e37f7963e1 39
+  s_a46a906a5a390b::t_820ba2b1e0149e 1,10-12
+apps/studio/src/FinishedOutputPreview.test.tsx
+  s_46f98c2b8d6687::t_20110e827f42db 12-15,18-20,75,80-82,87,129
+  s_38b8c38e09d242::t_e7b944b09d954c 9,21,40,44-50
+  s_38b8c38e09d242::t_61e3e5df5ac327 41-43,51-52
+  s_38b8c38e09d242::t_8ff4dde0ae4c04 7,138
+  s_46f98c2b8d6687::t_57e0f86ef128eb 10,37-39,53
+  s_a46a906a5a390b::t_aec970ea2fddd1 4-6,8,24,31,89-90
+  s_38b8c38e09d242::t_7a6a8fed45957c 58,136-137,139-213
+  s_a46a906a5a390b::t_915858a4706c92 16
+  s_46f98c2b8d6687::t_388976675b7886 54
+apps/studio/src/project-api.test.ts
+  s_46f98c2b8d6687::t_985c3fc468d8a6 60
+  s_a46a906a5a390b::t_aec970ea2fddd1 4-8,31,38
+  s_38b8c38e09d242::t_5e9d76ce635969 17
+apps/studio/worker/project-media.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 10-11,303
+  s_f78b1aa74e7724::t_2bd1d5865d2d6d 48-51,1148-1151
+  s_f78b1aa74e7724::t_b8d562a4e39fe0 8,45-47,52-64,75,92,393-396,406,1035,1044-1046,1056-1059,1065-1075,1090-1092
+  s_639e8a37c841bd::t_b3e045043030af 866-876
+packages/contracts/src/index.ts
+  s_5a24c1408ec398::t_50915f30239e59 145
+  s_452074f78fd047::t_585c774f0bd23c 7-8,15-29
+  s_452074f78fd047::t_f76af1789fbbe0 30
+apps/studio/src/PublicationHistory.tsx
+  s_a46a906a5a390b::t_820ba2b1e0149e 8-9,43
+apps/preview/worker.test.ts
+  s_72ab6103eef68c::t_cbc257c1a2d6a5 27-29
+  s_72ab6103eef68c::t_980e5f6e440d32 1,13-14,24-26,30-46,49-56,102-124
+  s_72ab6103eef68c::t_72dd2bc1dbf10f 15-23,48,125-139
+  s_72ab6103eef68c::t_e71f90927515e5 140
+apps/studio/worker/api.test.ts
+  s_9e98e12b384035::t_5011a6c97175f7 1,39,45
+  s_9e98e12b384035::t_523e209b82e08e 73-76
+  s_639e8a37c841bd::t_69064fd7263540 17-28,36-38
+  s_639e8a37c841bd::t_b3e045043030af 6,43,111,116-167
+  s_9e98e12b384035::t_9c14fce51a1f4b 11-16,29,77-80
+  s_639e8a37c841bd::t_81407463962693 103
+packages/contracts/src/shared.ts
+  s_5a24c1408ec398::t_50915f30239e59 3
+tools/oxlint/anti-slop/rules/require-safety-comment-for-type-assertion.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-62
+apps/studio/src/FinishVideoPanel.test.tsx
+  s_38b8c38e09d242::t_abd1aea19a0138 149,292-305,309-325,329-336,350-356,360-368
+  s_46f98c2b8d6687::t_cba0bc254ecd95 14,16,19-34,38-44,50-58,98,120-121,124-131,171,224,247,255,434-435
+  s_38b8c38e09d242::t_0b4a30e9f96cb5 338-349
+  s_a46a906a5a390b::t_aec970ea2fddd1 10-13,15,69,76
+  s_38b8c38e09d242::t_8dd584411707c8 392
+  s_46f98c2b8d6687::t_a19583c99be537 46-49,433
+  s_38b8c38e09d242::t_1a94ac27e55c50 306-308,326-328,337,357-359
+  s_46f98c2b8d6687::t_e66aedc8efce0c 45
+  s_38b8c38e09d242::t_c182d82d588cd9 369
+apps/renderer/test/browser-network.integration.test.ts
+  s_09afbb6ac60d1b::t_39b1f5f0cc9736 95-101,133-134,147
+  s_83e72131448962::t_34677f1bef53f0 25,27,49,55-58,69,71,92,117-124,199-232
+  s_83e72131448962::t_dc54eb37e49332 85-86,88,93,102,106,142,168,175-176,257,310-318,320-328,353-356
+  s_83e72131448962::t_d191537d724811 4,10,17-24,26,28-31,41,47-48,50-54,59-68,70,72-83,87,89-91,103-105,107-116,125-132,135-137,148,182-198,233-244,252-256,258-269,288-309,319,337-352
+  s_83e72131448962::t_172d8c3d5ab535 270-274,276-287
+  s_83e72131448962::t_d7fb47d7b81172 84
+  s_83e72131448962::t_e3502b211078ff 357
+apps/studio/worker/index.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 89
+  s_f78b1aa74e7724::t_8839b961adc93f 90,280,295-300,589,603,888-889
+  s_f78b1aa74e7724::t_2de263290702ea 890
+apps/studio/src/studio/latest-publication-attempt.ts
+  s_a46a906a5a390b::t_820ba2b1e0149e 1-12
+apps/studio/worker/access.ts
+  s_f78b1aa74e7724::t_8b6dbf3185727c 2-4,17-20,42-43,46
+apps/renderer/test/container-smoke.ts
+  s_452074f78fd047::t_2ce4875b880db3 7-8,31,68
+apps/renderer/src/json-value.ts
+  s_09afbb6ac60d1b::t_3ed7615959b6a0 2
+  s_09afbb6ac60d1b::t_01907ea9490b74 1
+apps/studio/src/FinishedOutputPreview.tsx
+  s_46f98c2b8d6687::t_2a418fe8aae353 18,26-33,40-43,73,101
+  s_38b8c38e09d242::t_b3a20a0dbfdbfc 52,66,85
+  s_a46a906a5a390b::t_820ba2b1e0149e 4,55-56,150-157,191
+  s_a46a906a5a390b::t_1d98c500cb59d6 190
+tools/oxlint/anti-slop/rules/no-widen-then-assert.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-366
+tools/oxlint/anti-slop/shared/lexical-type-parameters.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-61
+tools/oxlint/anti-slop/rules/no-module-mocking.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-91
+compositions/support-agent/src/timeline.ts
+  s_452074f78fd047::t_585c774f0bd23c 12-16,56
+apps/studio/src/ProjectPanel.test.tsx
+  s_46f98c2b8d6687::t_985c3fc468d8a6 664-669,910-914
+  s_46f98c2b8d6687::t_ce2df423aae147 32-35,242,247
+  s_46f98c2b8d6687::t_0abd160a5460ae 248-254,425-428,473-474,508,872,880,1061,1177,1202
+  s_46f98c2b8d6687::t_6a09dd931a3dcf 1105,1110
+  s_38b8c38e09d242::t_5e9d76ce635969 17
+  s_46f98c2b8d6687::t_a19583c99be537 283,539,909
+  s_46f98c2b8d6687::t_2755f4397164ee 13-16,19-30,37-41,58-63,132-150
+  s_46f98c2b8d6687::t_57e0f86ef128eb 670-674,1091
+  s_46f98c2b8d6687::t_9300682f7e4629 125
+  s_46f98c2b8d6687::t_baf17468f2e19f 31
+  s_46f98c2b8d6687::t_02dd9e24dbc2da 151
+apps/studio/worker/publication-delivery.test.ts
+  s_9e98e12b384035::t_523e209b82e08e 36-37
+  s_9e98e12b384035::t_359ceab0e55f0d 2,4,77,86,91,115,124,129
+apps/studio/worker/revision-build-lifecycle.ts
+  s_f78b1aa74e7724::t_8839b961adc93f 306
+apps/renderer/test/verify-support-agent-frames.ts
+  s_452074f78fd047::t_f3e6ca45bf96fb 8,18-28
+apps/studio/worker/worker-constants.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 1-2
+apps/studio/src/studio/use-project-publications.ts
+  s_38b8c38e09d242::t_b3a20a0dbfdbfc 72,139,168
+  s_46f98c2b8d6687::t_2a418fe8aae353 9-11,14-17,61-64,93-96,109,113,140-142,148,152
+  s_46f98c2b8d6687::t_a19583c99be537 110-112,149-151
+  s_a46a906a5a390b::t_820ba2b1e0149e 5,23-24
+apps/studio/worker/api.ts
+  s_f78b1aa74e7724::t_9bcbf0e71b69f3 2,5-9,12,22,48,64,67,74-75
+  s_f78b1aa74e7724::t_8b6dbf3185727c 20
+  s_d337553df27b9c::t_309bb5af2c3cf4 4
+apps/renderer/test/upload-video.test.ts
+  s_452074f78fd047::t_2ce4875b880db3 9,48-51,76-81
+  s_09afbb6ac60d1b::t_39b1f5f0cc9736 118,131
+  s_09afbb6ac60d1b::t_277b7b5a4e07a1 5,8,83-84,86-93,97-117,119-130,132-151,153
+compositions/support-agent/src/browser.ts
+  s_5a24c1408ec398::t_50915f30239e59 10
+apps/studio/worker/managed-publications.test.ts
+  s_9e98e12b384035::t_523e209b82e08e 126-127,144-151,154-162,189-191,226-232,236-242,252-258,517-519,607-609,664-666,695-697
+  s_9e98e12b384035::t_8b9d2dfa6d1104 2,4,91,102-107,113-123,128-129,132-141,167,172,193-203,216-225,233-235,243-246,249-251,259-261,273-274,315
+  s_9e98e12b384035::t_0bce0b05a28255 314,317,373-374,427-428,524,638-647,722
+  s_639e8a37c841bd::t_b3e045043030af 540-584
+apps/studio/src/types.d.ts
+  s_46f98c2b8d6687::t_9300682f7e4629 22
+  s_46f98c2b8d6687::t_f373dbafb10c98 24
+  s_38b8c38e09d242::t_5e9d76ce635969 3-9
+apps/renderer/test/render-video.test.ts
+  s_09afbb6ac60d1b::t_277b7b5a4e07a1 31-34
+  s_09afbb6ac60d1b::t_9ef09b17ebc1e4 13-14,52-53,55-57,72,76-87,89,91,93,96,111-114,127-128,151-154,187-189,239-241,264,284-287,291-335
+  s_83e72131448962::t_633093172af718 45,118-120,158,199-201
+  s_452074f78fd047::t_b60f46b8552198 18-21,25-27,35-38,51,54,58,95
+  s_452074f78fd047::t_103e2a4600ed3d 121,159,207,252
+  s_452074f78fd047::t_df0118d64b42ed 5-6,15,50,59-60,88,90,92,94,97-103,116,126,133-134,156,169-170,197,215-216,250,265-266,289
+  s_09afbb6ac60d1b::t_fbd5a7f895efdf 73-74
+  s_452074f78fd047::t_54392ac8366481 135-137
+  s_452074f78fd047::t_b498add0f3fd3b 171-173
+  s_09afbb6ac60d1b::t_fe37a3664ba3fb 190
+  s_452074f78fd047::t_99becc2169fbda 196
+  s_452074f78fd047::t_730cc66aa851b8 217-219
+  s_09afbb6ac60d1b::t_bf34d4514cc453 242
+  s_452074f78fd047::t_a81c008f8a2768 249
+  s_452074f78fd047::t_784eb102355377 267-269
+apps/studio/worker/revision-delivery.test.ts
+  s_9e98e12b384035::t_3c2f5a06810f87 1,3,51,80-89,91-95,102-112,143,150,168,201,222,237
+  s_9e98e12b384035::t_7ba12b1d34308e 123-128
+apps/studio/worker/projects.ts
+  s_f78b1aa74e7724::t_e8f94c0b8b3e25 14,17,20-22,69,493,495-497,527-529,663,665,667
+  s_d337553df27b9c::t_309bb5af2c3cf4 9
+packages/contracts/src/project-revision.ts
+  s_452074f78fd047::t_334dc7e3773b71 19
+  s_452074f78fd047::t_67310027019526 294-295,297
+  s_452074f78fd047::t_53c6789ce1914d 298-300
+  s_452074f78fd047::t_585c774f0bd23c 301,304-311
+  s_452074f78fd047::t_a8d77b5474d6ad 16-18,20-21,29
+  s_5a24c1408ec398::t_50915f30239e59 4,62,121,197-198,236,242,272,399-400
+  s_452074f78fd047::t_80a9f70213f2cc 293
+apps/studio/worker/preview-capability.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 1-2
+apps/studio/src/render-bridge.ts
+  s_46f98c2b8d6687::t_9300682f7e4629 94,110-112,137-138
+  s_46f98c2b8d6687::t_2cc7e37f7963e1 124
+  s_38b8c38e09d242::t_eb177637a1d892 7-10,74-79,83,118-119,122
+  s_38b8c38e09d242::t_b3a20a0dbfdbfc 68-73,80-82,84-87,89-91
+  s_38b8c38e09d242::t_5e9d76ce635969 14-18
+apps/studio/worker/status.ts
+  s_f78b1aa74e7724::t_9bcbf0e71b69f3 15-29,31,34-38
+  s_f78b1aa74e7724::t_596aad04c8b818 32
+  s_f78b1aa74e7724::t_8b6dbf3185727c 5,9-14
+  s_f78b1aa74e7724::t_2bd1d5865d2d6d 30,33
+  s_f78b1aa74e7724::t_8218e438e84bcc 39-41,63-64,68
+tools/oxlint/anti-slop/rules/no-unknown-returns.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-115
+apps/studio/src/App.tsx
+  s_46f98c2b8d6687::t_2a418fe8aae353 2,6-10,28
+apps/studio/worker/revision-provenance.test.ts
+  s_d337553df27b9c::t_f6c35efe44e16a 77-79
+  s_d337553df27b9c::t_309bb5af2c3cf4 21
+  s_9e98e12b384035::t_9c14fce51a1f4b 1,24
+apps/renderer/src/video-command.ts
+  s_452074f78fd047::t_45f4f41bcbcc76 138-145
+  s_452074f78fd047::t_564f6a65bff289 5,9,55-88,116-118,130-132,134-135,157,161-172,197,206-214,216,218,225-232,236,240-241,286,294,297,301,319-320,346-350,352,362,366-368,371-372,378-379,382
+  s_09afbb6ac60d1b::t_01907ea9490b74 13
+  s_452074f78fd047::t_2b1c2b30221465 24,29
+  s_38b8c38e09d242::t_f2f34d41f76286 133,234
+apps/renderer/test/video-command.test.ts
+  s_452074f78fd047::t_dd1abdc75e9b58 15-17
+  s_452074f78fd047::t_2b1c2b30221465 5,7-10,14,18-27,30-51,88
+apps/studio/worker/projects.test.ts
+  s_9e98e12b384035::t_523e209b82e08e 339-343
+  s_9e98e12b384035::t_7a607f4905820b 1,3,86-87,126,141-158,160-163,165-172,176-177,185-195,197-202,204,214-219,224-235,237-244,250-252,254-256,258-259,333,352
+  s_9e98e12b384035::t_5011a6c97175f7 331,335
+starters/product-project/test/render-bridge.test.ts
+  s_452074f78fd047::t_5973c9ada087f0 53,77
+apps/studio/src/studio/workspace-presentation.test.tsx
+  s_a46a906a5a390b::t_71e2a42b2685d2 37-52
+  s_a46a906a5a390b::t_aec970ea2fddd1 10-14,35
+  s_46f98c2b8d6687::t_20110e827f42db 120-123
+apps/studio/src/render-bridge.test.ts
+  s_46f98c2b8d6687::t_9e36ca5018d379 2-5,8,10-19,92,103-107
+  s_38b8c38e09d242::t_b405a4e2edab02 95,110
+  s_38b8c38e09d242::t_d067a835739ce1 1,42-46,48-49,51-74,76,78-88
+apps/preview/worker.ts
+  s_452074f78fd047::t_53c6789ce1914d 172,217,223-226
+  s_452074f78fd047::t_585c774f0bd23c 1-5,176-178,180-182,184-185
+  s_452074f78fd047::t_cece81307ee38d 227-228
+apps/studio/src/studio/workspace-presentation.tsx
+  s_a46a906a5a390b::t_820ba2b1e0149e 11,303-304,306,309-311
+  s_46f98c2b8d6687::t_5920954ffe82e7 14,19,21,26-28,41
+apps/renderer/src/validate-audio.ts
+  s_452074f78fd047::t_5d14c541a91973 21-50,144,148,155,171-174,196
+  s_452074f78fd047::t_4e7fb0bc05735d 197-199,227-228
+tools/oxlint/anti-slop/rules/no-known-value-widening.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-247
+apps/studio/worker/revision-builds.test.ts
+  s_9e98e12b384035::t_fbe12d3298a6bb 3,5,59-61,77,97-105,109-128,130
+  s_9e98e12b384035::t_523e209b82e08e 66
+apps/renderer/src/capture-review-stills.ts
+  s_83e72131448962::t_5599e00c979eff 2,28-29
+packages/contracts/src/composition-manifest.ts
+  s_452074f78fd047::t_585c774f0bd23c 81
+tools/oxlint/anti-slop/index.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-41
+packages/composition-registry/src/index.test.ts
+  s_72ab6103eef68c::t_980e5f6e440d32 60-62,81-82,84,86-89,91,93-96,114-115
+  s_452074f78fd047::t_585c774f0bd23c 27
+  s_72ab6103eef68c::t_72dd2bc1dbf10f 63-80,97-113
+packages/contracts/src/managed-project.ts
+  s_452074f78fd047::t_585c774f0bd23c 3-6,101-102
+apps/studio/src/studio/workspace-model.test.ts
+  s_a46a906a5a390b::t_aec970ea2fddd1 1-3,75,82
+  s_a46a906a5a390b::t_1d98c500cb59d6 4-5
+starters/product-project/test/review-bridge.test.ts
+  s_f6febbeebc75c0::t_5d92ffe63d3980 14-19
+  s_55bfc107b644a2::t_af83e2bbbad745 7-8,10,23-24,29-30,36-37,43-44,52,59,78-79
+packages/contracts/src/finishing.ts
+  s_5a24c1408ec398::t_50915f30239e59 3-4,9,207-208,223,245
+apps/studio/worker/publication-delivery.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 12
+starters/product-project/src/render-bridge.ts
+  s_452074f78fd047::t_5973c9ada087f0 46,48-49,110,128
+  s_452074f78fd047::t_a8f55aaf1faf21 1,47
+  s_f6febbeebc75c0::t_d1dda4bb62ea81 10-18,21-28
+  s_f6febbeebc75c0::t_a64ceb4074e46e 20
+apps/studio/src/RevisionReviewCanvas.test.tsx
+  s_f6febbeebc75c0::t_5d92ffe63d3980 111-116
+  s_46f98c2b8d6687::t_0b0bc7a0159d55 10-11,65,72-85,166,211,213,242,247,260-261,263,282-283
+  s_38b8c38e09d242::t_5e9d76ce635969 26
+  s_38b8c38e09d242::t_5bf20357c36c86 42,89-101
+  s_a46a906a5a390b::t_aec970ea2fddd1 19-25,50-51,323-324
+  s_38b8c38e09d242::t_92220615161f8d 181
+apps/studio/src/App.test.tsx
+  s_46f98c2b8d6687::t_a19583c99be537 12-16
+  s_46f98c2b8d6687::t_20110e827f42db 4,6,11
+starters/product-project/src/ProductComposition.tsx
+  s_452074f78fd047::t_372bc79afdc5ce 11-16,20
+  s_452074f78fd047::t_585c774f0bd23c 24
+.oxlintrc.json
+  s_f6febbeebc75c0::t_253a0b5c2dc195 1-46
+apps/studio/src/PublicationHistory.test.tsx
+  s_46f98c2b8d6687::t_a19583c99be537 89-91
+  s_a46a906a5a390b::t_aec970ea2fddd1 10-14,29,36
+  s_46f98c2b8d6687::t_20110e827f42db 73
+tools/oxlint/anti-slop/rules/no-reflect-apply.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-28
+apps/renderer/src/static-server.ts
+  s_452074f78fd047::t_2ce4875b880db3 6,12-25,66,79-82
+  s_452074f78fd047::t_2a6092e1bb70ab 83-84,95-96,102,107-110
+starters/product-project/src/main.tsx
+  s_72ab6103eef68c::t_980e5f6e440d32 67
+apps/studio/worker/managed-publications.ts
+  s_f78b1aa74e7724::t_9bcbf0e71b69f3 809-811,820-824,838-840
+  s_d337553df27b9c::t_309bb5af2c3cf4 7,150
+  s_f78b1aa74e7724::t_8839b961adc93f 13-14,893,907
+packages/composition-registry/src/types.d.ts
+  s_452074f78fd047::t_8e459def74f9d1 2-6
+apps/studio/worker/managed-renders.ts
+  s_f78b1aa74e7724::t_8839b961adc93f 3-4,169
+.prettierignore
+  s_f6febbeebc75c0::t_253a0b5c2dc195 8-9
+apps/studio/worker/project-references.ts
+  s_d337553df27b9c::t_309bb5af2c3cf4 11-12
+  s_f78b1aa74e7724::t_9bcbf0e71b69f3 377-382,466-469
+  s_f78b1aa74e7724::t_b8d562a4e39fe0 9,17-21,100-101,105,357-362
+apps/studio/src/FinishVideoPanel.tsx
+  s_38b8c38e09d242::t_b3a20a0dbfdbfc 109,145,166
+  s_a46a906a5a390b::t_820ba2b1e0149e 5,14,96,118-120,191,359
+  s_46f98c2b8d6687::t_2a418fe8aae353 17-23,25-28,37-51,62-63,92-93,151,155,239-240,265-267,285-287,313-315,330
+  s_46f98c2b8d6687::t_a19583c99be537 152-154,279-282,303-310
+  s_a46a906a5a390b::t_1d98c500cb59d6 12,55
+  s_46f98c2b8d6687::t_cb03a987914846 52
+compositions/product-launch/src/ProductLaunchComposition.tsx
+  s_5a24c1408ec398::t_50915f30239e59 159
+apps/studio/src/studio/use-project-publications.test.tsx
+  s_46f98c2b8d6687::t_9300682f7e4629 139
+  s_38b8c38e09d242::t_3f966029a3a076 194-226
+  s_46f98c2b8d6687::t_20110e827f42db 11-14,16-23,97-99,122-124,148-150,175-177
+  s_a46a906a5a390b::t_aec970ea2fddd1 3-7,42,49
+package.json
+  s_f6febbeebc75c0::t_62c530a3d846d1 20
+  s_f6febbeebc75c0::t_24fc9ea3042f06 12
+  s_f6febbeebc75c0::t_2b56bf21212cd8 19,22
+tools/oxlint/anti-slop/rules/no-shape-in-symbol-names.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-39
+apps/studio/worker/managed-renders.test.ts
+  s_9e98e12b384035::t_9c14fce51a1f4b 1,9,13,19,22
+apps/studio/worker/revision-builds.ts
+  s_f78b1aa74e7724::t_8839b961adc93f 12-13,225-229,231,416-418,430
+tools/oxlint/anti-slop/rules/no-conditional-empty-object-spread.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-49
+apps/renderer/src/server.ts
+  s_452074f78fd047::t_ab79787e1d1524 20,41,82,86-89,111,117-119,158,165-168,184,191-193,225-228,357
+  s_09afbb6ac60d1b::t_01907ea9490b74 34
+packages/contracts/src/video-spec.ts
+  s_452074f78fd047::t_585c774f0bd23c 12-17,25-26
+tools/oxlint/anti-slop/effect/index.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-13
+apps/renderer/src/render-video.ts
+  s_09afbb6ac60d1b::t_fb244f1a6cb6cc 379
+  s_55bfc107b644a2::t_af83e2bbbad745 462,467,472,478,484,488
+  s_09afbb6ac60d1b::t_01907ea9490b74 23,222,225,380-386,389,395,412
+  s_452074f78fd047::t_5460698a6115cd 63,65-67,79-91,106,114,196,211,213-214,216,319
+  s_83e72131448962::t_5599e00c979eff 16,21,27-49,151-157,174-184,194,200,221,454
+  s_09afbb6ac60d1b::t_f851952ee4fdd0 252
+  s_09afbb6ac60d1b::t_db8f30ef315133 338-378
+  s_09afbb6ac60d1b::t_0bbf91252d1e96 51-62,64,68-78,92-105,107-113,158,160,185,187,192,198,212,233-234,237,337,451,453
+  s_452074f78fd047::t_69e538bff9b965 118,159,161
+  s_452074f78fd047::t_f4cdf045a5ab3c 215
+apps/studio/src/studio/workspace-model.ts
+  s_46f98c2b8d6687::t_5920954ffe82e7 98,112,122,130-136
+  s_f6febbeebc75c0::t_5d92ffe63d3980 7-8,67
+apps/renderer/src/upload-video.ts
+  s_09afbb6ac60d1b::t_b53307098cf0c5 6-7,19-35,41-42,44-46,48-63,73-78,84-87,89,92-93,96-98,100-114,120-124
+  s_09afbb6ac60d1b::t_01907ea9490b74 99
+  s_452074f78fd047::t_53c6789ce1914d 4-5,40,43,64-68,70-72,88,90,125
+  s_09afbb6ac60d1b::t_39b1f5f0cc9736 79-83,94-95,115-119
+  s_72ab6103eef68c::t_13eb3bd1621c09 69
+tools/oxlint/anti-slop/rules/no-runtime-typeof.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-67
+packages/composition-registry/src/index.ts
+  s_72ab6103eef68c::t_980e5f6e440d32 15,69
+  s_452074f78fd047::t_8d273494124d5e 16-18,62
+  s_8bba816e340b59::t_ce3b18d15b4fc4 59,61,73,81-82
+  s_452074f78fd047::t_372bc79afdc5ce 23
+  s_452074f78fd047::t_03b2eb0a80325f 19
+apps/renderer/src/browser-renderer.ts
+  s_09afbb6ac60d1b::t_39b1f5f0cc9736 126,201
+  s_72ab6103eef68c::t_13eb3bd1621c09 33,155-161,221-227
+  s_09afbb6ac60d1b::t_277b7b5a4e07a1 137-143
+  s_09afbb6ac60d1b::t_b53307098cf0c5 12-13,20,23-26,32,44,54,63,71,77,80,90,124,197-199
+  s_09afbb6ac60d1b::t_01907ea9490b74 92-95
+  s_83e72131448962::t_a4ff07212c1236 163
+  s_83e72131448962::t_5599e00c979eff 8,15,18-19,27,30-31,34-43,45-50,53,55-62,64-70,72-76,79,81-89,98,101,109,114-115,120-123,125,127-129,132-136,144-145,147,150-154,162,164-165,180,182,185,187-188,193-196,200,202-204,206-209,214,216-220,228,231-236,242,256-260,263-278,280,284,287-296,312-330
+  s_83e72131448962::t_34677f1bef53f0 281-283
+  s_83e72131448962::t_181ad51206b658 51-52,78,130-131,205
+  s_09afbb6ac60d1b::t_9a7bd2246679af 91
+  s_83e72131448962::t_99c0643532e15b 331
+tools/oxlint/anti-slop/rules/no-unsafe-dictionary-type.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-134
+apps/studio/src/RevisionReviewCanvas.tsx
+  s_46f98c2b8d6687::t_d61ee8a304f714 88
+  s_a46a906a5a390b::t_820ba2b1e0149e 1,215-217
+  s_46f98c2b8d6687::t_2a418fe8aae353 18
+apps/studio/worker/project-references.test.ts
+  s_9e98e12b384035::t_1b4c255f52a84a 2,7,43,51,72-85,87-89,91-97,150-151,301
+  s_d337553df27b9c::t_309bb5af2c3cf4 3-6,14,240-242,260
+tools/oxlint/anti-slop/effect/rules/no-service-constructor-imports.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-52
+tools/oxlint/anti-slop/shared/dictionary-types.ts
+  s_f6febbeebc75c0::t_2b56bf21212cd8 1-502
+pnpm-lock.yaml
+  s_f6febbeebc75c0::t_ecdab345a45ebf 11-16,20-22,884-1009,1183-1185,1700-1712,2436-2494,2625-2626,3083-3104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b60cf556c6550b604b1ac457044c478682d4394e",
+  "prompts": {},
+  "sessions": {
+    "s_09afbb6ac60d1b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9f11734ffeZzaD1x7eesHPCY",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_38b8c38e09d242": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9f1176bffePcN7E7H6mxZMbN",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_452074f78fd047": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9feafc6ffeaN9odPEicN5Yj0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_46f98c2b8d6687": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9feb029ffeEdY8eBTZa4qaMa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_55bfc107b644a2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa18eab0ffe4Nyfwyn4R5q1YL",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_5a24c1408ec398": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa18eacdffeS9g6kJYwEXpm3v",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_639e8a37c841bd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9f1178cffeVSzQ3vCU6oA6Oj",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_72ab6103eef68c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9f11693ffeKSNfZVQb71ynpO",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_83e72131448962": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa08ff34ffer8sF9toyzsk9e1",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_8bba816e340b59": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9e596a7ffe9rBHF4rshksJID",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_9e98e12b384035": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9feb048ffeHCWJHqtC0EGYF4",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_a46a906a5a390b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa18eac3ffebuoBvTQmqvDrPG",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_d337553df27b9c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa18eab8ffewOSLAxppdT4bO6",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_f6febbeebc75c0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa21d2a0ffeffKGz53LZoSNIm",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_f78b1aa74e7724": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa9feb03bffeKHH9vdLNJgdS5O",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
