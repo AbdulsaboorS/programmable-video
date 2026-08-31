@@ -1,0 +1,34 @@
+SESSION_CONTEXT.md
+  s_f6febbeebc75c0::t_112aba82cb5bde 28,40,59
+  s_f6febbeebc75c0::t_1e1eb5f8be8311 39
+  s_2bdae85ed79e6d::t_1bcfc2e0c257ba 15
+  s_f6febbeebc75c0::t_9933f6f4ed58ea 60
+README.md
+  s_f6febbeebc75c0::t_112aba82cb5bde 15,88,94
+  s_f6febbeebc75c0::t_9933f6f4ed58ea 13
+  s_f6febbeebc75c0::t_58dfcbb71f0b06 95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f70662a24d4efb20c2b10ac914e84024dc6cb552",
+  "prompts": {},
+  "sessions": {
+    "s_2bdae85ed79e6d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fb01c0694ffeLHcc6xMyZXc6wG",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_f6febbeebc75c0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa21d2a0ffeffKGz53LZoSNIm",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
