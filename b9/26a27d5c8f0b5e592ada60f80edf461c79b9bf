@@ -1,0 +1,39 @@
+docs/deployment-runbook.md
+  s_f6febbeebc75c0::t_0132673e07d5b3 1-63,65-86
+  s_f6febbeebc75c0::t_e85a32031befe4 64
+README.md
+  s_f6febbeebc75c0::t_0132673e07d5b3 3,7,9,11,13,15-20,23-26,31-63,76-79,81-84,86-97,99-104,107,109-113,117,119,121-123,132,142,144,153-155,167,173,177,179,181,183-188
+  s_f6febbeebc75c0::t_5afbda00e83ab7 175
+  s_f6febbeebc75c0::t_b3bace7b6a68ae 64-75,165-166,168-171
+  s_f6febbeebc75c0::t_e85a32031befe4 98
+package.json
+  s_f6febbeebc75c0::t_5afbda00e83ab7 13
+  s_f6febbeebc75c0::t_8f9b6a166a7bcb 23-24
+.gitlab-ci.yml
+  s_f6febbeebc75c0::t_5afbda00e83ab7 1-36
+SESSION_CONTEXT.md
+  s_f6febbeebc75c0::t_0132673e07d5b3 14
+  s_f6febbeebc75c0::t_5afbda00e83ab7 40
+.husky/pre-commit
+  s_f6febbeebc75c0::t_5afbda00e83ab7 1
+.lintstagedrc.json
+  s_f6febbeebc75c0::t_5afbda00e83ab7 1-4
+pnpm-lock.yaml
+  s_f6febbeebc75c0::t_30405922fb910b 20-25,40,81,124,136,145,182,210,238,1554-1558,1647-1651,1742-1745,1839-1842,2037-2041,2130,2135,2757,2760,2771,2777,2982-2983,3041-3048,3152-3153,3284-3285,3382,3394,3396,3399,3416,3457-3459
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b926a27d5c8f0b5e592ada60f80edf461c79b9bf",
+  "prompts": {},
+  "sessions": {
+    "s_f6febbeebc75c0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_faa21d2a0ffeffKGz53LZoSNIm",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
