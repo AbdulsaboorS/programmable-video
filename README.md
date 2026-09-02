@@ -8,29 +8,11 @@ Programmable Video turns a product repository, visual references, and a short br
 
 This repository is an experimental reference implementation for developers exploring what they can build with Cloudflare's developer platform. It is not an official Cloudflare product or a one-click production service.
 
-## Run The Composition Starter
+## Before You Start
 
-The standalone starter is a synthetic scaffold for authoring a product-specific composition. It is not the Studio interface. It takes about five minutes to run on a machine with Node.js installed and does not require a Cloudflare account:
+Programmable Video is not an offline application. `pnpm dev` runs the Studio code locally while connecting to resources in your Cloudflare account.
 
-```sh
-cd starters/product-project
-corepack enable
-pnpm install --frozen-lockfile
-pnpm dev
-```
-
-The starter opens the placeholder product screen with play and frame controls below it. A coding agent replaces that screen with visuals from a real product repository. Run `pnpm verify` to check formatting, types, tests, and the production build. MP4 rendering and publishing require the complete Studio pipeline.
-
-## Choose How To Run It
-
-| Goal                                   | What you need                                                                                          |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Explore the composition scaffold       | Node.js and pnpm. No Cloudflare account or login.                                                      |
-| Preview or render compositions locally | Chromium; FFmpeg and ffprobe for image or video output.                                                |
-| Develop the Studio locally             | The configured Cloudflare resources and credentials from the deployment guide.                         |
-| Deploy the complete managed Studio     | Workers Paid, Stream, Artifacts private-beta access, and the resources listed in the deployment guide. |
-
-Cloudflare Access protects a deployed Studio because the application does not yet provide its own user accounts, quotas, or abuse controls. Local Studio development does not show an application login, but its remote bindings still require a configured Cloudflare account.
+You need Workers Paid, Stream, and access to the Artifacts private beta. You must also provision Workflows, Containers, Sandbox, D1, three R2 buckets, and Cloudflare Access. Review the [costs and product requirements](#deploy-the-complete-studio), then follow the [deployment runbook](docs/deployment-runbook.md) before starting the Studio.
 
 ## The Workflow
 
@@ -87,7 +69,7 @@ flowchart LR
 | `starters/product-project/`      | Seed project forked for each managed product video                            |
 | `docs/`                          | Product model, creator journey, finishing contract, and deployment guide      |
 
-## Try It Locally
+## Develop Locally
 
 ### Requirements
 
@@ -96,6 +78,8 @@ flowchart LR
 - FFmpeg and ffprobe for local image or video output
 - A Playwright-compatible Chromium installation
 - Docker only for Container builds and full Cloudflare deployment
+- A configured Cloudflare account with every resource in the [deployment runbook](docs/deployment-runbook.md)
+- Wrangler authentication for that account
 
 Install dependencies:
 
@@ -111,7 +95,7 @@ After provisioning the Cloudflare resources and credentials in the [deployment g
 pnpm dev
 ```
 
-The standalone composition starter above is the only no-account local path. The Studio Worker and managed project APIs require configured Cloudflare resources.
+The Studio Worker and managed project APIs use your configured remote Cloudflare resources.
 
 ### Render A Maintained Composition
 
