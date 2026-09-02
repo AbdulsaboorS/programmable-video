@@ -1,0 +1,415 @@
+.agents/skills/video-composer/SKILL.md
+  s_4df2129ccaa1fa::t_07df682fc96f8f 1-117
+.dockerignore
+  s_4df2129ccaa1fa::t_4e184e2ab22c4c 1-7
+AGENTS.md
+  s_4df2129ccaa1fa::t_56ecc087ddae66 1-58
+apps/preview/.dev.vars.example
+  s_4df2129ccaa1fa::t_a5fae1eabe1f48 1-2
+apps/preview/secrets.d.ts
+  s_4df2129ccaa1fa::t_b17843a4f67d4e 1-3
+apps/preview/tsconfig.json
+  s_4df2129ccaa1fa::t_6b4926614b6350 1-7
+apps/preview/worker-configuration.d.ts
+  s_4df2129ccaa1fa::t_362d3faf2b166f 1-16849
+apps/preview/worker.test.ts
+  s_4df2129ccaa1fa::t_341f519c986f3e 1-165
+apps/preview/worker.ts
+  s_4df2129ccaa1fa::t_6405008e3acb09 1-234
+apps/preview/wrangler.jsonc
+  s_4df2129ccaa1fa::t_33b6dd200c6207 1-20
+apps/renderer/.dockerignore
+  s_4df2129ccaa1fa::t_c0e4d79f7f1f86 1-6
+apps/renderer/Dockerfile
+  s_4df2129ccaa1fa::t_b3c463cf10679c 1-28
+apps/renderer/package.json
+  s_4df2129ccaa1fa::t_f38ce5283ff27e 1-27
+apps/renderer/src/archive-entries.ts
+  s_4df2129ccaa1fa::t_76798734dec49d 1-14
+apps/renderer/src/browser-renderer.ts
+  s_4df2129ccaa1fa::t_0978a621274fbd 1-342
+apps/renderer/src/capture-review-stills.ts
+  s_4df2129ccaa1fa::t_d87e45b5684ed1 1-33
+apps/renderer/src/capture-still.ts
+  s_4df2129ccaa1fa::t_2af68dba38216e 1-74
+apps/renderer/src/cli.ts
+  s_4df2129ccaa1fa::t_c2e1307d9c149e 1-3
+apps/renderer/src/json-value.ts
+  s_4df2129ccaa1fa::t_1d21fad4299d93 1-2
+apps/renderer/src/render-video.ts
+  s_4df2129ccaa1fa::t_d97d29db72d291 1-506
+apps/renderer/src/retrieve-private-media.ts
+  s_4df2129ccaa1fa::t_746bb5e5b4ecf3 1-104
+apps/renderer/src/server.ts
+  s_4df2129ccaa1fa::t_85a2d156c83188 1-373
+apps/renderer/src/static-server.ts
+  s_4df2129ccaa1fa::t_37f2482f9b5c55 1-130
+apps/renderer/src/upload-video.ts
+  s_4df2129ccaa1fa::t_68f3019f7dadf1 1-126
+apps/renderer/src/validate-audio.ts
+  s_4df2129ccaa1fa::t_838217cc80f458 1-229
+apps/renderer/src/video-command.ts
+  s_4df2129ccaa1fa::t_17b4ed94127c1f 1-398
+apps/renderer/test/archive-entries.test.ts
+  s_4df2129ccaa1fa::t_d11af2086e463d 1-22
+apps/renderer/test/browser-network.integration.test.ts
+  s_4df2129ccaa1fa::t_6a832ffec78b8a 1-371
+apps/renderer/test/container-smoke.ts
+  s_4df2129ccaa1fa::t_8172031e0ec642 1-104
+apps/renderer/test/render-network.test.ts
+  s_4df2129ccaa1fa::t_be32400559f1d8 1-27
+apps/renderer/test/render-video.test.ts
+  s_4df2129ccaa1fa::t_901be702ba5eca 1-350
+apps/renderer/test/retrieve-private-media.test.ts
+  s_4df2129ccaa1fa::t_40051a4fdaea89 1-145
+apps/renderer/test/static-server.test.ts
+  s_4df2129ccaa1fa::t_f47b6025809430 1-47
+apps/renderer/test/upload-video.test.ts
+  s_4df2129ccaa1fa::t_c66372fcfb5d80 1-157
+apps/renderer/test/validate-audio.test.ts
+  s_4df2129ccaa1fa::t_077954fc6fa5ff 1-196
+apps/renderer/test/verify-support-agent-frames.ts
+  s_4df2129ccaa1fa::t_a2594628c8b92c 1-103
+apps/renderer/test/video-command.test.ts
+  s_4df2129ccaa1fa::t_88dd9c70e69443 1-280
+apps/renderer/tsconfig.json
+  s_4df2129ccaa1fa::t_693b76ed6ed70a 1-7
+apps/studio/.dev.vars.example
+  s_4df2129ccaa1fa::t_ea8ba1b44db944 1-3
+apps/studio/DESIGN.md
+  s_4df2129ccaa1fa::t_f896f11bc5a1f3 1-116
+apps/studio/PRODUCT.md
+  s_e74336aa5f684d::t_a7280e20a2cc5d 1-67
+apps/studio/Sandbox.Dockerfile
+  s_4df2129ccaa1fa::t_84335c0251a5af 1-3
+apps/studio/index.html
+  s_4df2129ccaa1fa::t_e3d115e38bb0d2 1-13
+apps/studio/migrations/0001_managed_projects.sql
+  s_4df2129ccaa1fa::t_7d012bbad54d0a 1-46
+apps/studio/migrations/0002_project_idempotency.sql
+  s_4df2129ccaa1fa::t_b5e68d406850b5 1-5
+apps/studio/migrations/0003_project_revisions.sql
+  s_4df2129ccaa1fa::t_3992dc9e9a0f29 1-35
+apps/studio/migrations/0004_revision_delivery.sql
+  s_4df2129ccaa1fa::t_50c745378860b8 1-56
+apps/studio/migrations/0005_project_review_data.sql
+  s_4df2129ccaa1fa::t_bd0b791c8c0ae2 1-41
+apps/studio/migrations/0006_reference_uploads.sql
+  s_4df2129ccaa1fa::t_be93b84de4842f 1-37
+apps/studio/migrations/0007_revision_build_leases.sql
+  s_4df2129ccaa1fa::t_72bbff773170d7 1-4
+apps/studio/migrations/0008_managed_publications.sql
+  s_4df2129ccaa1fa::t_3a0b0646dd2397 1-307
+apps/studio/package.json
+  s_e74336aa5f684d::t_f94276d629e7c2 1-39
+apps/studio/render.html
+  s_4df2129ccaa1fa::t_d78c92e949f20c 1-12
+apps/studio/src/App.test.tsx
+  s_4df2129ccaa1fa::t_78a737709dca5a 1-24
+apps/studio/src/App.tsx
+  s_4df2129ccaa1fa::t_92d197fdecb3d5 1-32
+apps/studio/src/FinishVideoPanel.test.tsx
+  s_4df2129ccaa1fa::t_af6c591c69cc59 1-467
+apps/studio/src/FinishVideoPanel.tsx
+  s_4df2129ccaa1fa::t_340625ce0df4ab 1-687
+apps/studio/src/FinishedOutputPreview.test.tsx
+  s_4df2129ccaa1fa::t_4b569f96596500 1-268
+apps/studio/src/FinishedOutputPreview.tsx
+  s_4df2129ccaa1fa::t_7c23983dede33b 1-275
+apps/studio/src/ProjectPanel.test.tsx
+  s_4df2129ccaa1fa::t_60232edba1991e 1-1496
+apps/studio/src/ProjectPanel.tsx
+  s_4df2129ccaa1fa::t_b5184f7cdd6b81 1-1857
+apps/studio/src/PublicationHistory.test.tsx
+  s_4df2129ccaa1fa::t_24c1d898806f53 1-168
+apps/studio/src/PublicationHistory.tsx
+  s_4df2129ccaa1fa::t_62b0d36e0e2ef8 1-234
+apps/studio/src/RevisionReviewCanvas.test.tsx
+  s_4df2129ccaa1fa::t_0da3ec42f171ed 1-363
+apps/studio/src/RevisionReviewCanvas.tsx
+  s_4df2129ccaa1fa::t_2426f4193091aa 1-297
+apps/studio/src/app.css
+  s_4df2129ccaa1fa::t_5885224593ce05 1-2165
+apps/studio/src/main.tsx
+  s_4df2129ccaa1fa::t_be3d8765b1ffe9 1-20
+apps/studio/src/project-api.test.ts
+  s_4df2129ccaa1fa::t_c92cd604542cc8 1-192
+apps/studio/src/project-api.ts
+  s_4df2129ccaa1fa::t_409d693da897f9 1-363
+apps/studio/src/render-bridge.test.ts
+  s_4df2129ccaa1fa::t_af36a171560b2e 1-113
+apps/studio/src/render-bridge.ts
+  s_4df2129ccaa1fa::t_0549751997e5f5 1-147
+apps/studio/src/render.css
+  s_4df2129ccaa1fa::t_dc757423ae035c 1-22
+apps/studio/src/render.tsx
+  s_4df2129ccaa1fa::t_91108ad61b1e53 1-11
+apps/studio/src/review-protocol.ts
+  s_4df2129ccaa1fa::t_d0d50aa396f102 1-63
+apps/studio/src/studio/latest-publication-attempt.ts
+  s_4df2129ccaa1fa::t_5a7e75d36c1748 1-12
+apps/studio/src/studio/use-project-publications.test.tsx
+  s_4df2129ccaa1fa::t_4b8408f6c55698 1-227
+apps/studio/src/studio/use-project-publications.ts
+  s_4df2129ccaa1fa::t_8a99872524db03 1-178
+apps/studio/src/studio/workspace-model.test.ts
+  s_4df2129ccaa1fa::t_f9f1adc4a22a88 1-223
+apps/studio/src/studio/workspace-model.ts
+  s_4df2129ccaa1fa::t_2b346cb2b3adb5 1-137
+apps/studio/src/studio/workspace-presentation.test.tsx
+  s_4df2129ccaa1fa::t_c087910c353e0e 1-142
+apps/studio/src/studio/workspace-presentation.tsx
+  s_4df2129ccaa1fa::t_042e0864060023 1-491
+apps/studio/src/styles.d.ts
+  s_4df2129ccaa1fa::t_36604dd51dc8ce 1-2
+apps/studio/src/types.d.ts
+  s_4df2129ccaa1fa::t_992f1c64f72c39 1-33
+apps/studio/tsconfig.json
+  s_4df2129ccaa1fa::t_78eca322e7a647 1-7
+apps/studio/vite.config.ts
+  s_4df2129ccaa1fa::t_5104a827e575b3 1-22
+apps/studio/worker/access.test.ts
+  s_4df2129ccaa1fa::t_21180ebaff31ea 1-29
+apps/studio/worker/access.ts
+  s_4df2129ccaa1fa::t_17fce3bf735cb7 1-48
+apps/studio/worker/api.test.ts
+  s_4df2129ccaa1fa::t_77c5ae516d8c58 1-168
+apps/studio/worker/api.ts
+  s_4df2129ccaa1fa::t_10af1818b15726 1-111
+apps/studio/worker/index.ts
+  s_4df2129ccaa1fa::t_3600370e514645 1-906
+apps/studio/worker/managed-publications.test.ts
+  s_4df2129ccaa1fa::t_d495654dded24e 1-726
+apps/studio/worker/managed-publications.ts
+  s_4df2129ccaa1fa::t_85c36b9f76da88 1-910
+apps/studio/worker/managed-renders.test.ts
+  s_4df2129ccaa1fa::t_db79b5b520c061 1-28
+apps/studio/worker/managed-renders.ts
+  s_4df2129ccaa1fa::t_2d21e795e8d2ab 1-171
+apps/studio/worker/preview-capability.ts
+  s_4df2129ccaa1fa::t_9c92ab8f592e59 1-35
+apps/studio/worker/project-media.test.ts
+  s_4df2129ccaa1fa::t_d7a4c87a3be02b 1-750
+apps/studio/worker/project-media.ts
+  s_4df2129ccaa1fa::t_663f1a8e56d603 1-1167
+apps/studio/worker/project-references.test.ts
+  s_4df2129ccaa1fa::t_b2bb1303e09cb4 1-471
+apps/studio/worker/project-references.ts
+  s_4df2129ccaa1fa::t_205d117aef244b 1-707
+apps/studio/worker/projects.test.ts
+  s_4df2129ccaa1fa::t_42ff68808349c4 1-802
+apps/studio/worker/projects.ts
+  s_4df2129ccaa1fa::t_e099e872f46299 1-742
+apps/studio/worker/publication-delivery.test.ts
+  s_4df2129ccaa1fa::t_195b40f62e274d 1-136
+apps/studio/worker/publication-delivery.ts
+  s_4df2129ccaa1fa::t_93744b596da191 1-155
+apps/studio/worker/revision-build-lifecycle.ts
+  s_4df2129ccaa1fa::t_10fe152395c9de 1-368
+apps/studio/worker/revision-builds.test.ts
+  s_4df2129ccaa1fa::t_52b71f6b04d60b 1-482
+apps/studio/worker/revision-builds.ts
+  s_4df2129ccaa1fa::t_7044b1bb9a45b7 1-434
+apps/studio/worker/revision-delivery.test.ts
+  s_4df2129ccaa1fa::t_72b21b04eb2c08 1-262
+apps/studio/worker/revision-delivery.ts
+  s_4df2129ccaa1fa::t_038cf35ec714ee 1-165
+apps/studio/worker/revision-provenance.test.ts
+  s_4df2129ccaa1fa::t_e488732a605496 1-160
+apps/studio/worker/revision-video-spec.ts
+  s_4df2129ccaa1fa::t_bc81b322e86fc7 1-10
+apps/studio/worker/revisions.test.ts
+  s_4df2129ccaa1fa::t_fba5998928076c 1-442
+apps/studio/worker/revisions.ts
+  s_4df2129ccaa1fa::t_561253e6d39731 1-664
+apps/studio/worker/secrets.d.ts
+  s_4df2129ccaa1fa::t_e03c792b18a248 1-4
+apps/studio/worker/status.test.ts
+  s_4df2129ccaa1fa::t_9afa37a66b0fa5 1-62
+apps/studio/worker/status.ts
+  s_4df2129ccaa1fa::t_9f9792d7b0bde1 1-88
+apps/studio/worker/worker-configuration.d.ts
+  s_4df2129ccaa1fa::t_4fe97423fc0d9a 1-16867
+apps/studio/worker/worker-constants.ts
+  s_4df2129ccaa1fa::t_44916d944bc1da 1-2
+apps/studio/worker/worker-utils.ts
+  s_4df2129ccaa1fa::t_91b5c2a3238136 1-37
+apps/studio/wrangler.jsonc
+  s_4df2129ccaa1fa::t_aa4aefe2740b9f 1-124
+compositions/product-launch/package.json
+  s_4df2129ccaa1fa::t_4986d8b0a96493 1-29
+compositions/product-launch/src/ProductLaunchComposition.test.tsx
+  s_4df2129ccaa1fa::t_ef97fafe26e38b 1-33
+compositions/product-launch/src/ProductLaunchComposition.tsx
+  s_4df2129ccaa1fa::t_5e28839f112500 1-279
+compositions/product-launch/src/assets/signal-grid.svg
+  s_4df2129ccaa1fa::t_52e88a0a02f24f 1-10
+compositions/product-launch/src/browser.ts
+  s_4df2129ccaa1fa::t_13f04f18351596 1-16
+compositions/product-launch/src/composition.css
+  s_4df2129ccaa1fa::t_bd68d8dbfbc32f 1-443
+compositions/product-launch/src/index.ts
+  s_4df2129ccaa1fa::t_b5c9d74f5d30da 1
+compositions/product-launch/src/manifest.ts
+  s_4df2129ccaa1fa::t_21ee9ffecd650f 1-87
+compositions/product-launch/src/timeline.test.ts
+  s_4df2129ccaa1fa::t_72190766fc493c 1-72
+compositions/product-launch/src/timeline.ts
+  s_4df2129ccaa1fa::t_de6e9555d8b840 1-75
+compositions/product-launch/src/types.d.ts
+  s_4df2129ccaa1fa::t_c1be052f12e3ee 1-6
+compositions/product-launch/tsconfig.json
+  s_4df2129ccaa1fa::t_57b5454af532bd 1-7
+compositions/support-agent/package.json
+  s_4df2129ccaa1fa::t_1ecc6047a36c95 1-27
+compositions/support-agent/src/SupportAgentComposition.tsx
+  s_4df2129ccaa1fa::t_e090d548dd1b3b 1-332
+compositions/support-agent/src/browser.ts
+  s_4df2129ccaa1fa::t_b47d7ab683d4d3 1-10
+compositions/support-agent/src/composition.css
+  s_4df2129ccaa1fa::t_256a4810c39a16 1-404
+compositions/support-agent/src/index.ts
+  s_4df2129ccaa1fa::t_b5c39731e9a18a 1
+compositions/support-agent/src/manifest.ts
+  s_4df2129ccaa1fa::t_ee1c7c9408d95f 1-68
+compositions/support-agent/src/timeline.test.ts
+  s_4df2129ccaa1fa::t_5cabec4b5560e0 1-58
+compositions/support-agent/src/timeline.ts
+  s_4df2129ccaa1fa::t_0c19f55e3bd53d 1-74
+compositions/support-agent/src/types.d.ts
+  s_4df2129ccaa1fa::t_f3db560a406c25 1
+compositions/support-agent/test/fixtures/linux-frame-hashes.json
+  s_4df2129ccaa1fa::t_00e57471578780 1-50
+compositions/support-agent/tsconfig.json
+  s_4df2129ccaa1fa::t_53a3de22e4efb1 1-7
+packages/composition-registry/package.json
+  s_4df2129ccaa1fa::t_94f6f5ad4295e5 1-26
+packages/composition-registry/src/browser.ts
+  s_4df2129ccaa1fa::t_a9e9f8fc8ddc6a 1-58
+packages/composition-registry/src/index.test.ts
+  s_4df2129ccaa1fa::t_9b04f7791bc43b 1-116
+packages/composition-registry/src/index.ts
+  s_4df2129ccaa1fa::t_860092ddc9417c 1-89
+packages/composition-registry/src/types.d.ts
+  s_4df2129ccaa1fa::t_b959eee150d868 1-6
+packages/composition-registry/tsconfig.json
+  s_4df2129ccaa1fa::t_c45efedef7ded5 1-7
+packages/contracts/package.json
+  s_4df2129ccaa1fa::t_e6c9432421ead3 1-15
+packages/contracts/src/composition-manifest.ts
+  s_4df2129ccaa1fa::t_04496ddb8445cc 1-118
+packages/contracts/src/finishing.test.ts
+  s_4df2129ccaa1fa::t_a09769f6c021bc 1-163
+packages/contracts/src/finishing.ts
+  s_4df2129ccaa1fa::t_0211b613350566 1-282
+packages/contracts/src/index.test.ts
+  s_4df2129ccaa1fa::t_f013c2cef82f0f 1-43
+packages/contracts/src/index.ts
+  s_4df2129ccaa1fa::t_2d6a5963f00c46 1-181
+packages/contracts/src/managed-project.test.ts
+  s_4df2129ccaa1fa::t_c4ece7a84c36bc 1-196
+packages/contracts/src/managed-project.ts
+  s_4df2129ccaa1fa::t_2ecef4e754f2d2 1-203
+packages/contracts/src/project-revision.test.ts
+  s_4df2129ccaa1fa::t_3ee472f39a7df1 1-464
+packages/contracts/src/project-revision.ts
+  s_4df2129ccaa1fa::t_533e8215580902 1-428
+packages/contracts/src/shared.ts
+  s_4df2129ccaa1fa::t_cb45872471a5c8 1-4
+packages/contracts/src/video-spec.test.ts
+  s_4df2129ccaa1fa::t_8f4abcf08719f7 1-38
+packages/contracts/src/video-spec.ts
+  s_4df2129ccaa1fa::t_d0ebe9722e4e34 1-30
+packages/contracts/tsconfig.json
+  s_4df2129ccaa1fa::t_178b2170ba9809 1-4
+pnpm-lock.yaml
+  s_dd9d8a9b8c75d7::t_bdc557166e00fc 1-3466
+pnpm-workspace.yaml
+  s_4df2129ccaa1fa::t_a4f2cdc0d3be4f 1-10
+starters/product-project/.gitignore
+  s_4df2129ccaa1fa::t_b5173b1e44b04e 1-2
+starters/product-project/AGENTS.md
+  s_4df2129ccaa1fa::t_3089cf3f992f60 1-13
+starters/product-project/README.md
+  s_4df2129ccaa1fa::t_cbe3b6cec7b6f8 1-24
+starters/product-project/SOURCE_PROVENANCE.md
+  s_4df2129ccaa1fa::t_f055634bb693b5 1-22
+starters/product-project/index.html
+  s_4df2129ccaa1fa::t_aa22c3ddf9fe91 1-12
+starters/product-project/package.json
+  s_4df2129ccaa1fa::t_73a17055e83646 1-30
+starters/product-project/pnpm-lock.yaml
+  s_4df2129ccaa1fa::t_5ce54cddbcae70 1-1301
+starters/product-project/pnpm-workspace.yaml
+  s_4df2129ccaa1fa::t_142d3a87a9d73f 1-2
+starters/product-project/render.html
+  s_4df2129ccaa1fa::t_4e861cc5259761 1-12
+starters/product-project/src/ProductComposition.tsx
+  s_4df2129ccaa1fa::t_be8a7c9000c4fe 1-74
+starters/product-project/src/composition.css
+  s_4df2129ccaa1fa::t_7484755b6a5938 1-171
+starters/product-project/src/main.tsx
+  s_4df2129ccaa1fa::t_d26ecf633ab1fd 1-139
+starters/product-project/src/preview.css
+  s_4df2129ccaa1fa::t_a4d2d8f79c051c 1-73
+starters/product-project/src/render-bridge.ts
+  s_4df2129ccaa1fa::t_c1bb64c23c4c30 1-133
+starters/product-project/src/render-types.d.ts
+  s_4df2129ccaa1fa::t_3b3de3c46278d6 1-7
+starters/product-project/src/render.css
+  s_4df2129ccaa1fa::t_bbdcd719388a78 1-8
+starters/product-project/src/render.tsx
+  s_4df2129ccaa1fa::t_6324efba09c3ba 1-10
+starters/product-project/src/review-bridge.ts
+  s_4df2129ccaa1fa::t_68cc06a588db54 1-82
+starters/product-project/src/story.ts
+  s_4df2129ccaa1fa::t_12c4c581e867d7 1-27
+starters/product-project/src/timeline.ts
+  s_4df2129ccaa1fa::t_aa8bc7b10802d5 1-34
+starters/product-project/test/render-bridge.test.ts
+  s_4df2129ccaa1fa::t_1d2e15065e1e57 1-91
+starters/product-project/test/review-bridge.test.ts
+  s_4df2129ccaa1fa::t_4b244546239aec 1-92
+starters/product-project/test/story.test.ts
+  s_4df2129ccaa1fa::t_7d8f7a6978ae20 1-25
+starters/product-project/test/timeline.test.ts
+  s_4df2129ccaa1fa::t_2036c2c0947e06 1-29
+starters/product-project/tsconfig.json
+  s_4df2129ccaa1fa::t_0635395409af08 1-22
+starters/product-project/vite.config.ts
+  s_4df2129ccaa1fa::t_8151c0163d67d8 1-44
+tsconfig.json
+  s_4df2129ccaa1fa::t_2ec45b66751581 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "46d96fe4d34287307d9982f3890aaf30f051a8d0",
+  "prompts": {},
+  "sessions": {
+    "s_4df2129ccaa1fa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa6b23773ffeq5OtUgb04lkNZA",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_dd9d8a9b8c75d7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f9ce050b1ffeiG15Sez9uts6OX",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_e74336aa5f684d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa68f97f7ffel6lRxhMuhWKrZh",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
