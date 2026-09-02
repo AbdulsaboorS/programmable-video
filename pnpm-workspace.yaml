@@ -1,0 +1,10 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "compositions/*"
+
+allowBuilds:
+  esbuild: true
+  workerd: true
+
+reporter: silent

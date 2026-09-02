@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "image": {
+    "name": "programmable-video-renderer:stage4-baseline",
+    "id": "sha256:977c3798267fdecebd1564b6870921eff401d00063f11dfbbf1531402834b6ad",
+    "platform": "linux/amd64",
+    "playwrightBase": "mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e"
+  },
+  "decodedPixelFormat": "rgba",
+  "width": 1280,
+  "height": 720,
+  "frames": [
+    {
+      "frame": 0,
+      "sha256": "d5140f57564ab9421685934e296d43086558f5b2e10c4b358b45e61391ae89fd"
+    },
+    {
+      "frame": 36,
+      "sha256": "b55f6d89aef5086f355919e5855518e53c7c5bd54fbbae99646f2aef09720526"
+    },
+    {
+      "frame": 75,
+      "sha256": "dedaf8de3fd176aa60cc67c75d0a256151ea7fe473c5a4125d66497b247fe33b"
+    },
+    {
+      "frame": 120,
+      "sha256": "72dd26ff4f11447616b977c7cf9a35e77b4f7d38d3f9460d2e64ec58e1a1a742"
+    },
+    {
+      "frame": 180,
+      "sha256": "32aef19e61f614736b5402b4c6c31ce73f135ea2328eba4fea636bea9b36703a"
+    },
+    {
+      "frame": 220,
+      "sha256": "261ee44c47ade6d9b3a69b629b57290703ed33b3824eda9b7367e0e757f21142"
+    },
+    {
+      "frame": 255,
+      "sha256": "7d084d75aab465af0a34b0de2cd8757bd4f1a595440993c1d67d00ac804faf51"
+    },
+    {
+      "frame": 320,
+      "sha256": "d216616bfb13127df0c38d28441ed34a079cb82f766c62bd585cfb0dd8cab632"
+    },
+    {
+      "frame": 359,
+      "sha256": "9554208eb6d4d7042898e426e8e5f3672995f6d2dafe164935d5a46a01ab83dc"
+    }
+  ]
+}

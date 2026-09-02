@@ -1,0 +1,26 @@
+{
+  "name": "@programmable-video/composition-registry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@programmable-video/contracts": "workspace:*",
+    "@programmable-video/product-launch": "workspace:*",
+    "@programmable-video/support-agent": "workspace:*",
+    "react": "19.2.8",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}

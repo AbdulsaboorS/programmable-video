@@ -1,0 +1,27 @@
+{
+  "name": "@programmable-video/renderer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "smoke:container": "tsx test/container-smoke.ts",
+    "capture:review-stills": "tsx src/capture-review-stills.ts",
+    "verify:support-agent-frames": "tsx test/verify-support-agent-frames.ts",
+    "start": "tsx src/server.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "video": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@programmable-video/composition-registry": "workspace:*",
+    "@programmable-video/contracts": "workspace:*",
+    "playwright": "1.62.1",
+    "tsx": "4.23.12",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.0.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}

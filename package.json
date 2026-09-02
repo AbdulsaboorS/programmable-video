@@ -1,0 +1,31 @@
+{
+  "name": "programmable-video",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "build": "pnpm --recursive --if-present run build",
+    "dev": "pnpm --filter @programmable-video/studio dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "oxlint .",
+    "prepare": "husky",
+    "test": "vitest run --exclude 'starters/product-project/**'",
+    "types:check": "pnpm --recursive --if-present run types:check",
+    "typecheck": "pnpm --recursive --if-present run typecheck",
+    "video": "tsx apps/renderer/src/cli.ts",
+    "verify:support-agent-frames": "pnpm --filter @programmable-video/renderer verify:support-agent-frames"
+  },
+  "devDependencies": {
+    "@total-typescript/shoehorn": "0.1.2",
+    "@types/node": "26.0.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.4.1",
+    "oxlint": "1.80.0",
+    "prettier": "3.9.6",
+    "tsx": "4.23.12",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  }
+}
