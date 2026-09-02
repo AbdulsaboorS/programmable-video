@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+dist
+out
+.wrangler
+coverage
+**/worker-configuration.d.ts
+**/*.svg
+.agents/skills
+product-video
