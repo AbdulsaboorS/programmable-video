@@ -4,9 +4,9 @@ This guide deploys the complete Programmable Video reference application into yo
 
 ## Availability And Cost
 
-You need Workers, Workflows, Containers, Sandbox, Artifacts, D1, R2, Stream, and Zero Trust Access. Product availability and account limits vary. The pinned Wrangler version labels Artifacts and Sandbox commands as prerelease functionality.
+You need Workers Paid, Workflows, Containers, Sandbox, Artifacts, D1, R2, Stream, and Zero Trust Access. Containers and Sandbox require Workers Paid, which starts at $5 USD per month. Stream is paid separately. Artifacts is in private beta and must be enabled for your account. This project also pins a prerelease Sandbox SDK version.
 
-The deployment creates billable compute, storage, and video resources. Delete test projects, Containers, R2 objects, and Stream videos when you no longer need them.
+The deployment creates billable compute, storage, and video resources. The [README cost table](../README.md#deploy-the-complete-studio) links to current pricing. Delete test projects, Containers, R2 objects, and Stream videos when you no longer need them.
 
 ## Local Requirements
 

@@ -8,6 +8,29 @@ Programmable Video turns a product repository, visual references, and a short br
 
 This repository is an experimental reference implementation for developers exploring what they can build with Cloudflare's developer platform. It is not an official Cloudflare product or a one-click production service.
 
+## Fastest Way To Try It
+
+Run the standalone product-video starter. This takes about five minutes on a machine with Node.js installed and does not require a Cloudflare account:
+
+```sh
+cd starters/product-project
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+The starter provides browser preview and exact-frame rendering. Run `pnpm verify` to check formatting, types, tests, and the production build. MP4 rendering and publishing require the complete Studio pipeline.
+
+## Choose How To Run It
+
+| Goal                                   | What you need                                                                 |
+| -------------------------------------- | ----------------------------------------------------------------------------- |
+| Explore the Studio UI locally          | Node.js and pnpm. No Cloudflare account or Access login.                      |
+| Preview or render compositions locally | Chromium; FFmpeg and ffprobe for image or video output.                       |
+| Deploy the complete managed Studio     | Workers Paid, Stream, Artifacts private-beta access, and the resources below. |
+
+`pnpm dev` starts the interface without an email sign-in. Cloudflare Access protects only a deployed Studio because the application does not yet provide its own user accounts, quotas, or abuse controls.
+
 ## The Workflow
 
 1. **Draft:** Record a GitHub source repository, upload visual references, describe the story, and copy a temporary handoff to a coding agent.
@@ -102,22 +125,20 @@ pnpm video render support-agent --output ./out/support-agent.mp4
 
 The renderer captures deterministic browser frames and encodes them with FFmpeg. Use `--props ./props.json` to provide validated composition properties.
 
-### Edit The Product Starter
-
-The seed project can also run as a small standalone composition workspace:
-
-```sh
-cd starters/product-project
-corepack enable
-pnpm install --frozen-lockfile
-pnpm dev
-```
-
-Its `pnpm verify` command checks formatting, types, tests, and the production build. Managed MP4 rendering is performed by the complete Studio pipeline; the starter alone currently provides browser preview and frame rendering.
-
 ## Deploy The Complete Studio
 
-The managed application is intentionally infrastructure-heavy. You need a Cloudflare account with Workers, Workflows, Containers, Sandbox, Artifacts, D1, R2, Stream, and Access. Artifacts availability is limited, and the pinned Wrangler version labels its commands as private beta.
+The complete Studio is not a free-tier deployment. Pricing and availability below were checked on September 2, 2026 and may change.
+
+| Requirement          | Plan or cost                                                                                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Workers              | Workers Paid is required by Containers and Sandbox. It starts at [$5 USD per month](https://developers.cloudflare.com/workers/platform/pricing/).            |
+| Workflows            | Included with Workers Paid, with monthly usage allowances and overage pricing.                                                                               |
+| Containers + Sandbox | Included usage comes with Workers Paid; additional CPU, memory, disk, and network usage is metered.                                                          |
+| D1                   | Workers Paid includes usage allowances; additional rows and storage are metered.                                                                             |
+| R2                   | Includes a monthly free allowance; storage and operations beyond it are metered. R2 egress is free.                                                          |
+| Stream               | Paid separately: [$5 per 1,000 stored minutes and $1 per 1,000 delivered minutes](https://developers.cloudflare.com/stream/pricing/).                        |
+| Artifacts            | Required and currently in [private beta](https://developers.cloudflare.com/changelog/post/2026-04-16-artifacts-now-in-beta/). Your account must have access. |
+| Access               | A Zero Trust free plan can protect a small deployment. Users authenticate only when opening the deployed Studio.                                             |
 
 Deployment is manual and intended for experienced Cloudflare developers. It requires:
 
