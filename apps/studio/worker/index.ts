@@ -104,10 +104,14 @@ const revisionQueuePollLimit = 240;
 
 type RenderWorkflowParams = RenderRequest;
 
+interface RendererEnvironmentVariables {
+  [name: string]: string;
+}
+
 export class RendererContainer extends Container<Env> {
   defaultPort = 8080;
   sleepAfter = "2m";
-  envVars = {
+  envVars: RendererEnvironmentVariables = {
     CONTAINER_EXTRA_CA_CERT: this.env.CONTAINER_EXTRA_CA_CERT ?? "",
   };
 }
