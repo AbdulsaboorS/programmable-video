@@ -1,0 +1,290 @@
+apps/studio/worker/revision-delivery.test.ts
+  s_bee996d02c7245::t_db230b819b8e9f 5-9,17-29
+  s_2c878ce9031c50::t_587b21b8673509 30
+apps/studio/worker/index.ts
+  s_1f5343ba5700b8::t_39945181c88eed 9,31,35,51,413-415,418-422,425-434,461,464,466-472,768-770,964-967,972-978
+  s_bee996d02c7245::t_f84cfb4a8fabd1 757
+  s_bee996d02c7245::t_a14ca66667b590 98,123,132,192,222,266,341
+  s_bee996d02c7245::t_4b4747e226b98f 110-112
+  s_bee996d02c7245::t_db230b819b8e9f 64-67,299,301-302
+  s_bee996d02c7245::t_de2da9de0aeb41 435-460,462-463,465
+  s_bee996d02c7245::t_ee2ead99507b4a 63
+  s_1f5343ba5700b8::t_badc96c064bbb4 979-980
+apps/studio/worker/access.test.ts
+  s_1f5343ba5700b8::t_e31977ed05ea3c 2,5,11-22,28-30
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 23-27
+README.md
+  s_bee996d02c7245::t_b74ea80e4516dd 3,7,9,13-16,18,20,26-29,32,40,43-44,47,49,51-54,56,60,63,65,67,71-72,74-77,79-104,107-117,119,121-133,135,137-142,144,148-150,152,154,156,160,172,176
+  s_bee996d02c7245::t_2c4477428f8296 30,55,57,70,73,78,174
+apps/preview/package.json
+  s_bee996d02c7245::t_e36a34dee802bd 8
+AGENTS.md
+  s_bee996d02c7245::t_2c4477428f8296 50
+docs/project-brief.md
+  s_bee996d02c7245::t_2c4477428f8296 111,113,117,123
+  s_bee996d02c7245::t_d4ab80fbac049d 167,298,304,343,352
+SESSION_CONTEXT.md
+  s_bee996d02c7245::t_d4ab80fbac049d 33-34
+  s_bee996d02c7245::t_0fd4c2b2fb958b 38
+  s_bee996d02c7245::t_c7c94f3f2b2ccb 41-42,47
+  s_bee996d02c7245::t_9f41f6f3d8f74f 10
+  s_bee996d02c7245::t_2c4477428f8296 7
+  s_bee996d02c7245::t_6c8b951c42c904 32,39,46
+  s_bee996d02c7245::t_2ac68e8aa09b0b 35-37
+  s_bee996d02c7245::t_03df2cd97d7c86 40
+  s_bee996d02c7245::t_76b808be346a59 8-9
+  s_bee996d02c7245::t_14d9d4ff7c0e3a 29-31
+docs/stage-4-authoring-evaluation.md
+  s_bee996d02c7245::t_d4ab80fbac049d 33,69
+package.json
+  s_bee996d02c7245::t_2c4477428f8296 9
+  s_b95c7f346ae2e4::t_b9e900700049ec 14
+apps/studio/worker/managed-publications.ts
+  s_bee996d02c7245::t_a14ca66667b590 13-14,538
+apps/studio/migrations/0009_local_revision_bundles.sql
+  s_69393b3b853ccd::t_b5fff805de219d 1-56,58-83,85-88
+  s_69393b3b853ccd::t_1199dfe03a33f9 57,84
+apps/studio/worker/revisions.test.ts
+  s_bee996d02c7245::t_34438e9932bbf8 68-70
+  s_1f5343ba5700b8::t_1ccf56391291d7 166,168-172
+  s_1f5343ba5700b8::t_8d7d973c2f24c0 9,195-227
+  s_bee996d02c7245::t_51bf0621789ab6 98-103,186-194
+  s_bee996d02c7245::t_57d4c0fd3dfb31 94-97
+apps/studio/worker/worker-configuration.d.ts
+  s_1f5343ba5700b8::t_53c19d1bcb3071 2
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 5
+apps/renderer/Dockerfile
+  s_bee996d02c7245::t_3993e876ee2169 13,22-23
+apps/studio/worker/revision-provenance.test.ts
+  s_1f5343ba5700b8::t_2d923ff3e545be 11,40-45,47-50,53-76
+  s_1f5343ba5700b8::t_64ec6305c07abe 46,51-52
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 19-20
+apps/studio/worker/revisions.ts
+  s_bee996d02c7245::t_28cfede8b052e5 315-324
+  s_1f5343ba5700b8::t_7bdaf816b4a722 126-128,134
+  s_1f5343ba5700b8::t_16424da9803ff3 58,784,788,797
+  s_bee996d02c7245::t_f84cfb4a8fabd1 59,624-628
+  s_1f5343ba5700b8::t_aeb7802916b0f5 908,914-915,918-923,987-988,999-1002,1162,1191,1204
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 243-250,259-262,270-272,274,284-288,290-291,301-302,307-311,326-329,355,412-415,448-452,456-459,470-476,492-496,519-523,594-599,637-644,646-649,662-666,673-676,678-681,1003-1011,1013-1022
+  s_1f5343ba5700b8::t_c54da915da74f9 60,763,765-769,780-783,785-787,789-796,798-807,813,815,822,873,879
+  s_bee996d02c7245::t_de2da9de0aeb41 150,333-354,357,716-717,916
+  s_1f5343ba5700b8::t_16542213151212 237-242,251-258,263-269,275-276,278-283,289,303-306,312-314,325,330-332,356,358-360,362,365-375,398,408-411,416-419,422-447,453-455,460-469,477-491,497-518,524-546,579,589-593,600-607,613-620,622,635-636,645,650-661,667-670,672,677,682-686,917
+  s_1f5343ba5700b8::t_9b65bb6c19a67a 376,383-394,396-397,399,547-578,580-588
+  s_1f5343ba5700b8::t_26f6f3f0517418 20,363,671
+  s_bee996d02c7245::t_9d0ee42c7f8c18 15
+  s_1f5343ba5700b8::t_54cad10236a984 621
+  s_bee996d02c7245::t_d6dac6160d356d 273,277,292-297
+  s_bee996d02c7245::t_ff13a46bce8eb9 298-300
+  s_1f5343ba5700b8::t_492fbcab6426b7 404-407
+  s_bee996d02c7245::t_b767e410f21659 623,629
+  s_bee996d02c7245::t_2c4477428f8296 630-634
+  s_1f5343ba5700b8::t_1d8427aa77ea9f 608-612
+  s_1f5343ba5700b8::t_6c530f05939f1b 361,364,377-382,395,400-403,420-421
+  s_1f5343ba5700b8::t_a30b9cb3b4b476 4-6,17,21,41,57,104,106-117,135-149,151-183,186-204,216-217
+  s_1f5343ba5700b8::t_8205cba2fae134 61
+packages/contracts/src/index.ts
+  s_69393b3b853ccd::t_b5fff805de219d 84-85,93-94,103-104,108-110,137-140,155-157
+apps/project-cli/tsconfig.json
+  s_b95c7f346ae2e4::t_b9e900700049ec 1-7
+apps/project-cli/test/project-command.test.ts
+  s_b95c7f346ae2e4::t_b9e900700049ec 1-8,10-22,31-54,58-81,95-97,99-121,123-139,141-151,157-189,194-198
+  s_b95c7f346ae2e4::t_331fe9390c136d 9,122
+  s_bee996d02c7245::t_00dc3e6d7eae8e 23-30
+  s_b95c7f346ae2e4::t_6b8e00960b50cc 98
+  s_b95c7f346ae2e4::t_7dadd345b316ed 55-57,140,152-156,190-193
+  s_bee996d02c7245::t_d6dac6160d356d 82-94
+apps/studio/.dev.vars.example
+  s_bee996d02c7245::t_de2da9de0aeb41 2
+  s_bee996d02c7245::t_2c4477428f8296 1
+  s_bee996d02c7245::t_c7c94f3f2b2ccb 3
+  s_bee996d02c7245::t_6df69d480500dd 6-7
+apps/preview/worker.ts
+  s_bee996d02c7245::t_839d95f807efa1 137-139,141
+apps/studio/worker/revision-builds.ts
+  s_1f5343ba5700b8::t_721edeec17037d 4,7,18-22,38,43,164-177,180-188,193-196,208-231,243,245-250,255-259,285,322-323,325-326,331-332,334-338,341,343-353,355-362,365,369-374,379,384-386,391-394,397,401,417,421-422,427
+  s_bee996d02c7245::t_de2da9de0aeb41 39-42,402-416,428-443,449-457,459-478,690
+  s_bee996d02c7245::t_57d4c0fd3dfb31 444-448
+  s_1f5343ba5700b8::t_f38f8a9005d2d5 2,686
+  s_bee996d02c7245::t_64a4938f9b0c5c 232-242
+  s_bee996d02c7245::t_70b75dd15bdfd1 458
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 178-179,189-192,197-207,244,327-328,366-368,375-378,380-383,387-390,395-396,398-400,418-420,423-426,687-689
+  s_1f5343ba5700b8::t_bd5f77f44b1444 324,329-330,333,339-340,342,354,363-364
+  s_bee996d02c7245::t_4efcded9118ed1 479
+  s_bee996d02c7245::t_9c2243243a73e8 691
+packages/contracts/src/project-revision.test.ts
+  s_69393b3b853ccd::t_b5fff805de219d 10-12,14,184-224
+  s_69393b3b853ccd::t_a3c0b6467ec640 225-226
+apps/studio/worker/projects.ts
+  s_1f5343ba5700b8::t_12110293487bf4 21
+  s_bee996d02c7245::t_64a4938f9b0c5c 220
+  s_1f5343ba5700b8::t_005ac0a0762ba6 362-371,373-388
+  s_1f5343ba5700b8::t_67c11b3d02eae4 46,150-151,161,163,176,219,221,427,582-595
+  s_bee996d02c7245::t_f84cfb4a8fabd1 352,372
+  s_bee996d02c7245::t_d6dac6160d356d 23,177
+  s_1f5343ba5700b8::t_9f7913e3fcb0aa 389
+apps/studio/worker/access.ts
+  s_1f5343ba5700b8::t_029d111a49bb3f 9,25-27,34-45,48-50
+docs/iteration-model.md
+  s_bee996d02c7245::t_2c4477428f8296 21
+  s_bee996d02c7245::t_d4ab80fbac049d 48
+packages/contracts/src/project-revision.ts
+  s_69393b3b853ccd::t_b5fff805de219d 7,51-75,437-445
+apps/studio/worker/stream-service.ts
+  s_bee996d02c7245::t_6df69d480500dd 1-36,46-53,81-85,87-90,92-159,161-166,169-173,184-186,193-198,204-207,212-220,227-230,234-245
+  s_bee996d02c7245::t_90d439933e420d 54,64-66,174-182,187-192,199-203,209,211,221-226,231-233
+  s_bee996d02c7245::t_2c7471af23f279 91,183,208
+  s_bee996d02c7245::t_f3ae884727b666 37-45,86,160,167-168
+  s_bee996d02c7245::t_f74c346f5b3ab6 55-63,67-80,210
+apps/studio/vite.config.ts
+  s_bee996d02c7245::t_f3ae884727b666 6-24,29-47,53
+  s_bee996d02c7245::t_64a4938f9b0c5c 48
+  s_bee996d02c7245::t_4b4747e226b98f 25-28
+apps/renderer/src/upload-video.ts
+  s_bee996d02c7245::t_479c62b272b68b 3,14-15,29-32,37-40
+  s_bee996d02c7245::t_f034ad71015003 7,47,86
+  s_bee996d02c7245::t_4b4747e226b98f 9,33-36,41,55
+  s_bee996d02c7245::t_9042de9760ff1d 10,16,26-28,87-90,92-93
+  s_bee996d02c7245::t_c5c5cfded4ced7 13,96-97,110-124
+  s_bee996d02c7245::t_83770a2a4f9e55 94-95,98-109,125-126
+apps/renderer/test/upload-video.test.ts
+  s_bee996d02c7245::t_5df7f5a53d32e5 71,82
+apps/project-cli/package.json
+  s_b95c7f346ae2e4::t_331fe9390c136d 6-8
+  s_b95c7f346ae2e4::t_b9e900700049ec 1-5,9-18
+apps/studio/worker/project-references.test.ts
+  s_bee996d02c7245::t_b10dc6e027882b 430
+apps/preview/worker.test.ts
+  s_bee996d02c7245::t_6c513bb8f5cc18 145-147
+apps/studio/worker/revision-delivery.ts
+  s_bee996d02c7245::t_8d67193d10a5ca 86-89
+  s_bee996d02c7245::t_db230b819b8e9f 9,40,82-85,90-93
+  s_bee996d02c7245::t_87c38d4424fe22 41-45
+  s_bee996d02c7245::t_9aba6ca1f492e1 94-95
+apps/studio/worker/secrets.d.ts
+  s_bee996d02c7245::t_6df69d480500dd 4-5
+  s_bee996d02c7245::t_4b4747e226b98f 6
+apps/studio/wrangler.jsonc
+  s_1f5343ba5700b8::t_029d111a49bb3f 44-46
+  s_1f5343ba5700b8::t_aba58c68a141c4 43
+apps/studio/worker/project-references.ts
+  s_bee996d02c7245::t_f84cfb4a8fabd1 67,73,75,119-121
+  s_bee996d02c7245::t_941c066c971f49 123
+apps/studio/package.json
+  s_bee996d02c7245::t_3257c469b67c25 9
+  s_bee996d02c7245::t_2c4477428f8296 8
+apps/studio/worker/stream-service.test.ts
+  s_bee996d02c7245::t_383ddea413f0e5 25
+  s_bee996d02c7245::t_6df69d480500dd 1-24,26-128
+apps/studio/worker/publication-delivery.ts
+  s_bee996d02c7245::t_a14ca66667b590 13,26,114
+packages/contracts/src/managed-project.test.ts
+  s_69393b3b853ccd::t_b5fff805de219d 8,120,150-180
+  s_69393b3b853ccd::t_63505a5d92afc5 181-183
+apps/studio/worker/revision-bundle-submission.test.ts
+  s_1f5343ba5700b8::t_967d5233b56836 138,140,147
+  s_1f5343ba5700b8::t_cbd493236e36fe 5,77-90,115-119
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 7,38-40,68-76,108-110,120-127,141-142,168-180,182,189-194,198-201,214-221,223-226,286-291
+  s_1f5343ba5700b8::t_26f6f3f0517418 4,15-18,24-25
+  s_bee996d02c7245::t_2c4477428f8296 297-299,303-321
+  s_bee996d02c7245::t_040b6263131d3a 322-324,328-347
+  s_bee996d02c7245::t_db97edf1ee9922 206
+  s_bee996d02c7245::t_741fd890d17ee8 148-155
+  s_bee996d02c7245::t_b10dc6e027882b 129-132,146,156-160,164,187,283-284
+  s_bee996d02c7245::t_d6dac6160d356d 48-52,229-242
+  s_1f5343ba5700b8::t_5097e14094476a 42,139,205
+  s_1f5343ba5700b8::t_9b7561421cdb8c 1-3,6,8-14,26-37,41,43-47,53-67,91-107,128,133-137,143-145,161-163,165-167,181,183-186,188,195-197,202-204,207-213,222,227-228,243-258,282,285,292-296,348
+  s_1f5343ba5700b8::t_d47dfd96fe8f3b 19-23
+  s_1f5343ba5700b8::t_492fbcab6426b7 111-114
+  s_bee996d02c7245::t_3520875f063005 259-281
+  s_bee996d02c7245::t_b767e410f21659 300-302,325-327
+packages/contracts/src/managed-project.ts
+  s_bee996d02c7245::t_941c066c971f49 184-185,192-193,195-196
+  s_69393b3b853ccd::t_b5fff805de219d 55,57,65-77,180,182-183,197-204,209,213-226,230,238-244
+  s_bee996d02c7245::t_f84cfb4a8fabd1 186-191,194
+  s_69393b3b853ccd::t_d7a3f555b28575 229
+  s_bee996d02c7245::t_3ed968a6f21e74 227
+apps/project-cli/src/cli.ts
+  s_b95c7f346ae2e4::t_b9e900700049ec 1-3
+apps/studio/src/ProjectPanel.test.tsx
+  s_e8b8b30976f618::t_9398d3a912d44e 456-502,506-525,530-531,1223-1224,1261-1270
+  s_e8b8b30976f618::t_b97ab18a686af9 526-529
+  s_e8b8b30976f618::t_319a48f270b320 503-505
+  s_e8b8b30976f618::t_f0a5facbdd7fb7 1145-1152,1176
+  s_e8b8b30976f618::t_03a4d4c2a18aed 79,275,641
+apps/studio/worker/projects.test.ts
+  s_1f5343ba5700b8::t_f301ee61c26bfd 35,192,302,381,395-396,406,411-415,456,471,546,559-561,606
+  s_1f5343ba5700b8::t_383029a5d06f0e 621-622,624-637
+  s_1f5343ba5700b8::t_9659a9bba8d2f1 623
+  s_bee996d02c7245::t_75f95cf7b7b33b 388,403-404
+apps/project-cli/src/project-command.ts
+  s_b95c7f346ae2e4::t_6b8e00960b50cc 15
+  s_b95c7f346ae2e4::t_7dadd345b316ed 134-135,172-175,236-240,247-249,384-387
+  s_bee996d02c7245::t_de2da9de0aeb41 351
+  s_b95c7f346ae2e4::t_9708a4b456f622 156-163
+  s_bee996d02c7245::t_64a4938f9b0c5c 233-235
+  s_b95c7f346ae2e4::t_331fe9390c136d 17,31-33,35-45,96,100-102,109,153-155,275,278,280,305-306,315,317,328,330,333-337,341-342,396-402
+  s_bee996d02c7245::t_7dc0cc873a06cf 363
+  s_b95c7f346ae2e4::t_714f71f7a4a5d5 30,34,136-137,141,224-229
+  s_b95c7f346ae2e4::t_b9e900700049ec 1-14,16,18-29,46-95,97-99,103-108,110-133,138-140,142-152,164-171,176-223,230-232,241-246,250-274,276-277,279,281-304,307-314,316,318-327,329,331-332,338-340,343-350,352-362,364-383,388-395,403-414
+apps/studio/src/ProjectPanel.tsx
+  s_e8b8b30976f618::t_b97ab18a686af9 283
+  s_e8b8b30976f618::t_e08b7615cd45d1 7,210-232,234-282,284-309,314,316-319,830-835,929-934
+  s_bee996d02c7245::t_64a4938f9b0c5c 233
+  s_e8b8b30976f618::t_03a4d4c2a18aed 1349-1353,1356-1358,1833-1836
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c44c42dbd97e3b1ecc53702f2fec43ed88e1ff13",
+  "prompts": {},
+  "sessions": {
+    "s_1f5343ba5700b8": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f980353f6ffejGP0bV2CackENX",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_2c878ce9031c50": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98054c40ffe0lgzENqwYNb1P7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_69393b3b853ccd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f980819deffeIqG6dOzmBejqma",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_b95c7f346ae2e4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f980819cfffeOSb5Cm30p1IXME",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_e8b8b30976f618": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f980353e1ffeRyLShtHNNR2rJx",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
