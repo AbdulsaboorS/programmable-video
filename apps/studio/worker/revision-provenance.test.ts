@@ -8,7 +8,7 @@ const projectId = "0198c7d4-a5e6-7000-8000-000000000000";
 const revisionId = "0198c7d4-a5e6-7000-8000-000000000001";
 const commitSha = "a".repeat(40);
 
-function environment(options: { ready?: boolean } = {}) {
+function environment(options: { ready?: boolean; provenance?: string } = {}) {
   const first = vi.fn(async (...values: unknown[]) =>
     options.ready === false || values[1] !== owner
       ? null
@@ -16,6 +16,8 @@ function environment(options: { ready?: boolean } = {}) {
           revision_id: revisionId,
           commit_sha: commitSha,
           repository_name: "video-test",
+          source_kind: options.provenance ? "r2-bundle" : "artifacts",
+          source_provenance: options.provenance ?? null,
         },
   );
   const prepare = vi.fn(() => ({
@@ -35,6 +37,43 @@ function environment(options: { ready?: boolean } = {}) {
 }
 
 describe("revision source provenance", () => {
+  it("serves persisted provenance for a bundle revision without Artifacts", async () => {
+    const markdown = `# Source Provenance
+
+## Product Source
+
+- Repository: local bundle
+- Commit: ${commitSha}
+
+## Reused Source
+
+- Components: src/App.tsx
+- Styles and fonts: src/styles.css
+- Icons and assets: public/icon.svg
+
+## Adaptations
+
+- Uses deterministic fixtures.
+
+## Remaining Visual Differences
+
+- None`;
+    const { env } = environment({ provenance: markdown });
+    const fetcher = vi.fn<typeof fetch>();
+
+    const response = await getRevisionSourceProvenance(
+      projectId,
+      revisionId,
+      owner,
+      env,
+      fetcher,
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ markdown });
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
   it("retrieves bounded evidence from the server-resolved exact commit", async () => {
     const { env, first, prepare } = environment();
     const markdown = `# Source Provenance

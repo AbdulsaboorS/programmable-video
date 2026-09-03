@@ -6,6 +6,7 @@ import {
   finishRevisionInspection,
   inspectRevision,
   listProjectRevisions,
+  loadPendingRevisionTarget,
   recordPushedRevision,
   type RevisionEnv,
   type RevisionTarget,
@@ -64,7 +65,9 @@ function pushedEvent(overrides: PushedEventOverrides = {}): PushedEvent {
   };
 }
 
-function recordingEnvironment() {
+function recordingEnvironment(
+  projectKind: "artifacts" | "local" = "artifacts",
+) {
   let revision:
     | {
         id: string;
@@ -88,7 +91,16 @@ function recordingEnvironment() {
   const prepare = vi.fn((sql: string) => ({
     bind: (...values: unknown[]) => ({
       first: async () => {
-        if (sql.includes("FROM projects WHERE repository_name")) {
+        if (
+          sql.includes("FROM projects") &&
+          sql.includes("repository_name = ?")
+        ) {
+          if (
+            projectKind === "local" &&
+            sql.includes("authoring_source_kind = 'artifacts'")
+          ) {
+            return null;
+          }
           return {
             id: projectId,
             repository_name: "video-test",
@@ -151,9 +163,13 @@ const target: RevisionTarget = {
   id: "0198c7d4-a5e6-7000-8000-000000000001",
   projectId,
   commitSha,
-  repositoryName: "video-test",
-  repositoryRemoteUrl: "https://example.com/video-test.git",
+  ref: "refs/heads/main",
   inspectionStatus: "pending",
+  source: {
+    kind: "artifacts",
+    repositoryName: "video-test",
+    repositoryRemoteUrl: "https://example.com/video-test.git",
+  },
 };
 
 const validPackage = JSON.stringify({
@@ -167,6 +183,48 @@ const validPackage = JSON.stringify({
 });
 
 describe("project revisions", () => {
+  it("ignores Artifacts events for local-authoring projects", async () => {
+    const { env } = recordingEnvironment("local");
+
+    await expect(recordPushedRevision(pushedEvent(), env)).resolves.toEqual({
+      kind: "ignored",
+      reason: "unknown-repository",
+    });
+  });
+
+  it("loads a pending bundle target with immutable source identity", async () => {
+    const database = fromPartial<D1Database>({
+      prepare: () => ({
+        bind: () => ({
+          first: async () => ({
+            id: target.id,
+            project_id: projectId,
+            commit_sha: commitSha,
+            ref: "refs/heads/main",
+            inspection_status: "pending",
+            source_kind: "r2-bundle",
+            source_bundle_key: "projects/project/revisions/source.bundle",
+            source_bundle_digest: "b".repeat(64),
+            source_bundle_size: 123,
+            repository_name: "local-sentinel",
+            repository_remote_url: "https://local.invalid/project",
+          }),
+        }),
+      }),
+    });
+
+    await expect(
+      loadPendingRevisionTarget(target.id, projectId, database),
+    ).resolves.toMatchObject({
+      ref: "refs/heads/main",
+      source: {
+        kind: "r2-bundle",
+        bundleDigest: "b".repeat(64),
+        bundleSize: 123,
+      },
+    });
+  });
+
   it("does not list revisions owned by another user", async () => {
     let revisionQueryRan = false;
     const database = fromPartial<D1Database>({

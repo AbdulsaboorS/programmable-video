@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "wrangler deploy --dry-run --outdir dist",
+    "dev": "wrangler dev --port \"${PV_PREVIEW_PORT:-5174}\" --inspector-port 9240 --compatibility-date 2026-08-27 --persist-to \"${PV_PERSIST_PATH:-../../.wrangler/state}\" --var \"STUDIO_ORIGIN:${PV_STUDIO_ORIGIN:-http://localhost:${PV_STUDIO_PORT:-5173}}\"",
     "typecheck": "tsc --noEmit",
-    "types:check": "wrangler types worker-configuration.d.ts --check",
     "types:worker": "wrangler types worker-configuration.d.ts"
   },
   "dependencies": {

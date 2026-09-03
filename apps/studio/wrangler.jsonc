@@ -41,6 +41,10 @@
   ],
   "r2_buckets": [
     {
+      "binding": "REVISION_SOURCES",
+      "bucket_name": "programmable-video-revision-sources",
+    },
+    {
       "binding": "REVISION_PREVIEWS",
       "bucket_name": "programmable-video-previews",
     },

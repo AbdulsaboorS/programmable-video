@@ -10,6 +10,8 @@ import {
   type PublicationAttempt,
 } from "@programmable-video/contracts";
 
+import type { PublicationStreamService } from "./stream-service";
+
 import type { BoundaryError } from "./worker-utils";
 
 export interface PublicationWorkflowTarget {
@@ -533,7 +535,7 @@ export async function persistStreamUpload(
 
 export async function reservePublicationStreamUpload(
   target: PublicationWorkflowTarget,
-  stream: StreamBinding,
+  stream: PublicationStreamService,
   db: D1Database,
 ): Promise<{ videoId: string; uploadUrl: string }> {
   const persisted = await loadPersistedStreamUpload(target.attemptId, db);

@@ -18,7 +18,7 @@ The intended model distinguishes:
 - **Live draft:** the latest compile-valid preview from an agent workspace. It may contain uncommitted work and cannot be approved or rendered.
 - **Saved revision:** an immutable Git commit that passed the required checks. It can be reviewed, approved, and rendered while earlier revisions remain available.
 
-The current prototype stores product visuals and video-specific code in one managed repository and creates previews only after a push. The terms above describe the target boundary, not behavior already available in Studio.
+The current prototype stores product visuals and video-specific code in one local composition repository and creates previews after the project CLI submits a clean `main` commit. The terms above describe the target boundary, not behavior already available in Studio.
 
 ## Target Creator Loop
 
@@ -45,7 +45,7 @@ The immutable revision remains the safety boundary. Approval and final rendering
 
 The agent-facing workflow should follow five principles demonstrated well by tools such as `tcut`:
 
-1. Give agents one short task contract containing source identity, video brief, references, managed repository access, completion command, and required report.
+1. Give agents one short task contract containing source identity, video brief, references, local repository path, completion command, and required report.
 2. Provide one non-interactive verification command with stable machine-readable results.
 3. Treat accepted product visuals as a reusable artifact rather than rebuilding the UI for each video.
 4. Make variations change story and timing before changing accepted product visuals.
@@ -57,10 +57,10 @@ The Voice second-repository test showed that the generated handoff was repetitiv
 
 1. The second-repository test, generated-handoff simplification, request-changes handoff, and one-command starter verification are complete.
 2. The embedded exact-preview implementation is complete locally with play, pause, frame seeking, time, fullscreen, retry, and frame-specific external-agent feedback. Preview Worker deployment and reviewed-starter synchronization remain release gates.
-3. Persist briefs and feedback, accept visual references, and surface source provenance during product-match review. Complete.
+3. Persist briefs and feedback, accept reference screenshots, and surface source provenance during product-match review.
 4. Make the reusable product-visual and video-specific boundaries explicit in the managed project starter.
 5. Request a second video from one accepted product visual version and measure creator time, changed files, fidelity, and code reuse.
-6. Run an unassisted DevRel creator test, then address build queuing, retry, isolation, egress, and launch documentation.
+6. Run an unassisted DevRel creator test, then address build queuing, retry, isolation, egress, and launch documentation. See [Internal Beta Launch Plan](internal-beta-launch-plan.md).
 
 ## Not Now
 

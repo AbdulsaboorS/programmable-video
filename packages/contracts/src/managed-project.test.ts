@@ -5,6 +5,7 @@ import {
   createManagedProjectRequestSchema,
   createProjectFeedbackRequestSchema,
   createReferenceUploadRequestSchema,
+  managedRepositorySchema,
   referenceImageMaxBytes,
   referenceMetadataSchema,
   saveProjectBriefRequestSchema,
@@ -116,6 +117,7 @@ describe("managed project contracts", () => {
 
   it("requires secure reference downloads in agent handoffs", () => {
     const handoff = {
+      kind: "artifacts",
       remoteUrl: "https://artifacts.example/video.git",
       token: "git-token",
       tokenExpiresAt: "2026-08-20T11:00:00.000Z",
@@ -141,6 +143,40 @@ describe("managed project contracts", () => {
             downloadUrl: "http://studio.example/ref",
           },
         ],
+      }).success,
+    ).toBe(false);
+  });
+
+  it("distinguishes artifacts and local authoring contracts", () => {
+    expect(
+      managedRepositorySchema.safeParse({
+        kind: "artifacts",
+        name: "project-video",
+        remoteUrl: "https://artifacts.example/video.git",
+        defaultBranch: "main",
+        state: "seeded",
+      }).success,
+    ).toBe(true);
+    expect(
+      managedRepositorySchema.safeParse({
+        kind: "local",
+        defaultBranch: "main",
+        state: "initialized",
+      }).success,
+    ).toBe(true);
+
+    const localHandoff = {
+      kind: "local",
+      projectId: "0198c7d4-a5e6-7000-8000-000000000000",
+      defaultBranch: "main",
+      tokenExpiresAt: "2026-08-20T11:00:00.000Z",
+      references: [],
+    };
+    expect(agentHandoffSchema.parse(localHandoff)).toEqual(localHandoff);
+    expect(
+      agentHandoffSchema.safeParse({
+        ...localHandoff,
+        remoteUrl: "https://artifacts.example/video.git",
       }).success,
     ).toBe(false);
   });

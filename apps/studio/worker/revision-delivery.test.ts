@@ -2,13 +2,31 @@ import { fromPartial } from "@total-typescript/shoehorn";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
-import { approveRevision, createPreviewSession } from "./revision-delivery";
+import {
+  approveRevision,
+  containerArtifactUrl,
+  createPreviewSession,
+} from "./revision-delivery";
 
 const owner = "creator@example.com";
 const otherOwner = "other@example.com";
 const projectId = "0198c7d4-a5e6-7000-8000-000000000000";
 const revisionId = "0198c7d4-a5e6-7000-8000-000000000001";
 const signingKey = "test-preview-signing-key";
+
+describe("container artifact URL", () => {
+  it("routes local Preview through the Docker host gateway", () => {
+    expect(containerArtifactUrl("http://localhost:5174", revisionId)).toBe(
+      `http://host.docker.internal:5174/artifact/${revisionId}`,
+    );
+  });
+
+  it("preserves production Preview origins", () => {
+    expect(
+      containerArtifactUrl("https://preview.example.com", revisionId),
+    ).toBe(`https://preview.example.com/artifact/${revisionId}`);
+  });
+});
 
 interface ReadyRevision {
   project_id: string;

@@ -6,6 +6,7 @@ import {
   projectMediaAssetSchema,
   revisionArtifactManifestSchema,
   rendererErrorResponseSchema,
+  type RevisionSubmissionWorkflowCommand,
   type RenderStatus,
 } from "@programmable-video/contracts";
 import {
@@ -27,9 +28,11 @@ import {
   getRevisionSourceProvenance,
   inspectRevision,
   listProjectRevisions,
+  loadPendingRevisionTarget,
   loadRevisionTarget,
   recordPushedRevision,
   revisionErrorFinding,
+  submitRevisionBundle,
   type ArtifactRepoPushedEvent,
 } from "./revisions";
 import {
@@ -45,7 +48,7 @@ import {
   getReferenceByCapability,
   getReferenceContent,
 } from "./project-references";
-import { buildRevision } from "./revision-builds";
+import { buildRevision, inspectBundledRevision } from "./revision-builds";
 import {
   claimRevisionBuild,
   completeRevisionBuild,
@@ -57,7 +60,11 @@ import {
   revisionSandboxId,
   type RevisionBuildRetryCommand,
 } from "./revision-build-lifecycle";
-import { approveRevision, createPreviewSession } from "./revision-delivery";
+import {
+  approveRevision,
+  containerArtifactUrl,
+  createPreviewSession,
+} from "./revision-delivery";
 import {
   completePublicationAttempt,
   createManagedPublication,
@@ -88,6 +95,7 @@ import {
   type PreviewCapability,
 } from "./preview-capability";
 import { streamPollInterval } from "./worker-constants";
+import { publicationStreamService } from "./stream-service";
 import type { BoundaryError } from "./worker-utils";
 
 const streamDeadlineMs = 20 * 60 * 1000;
@@ -99,6 +107,9 @@ type RenderWorkflowParams = RenderRequest;
 export class RendererContainer extends Container<Env> {
   defaultPort = 8080;
   sleepAfter = "2m";
+  envVars = {
+    CONTAINER_EXTRA_CA_CERT: this.env.CONTAINER_EXTRA_CA_CERT ?? "",
+  };
 }
 
 export class RenderWorkflow extends WorkflowEntrypoint<
@@ -109,6 +120,7 @@ export class RenderWorkflow extends WorkflowEntrypoint<
     event: WorkflowEvent<RenderWorkflowParams>,
     step: WorkflowStep,
   ): Promise<RenderStatus> {
+    const stream = publicationStreamService(this.env);
     const payload = await withWorkflowFailure("validation", async () =>
       parseRenderRequest(event.payload),
     );
@@ -117,7 +129,7 @@ export class RenderWorkflow extends WorkflowEntrypoint<
         "create Stream upload",
         { retries: { limit: 0, delay: "1 second" } },
         async () => {
-          const directUpload = await this.env.STREAM.createDirectUpload({
+          const directUpload = await stream.createDirectUpload({
             maxDurationSeconds: 12,
             meta: {
               buildId: payload.buildId,
@@ -177,7 +189,7 @@ export class RenderWorkflow extends WorkflowEntrypoint<
         const video = await step.do(
           `check Stream status ${attempt}`,
           async () => {
-            return this.env.STREAM.video(upload.videoId).details();
+            return stream.video(upload.videoId).details();
           },
         );
         if (video.readyToStream && video.preview) {
@@ -207,6 +219,7 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
     event: WorkflowEvent<{ attemptId: string } | { jobId: string }>,
     step: WorkflowStep,
   ): Promise<void> {
+    const stream = publicationStreamService(this.env);
     const attemptId =
       "attemptId" in event.payload
         ? event.payload.attemptId
@@ -250,7 +263,7 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
           async () => {
             return reservePublicationStreamUpload(
               target,
-              this.env.STREAM,
+              stream,
               this.env.PROJECTS_DB,
             );
           },
@@ -283,10 +296,10 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
               jobId: target.attemptId,
               manifest,
               manifestDigest: target.manifestDigest,
-              artifactUrl: new URL(
-                `/artifact/${target.revisionId}`,
+              artifactUrl: containerArtifactUrl(
                 this.env.PREVIEW_ORIGIN,
-              ).toString(),
+                target.revisionId,
+              ),
               artifactToken,
               finishingSpec: target.finishingSpec,
               streamUpload: {
@@ -325,7 +338,7 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
         for (let poll = 0; poll < 240; poll += 1) {
           const video = await step.do(
             `check managed Stream status ${poll}`,
-            async () => this.env.STREAM.video(upload.videoId).details(),
+            async () => stream.video(upload.videoId).details(),
           );
           if (video.readyToStream && video.preview) {
             await step.do("record managed playback", async () =>
@@ -397,12 +410,66 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
 
 export class RevisionWorkflow extends WorkflowEntrypoint<
   Env,
-  ArtifactRepoPushedEvent | RevisionBuildRetryCommand
+  | ArtifactRepoPushedEvent
+  | RevisionBuildRetryCommand
+  | RevisionSubmissionWorkflowCommand
 > {
   async run(
-    event: WorkflowEvent<ArtifactRepoPushedEvent | RevisionBuildRetryCommand>,
+    event: WorkflowEvent<
+      | ArtifactRepoPushedEvent
+      | RevisionBuildRetryCommand
+      | RevisionSubmissionWorkflowCommand
+    >,
     step: WorkflowStep,
   ): Promise<void> {
+    if (isRevisionSubmission(event.payload)) {
+      const command = event.payload;
+      const target = await step.do("load submitted revision", async () =>
+        loadPendingRevisionTarget(
+          command.revisionId,
+          command.projectId,
+          this.env.PROJECTS_DB,
+        ),
+      );
+      if (!target) return;
+      let status = target.inspectionStatus;
+      if (status === "pending" || status === "error") {
+        let inspected;
+        try {
+          inspected = await step.do(
+            "inspect submitted revision",
+            { retries: { limit: 2, delay: "5 seconds" }, timeout: "5 minutes" },
+            async () => inspectBundledRevision(target, this.env),
+          );
+        } catch {
+          inspected = {
+            inspection: {
+              status: "error" as const,
+              findings: [revisionErrorFinding()],
+            },
+          };
+        }
+        const recorded = await step.do(
+          "record submitted revision inspection",
+          async () =>
+            finishRevisionInspection(
+              target.id,
+              inspected.inspection,
+              this.env.PROJECTS_DB,
+              inspected.sourceProvenance,
+            ),
+        );
+        if (!recorded) return;
+        status = inspected.inspection.status;
+      }
+      if (status !== "valid") return;
+      const queued = await step.do("queue initial revision build", async () =>
+        queueInitialRevisionBuild(target.id, this.env.PROJECTS_DB),
+      );
+      if (!queued) return;
+      await this.runBuild(target, queued.attempt, event.instanceId, step);
+      return;
+    }
     if (isRevisionBuildRetry(event.payload)) {
       const command = event.payload;
       const target = await step.do("load retry revision", async () =>
@@ -687,7 +754,7 @@ export default {
         return createReferenceUpload(request, projectId, ownerEmail, env);
       }
       if (request.method === "POST" && projectRoute[2] === "handoffs") {
-        return createHandoff(projectId, ownerEmail, env);
+        return createHandoff(projectId, ownerEmail, env, url.origin);
       }
       if (request.method === "PUT" && projectRoute[2] === "brief") {
         return saveProjectBrief(request, projectId, ownerEmail, env);
@@ -697,6 +764,9 @@ export default {
       }
       if (request.method === "GET" && projectRoute[2] === "revisions") {
         return listProjectRevisions(projectId, ownerEmail, env.PROJECTS_DB);
+      }
+      if (request.method === "POST" && projectRoute[2] === "revisions") {
+        return submitRevisionBundle(request, projectId, ownerEmail, env);
       }
     }
 
@@ -891,9 +961,21 @@ export default {
 } satisfies ExportedHandler<Env>;
 
 function isRevisionBuildRetry(
-  payload: ArtifactRepoPushedEvent | RevisionBuildRetryCommand,
+  payload:
+    | ArtifactRepoPushedEvent
+    | RevisionBuildRetryCommand
+    | RevisionSubmissionWorkflowCommand,
 ): payload is RevisionBuildRetryCommand {
   return "kind" in payload && payload.kind === "retry-build";
+}
+
+function isRevisionSubmission(
+  payload:
+    | ArtifactRepoPushedEvent
+    | RevisionBuildRetryCommand
+    | RevisionSubmissionWorkflowCommand,
+): payload is RevisionSubmissionWorkflowCommand {
+  return "kind" in payload && payload.kind === "submitted-revision";
 }
 
 async function sha256(bytes: Uint8Array): Promise<string> {

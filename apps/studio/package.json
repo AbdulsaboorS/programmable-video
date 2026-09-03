@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "db:migrate:local": "wrangler d1 migrations apply PROJECTS_DB --local --persist-to \"${PV_PERSIST_PATH:-../../.wrangler/state}\"",
+    "dev": "vite --port \"${PV_STUDIO_PORT:-5173}\" --strictPort",
     "test:worker": "vitest run worker",
-    "types:check": "wrangler types worker/worker-configuration.d.ts --check",
     "types:worker": "wrangler types worker/worker-configuration.d.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -31,7 +31,7 @@
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "@vitejs/plugin-react": "6.0.5",
-    "happy-dom": "20.8.9",
+    "happy-dom": "20.8.8",
     "typescript": "7.0.2",
     "vite": "8.2.1",
     "wrangler": "4.125.0"

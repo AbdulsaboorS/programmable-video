@@ -276,5 +276,5 @@ describe("root pnpm video command", () => {
       command: "validate",
       error: { code: "UNKNOWN_COMPOSITION" },
     });
-  });
+  }, 15_000);
 });

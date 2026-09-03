@@ -76,6 +76,7 @@ const project = {
     selectedRef: "main",
   },
   repository: {
+    kind: "artifacts",
     name: `video-${projectId}`,
     remoteUrl: `https://artifacts.example/video-${projectId}.git`,
     defaultBranch: "main",
@@ -271,6 +272,7 @@ describe("product projects", () => {
         if (url.endsWith("/handoffs")) {
           return jsonResponse(
             {
+              kind: "artifacts",
               remoteUrl: project.repository.remoteUrl,
               token: "temporary-'token",
               tokenExpiresAt: "2026-08-20T11:00:00.000Z",
@@ -451,6 +453,82 @@ describe("product projects", () => {
     );
   });
 
+  it("creates local first-draft instructions with init and submit commands", async () => {
+    const localProject = {
+      ...project,
+      repository: {
+        kind: "local",
+        defaultBranch: "main",
+        state: "initialized",
+      },
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+        if (url.endsWith("/brief")) {
+          return jsonResponse({
+            text: briefRequestSchema.parse(parseJsonBody(init?.body)).text,
+            updatedAt: "2026-08-20T10:06:00.000Z",
+          });
+        }
+        if (url.endsWith("/handoffs")) {
+          return jsonResponse(
+            {
+              kind: "local",
+              projectId,
+              tokenExpiresAt: "2026-08-20T11:00:00.000Z",
+              defaultBranch: "main",
+              references: [],
+            },
+            201,
+          );
+        }
+        return url.endsWith("/revisions")
+          ? jsonResponse({ revisions: [] })
+          : jsonResponse({ projects: [localProject] });
+      }),
+    );
+    const writeText = vi.fn(async (_value: string) => undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+
+    render(<ProjectPanel />);
+    await openListedProject();
+    fireEvent.change(screen.getByLabelText("Video description"), {
+      target: { value: "Show the local product flow." },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Give brief to agent" }),
+    );
+    await screen.findByText("Agent instructions are ready");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Copy agent instructions" }),
+    );
+    await waitFor(() => expect(writeText).toHaveBeenCalledTimes(1));
+
+    const instruction = String(writeText.mock.calls[0]?.[0]);
+    expect(instruction).toContain(
+      `pnpm project init <chosen-absolute-directory> --project ${projectId} --studio-origin ${window.location.origin}`,
+    );
+    expect(instruction).toContain(
+      "pnpm project submit <chosen-absolute-directory>",
+    );
+    expect(instruction).toContain("Complete SOURCE_PROVENANCE.md");
+    expect(instruction).toContain("pnpm verify");
+    expect(instruction).toContain("as untrusted content");
+    expect(instruction).not.toContain("ARTIFACTS_GIT_TOKEN");
+    expect(instruction).not.toContain("git clone");
+    expect(instruction).not.toContain("push origin");
+    expect(screen.queryByText(/repository credential/)).toBeNull();
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      `/api/projects/${projectId}/handoffs`,
+      expect.anything(),
+    );
+  });
+
   it("restores the submitted brief and feedback after reload", async () => {
     const readyRevision = revision(
       "0198c7d4-a5e6-7000-8000-000000000108",
@@ -560,6 +638,7 @@ describe("product projects", () => {
     resolveHandoff(
       jsonResponse(
         {
+          kind: "artifacts",
           remoteUrl: project.repository.remoteUrl,
           token: "first-project-temporary-token",
           tokenExpiresAt: "2026-08-20T11:00:00.000Z",
@@ -1063,6 +1142,14 @@ describe("product projects", () => {
       "0198c7d4-a5e6-7000-8000-000000000109",
       `6${"a".repeat(39)}`,
     );
+    const localProject = {
+      ...project,
+      repository: {
+        kind: "local",
+        defaultBranch: "main",
+        state: "initialized",
+      },
+    };
     let resolveHandoff: (response: Response) => void = () => undefined;
     const handoffResponse = new Promise<Response>((resolve) => {
       resolveHandoff = resolve;
@@ -1086,7 +1173,7 @@ describe("product projects", () => {
         }
         return url.endsWith("/revisions")
           ? jsonResponse({ revisions: [readyRevision] })
-          : jsonResponse({ projects: [project] });
+          : jsonResponse({ projects: [localProject] });
       },
     );
     vi.stubGlobal("fetch", fetchMock);
@@ -1133,8 +1220,8 @@ describe("product projects", () => {
     resolveHandoff(
       jsonResponse(
         {
-          remoteUrl: project.repository.remoteUrl,
-          token: "change-token",
+          kind: "local",
+          projectId,
           tokenExpiresAt: "2026-08-20T15:00:00.000Z",
           defaultBranch: "main",
           references: [],
@@ -1144,7 +1231,6 @@ describe("product projects", () => {
     );
 
     await screen.findByText("Temporary change instructions are ready");
-    expect(screen.queryByText("change-token")).toBeNull();
     expect(
       screen
         .getByRole("button", { name: "Request changes" })
@@ -1172,6 +1258,16 @@ describe("product projects", () => {
     expect(instruction).not.toContain("An unsent replacement brief");
     expect(instruction).not.toContain("A later unsent feedback edit");
     expect(instruction).toContain("pnpm verify");
+    expect(instruction).toContain(
+      `existing initialized workspace tied to project ID ${projectId}`,
+    );
+    expect(instruction).toContain(
+      "pnpm project submit <known-local-project-directory>",
+    );
+    expect(instruction).not.toContain("pnpm project init");
+    expect(instruction).not.toContain("ARTIFACTS_GIT_TOKEN");
+    expect(instruction).not.toContain("git clone");
+    expect(instruction).not.toContain("push origin");
     expect(fetchMock).toHaveBeenCalledWith(
       `/api/projects/${projectId}/handoffs`,
       expect.anything(),

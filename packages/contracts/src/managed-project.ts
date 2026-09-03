@@ -52,14 +52,28 @@ export const createManagedProjectRequestSchema = z
   })
   .strict();
 
-export const managedRepositorySchema = z
+export const artifactsManagedRepositorySchema = z
   .object({
+    kind: z.literal("artifacts"),
     name: z.string().min(1),
     remoteUrl: z.url(),
     defaultBranch: z.string().min(1),
     state: z.literal("seeded"),
   })
   .strict();
+
+export const localManagedRepositorySchema = z
+  .object({
+    kind: z.literal("local"),
+    defaultBranch: z.string().min(1),
+    state: z.literal("initialized"),
+  })
+  .strict();
+
+export const managedRepositorySchema = z.discriminatedUnion("kind", [
+  artifactsManagedRepositorySchema,
+  localManagedRepositorySchema,
+]);
 
 const referenceMetadataBaseSchema = z
   .object({
@@ -163,31 +177,57 @@ export const managedProjectListSchema = z
   .object({ projects: z.array(managedProjectSchema) })
   .strict();
 
-export const agentHandoffSchema = z
+const agentHandoffReferenceSchema = z
   .object({
+    id: z.uuid(),
+    fileName: z.string().min(1).max(255),
+    downloadUrl: z.url().refine(
+      (value) => {
+        const url = new URL(value);
+        return (
+          url.protocol === "https:" ||
+          (url.protocol === "http:" &&
+            ["localhost", "127.0.0.1", "::1", "[::1]"].includes(url.hostname))
+        );
+      },
+      {
+        message: "Reference download URL must use HTTPS or loopback HTTP",
+      },
+    ),
+    token: z.string().min(1).max(4096),
+    sha256: z.string().regex(/^[0-9a-f]{64}$/),
+  })
+  .strict();
+
+export const artifactsAgentHandoffSchema = z
+  .object({
+    kind: z.literal("artifacts"),
     remoteUrl: z.url(),
     token: boundedText,
     tokenExpiresAt: isoTimestampSchema,
     defaultBranch: z.string().min(1),
-    references: z.array(
-      z
-        .object({
-          id: z.uuid(),
-          fileName: z.string().min(1).max(255),
-          downloadUrl: z
-            .url()
-            .refine((value) => new URL(value).protocol === "https:", {
-              message: "Reference download URL must use HTTPS",
-            }),
-          token: z.string().min(1).max(4096),
-          sha256: z.string().regex(/^[0-9a-f]{64}$/),
-        })
-        .strict(),
-    ),
+    references: z.array(agentHandoffReferenceSchema),
   })
   .strict();
 
+export const localAgentHandoffSchema = z
+  .object({
+    kind: z.literal("local"),
+    projectId: z.uuid(),
+    defaultBranch: z.string().min(1),
+    tokenExpiresAt: isoTimestampSchema,
+    references: z.array(agentHandoffReferenceSchema),
+  })
+  .strict();
+
+export const agentHandoffSchema = z.discriminatedUnion("kind", [
+  artifactsAgentHandoffSchema,
+  localAgentHandoffSchema,
+]);
+
 export type AgentHandoff = z.infer<typeof agentHandoffSchema>;
+export type ArtifactsAgentHandoff = z.infer<typeof artifactsAgentHandoffSchema>;
+export type LocalAgentHandoff = z.infer<typeof localAgentHandoffSchema>;
 export type CreateManagedProjectRequest = z.infer<
   typeof createManagedProjectRequestSchema
 >;
@@ -195,6 +235,13 @@ export type CreateProjectFeedbackRequest = z.infer<
   typeof createProjectFeedbackRequestSchema
 >;
 export type ManagedProject = z.infer<typeof managedProjectSchema>;
+export type ManagedRepository = z.infer<typeof managedRepositorySchema>;
+export type ArtifactsManagedRepository = z.infer<
+  typeof artifactsManagedRepositorySchema
+>;
+export type LocalManagedRepository = z.infer<
+  typeof localManagedRepositorySchema
+>;
 export type ProjectBrief = z.infer<typeof projectBriefSchema>;
 export type ProjectFeedback = z.infer<typeof projectFeedbackSchema>;
 export type ReferenceMetadata = z.infer<typeof referenceMetadataSchema>;

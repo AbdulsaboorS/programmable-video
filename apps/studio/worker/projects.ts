@@ -18,12 +18,10 @@ import {
   createAgentReferenceDownloads,
   type AgentReferenceEnv,
 } from "./project-references";
-import { isUuid, platformFailure, type BoundaryError } from "./worker-utils";
+import { isUuid, platformFailure } from "./worker-utils";
 
+const localDefaultBranch = "main";
 const handoffTtlSeconds = 60 * 60;
-const artifactsErrorSchema = z
-  .instanceof(Error)
-  .and(z.object({ code: z.string() }));
 
 export interface ProjectApiEnv extends AgentReferenceEnv {
   ARTIFACTS: Artifacts;
@@ -45,6 +43,7 @@ interface ProjectRow {
   repository_remote_url: string;
   repository_default_branch: string;
   repository_state: "seeded";
+  authoring_source_kind: "artifacts" | "local";
   video_brief: string | null;
   video_brief_updated_at: string | null;
   created_at: string;
@@ -148,26 +147,9 @@ export async function createProject(
   }
 
   const id = crypto.randomUUID();
-  const repositoryName = `video-${id}`;
+  const repositoryName = `local-${id}`;
+  const repositoryRemoteUrl = `https://local.invalid/${id}`;
   const now = new Date().toISOString();
-  let created: ArtifactsCreateRepoResult;
-  let forked = false;
-  try {
-    const starter = await env.ARTIFACTS.get(env.STARTER_REPOSITORY);
-    created = await starter.fork(repositoryName, {
-      description: `Video project: ${parsed.data.name}`,
-      readOnly: false,
-      defaultBranchOnly: true,
-    });
-    forked = true;
-    const repository = await waitForRepository(repositoryName, env.ARTIFACTS);
-    if (!(await repository.revokeToken(created.token))) {
-      throw new Error("Artifacts did not revoke the initial repository token");
-    }
-  } catch (error) {
-    if (forked) await cleanupRepository(repositoryName, env.ARTIFACTS);
-    return platformFailure("Could not provision the project repository", error);
-  }
 
   try {
     await env.PROJECTS_DB.prepare(
@@ -176,9 +158,9 @@ export async function createProject(
         source_host, source_project_path, source_web_url,
         source_default_branch, source_selected_ref,
         repository_name, repository_remote_url,
-        repository_default_branch, repository_state,
+        repository_default_branch, repository_state, authoring_source_kind,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, 'ready', ?, ?, ?, ?, ?, ?, ?, ?, 'seeded', ?, ?)`,
+      ) VALUES (?, ?, ?, ?, 'ready', ?, ?, ?, ?, ?, ?, ?, ?, 'seeded', 'local', ?, ?)`,
     )
       .bind(
         id,
@@ -191,8 +173,8 @@ export async function createProject(
         source.defaultBranch,
         source.selectedRef,
         repositoryName,
-        created.remote,
-        created.defaultBranch,
+        repositoryRemoteUrl,
+        localDefaultBranch,
         now,
         now,
       )
@@ -205,9 +187,6 @@ export async function createProject(
         env.PROJECTS_DB,
       );
       if (existing) {
-        if (existing.repository_name !== repositoryName) {
-          await cleanupRepository(repositoryName, env.ARTIFACTS);
-        }
         if (!matchesProjectRequest(existing, parsed.data.name, source)) {
           return Response.json(
             { error: "Idempotency key already used" },
@@ -227,7 +206,6 @@ export async function createProject(
         }),
       );
     }
-    await cleanupRepository(repositoryName, env.ARTIFACTS);
     return platformFailure("Could not save the product project", error);
   }
 
@@ -238,10 +216,9 @@ export async function createProject(
       status: "ready",
       source,
       repository: {
-        name: repositoryName,
-        remoteUrl: created.remote,
-        defaultBranch: created.defaultBranch,
-        state: "seeded",
+        kind: "local",
+        defaultBranch: localDefaultBranch,
+        state: "initialized",
       },
       references: [],
       brief: null,
@@ -372,6 +349,7 @@ export async function createHandoff(
   projectId: string,
   ownerEmail: string,
   env: ProjectApiEnv,
+  studioOrigin = env.STUDIO_ORIGIN,
 ): Promise<Response> {
   let project: ProjectRow | null;
   try {
@@ -380,6 +358,34 @@ export async function createHandoff(
     return platformFailure("Could not load the product project", error);
   }
   if (!project) return notFound();
+
+  if (project.authoring_source_kind === "local") {
+    const tokenExpiresAt = new Date(
+      Date.now() + handoffTtlSeconds * 1000,
+    ).toISOString();
+    try {
+      const references = await createAgentReferenceDownloads(
+        projectId,
+        ownerEmail,
+        tokenExpiresAt,
+        env,
+        studioOrigin,
+      );
+      const response = agentHandoffSchema.parse({
+        kind: "local",
+        projectId,
+        defaultBranch: project.repository_default_branch,
+        tokenExpiresAt,
+        references,
+      });
+      return Response.json(response, {
+        status: 201,
+        headers: { "Cache-Control": "private, no-store" },
+      });
+    } catch (error) {
+      return platformFailure("Could not create an agent handoff", error);
+    }
+  }
 
   let repository: ArtifactsRepo;
   let token: ArtifactsCreateTokenResult;
@@ -418,6 +424,7 @@ export async function createHandoff(
   }
 
   const response = agentHandoffSchema.safeParse({
+    kind: "artifacts",
     remoteUrl: project.repository_remote_url,
     token: token.plaintext,
     tokenExpiresAt: token.expiresAt,
@@ -530,53 +537,6 @@ async function findProjectByRequest(
     .first<ProjectRow>();
 }
 
-async function waitForRepository(
-  repositoryName: string,
-  artifacts: Artifacts,
-): Promise<ArtifactsRepo> {
-  for (let attempt = 0; attempt < 10; attempt += 1) {
-    try {
-      return await artifacts.get(repositoryName);
-    } catch (error) {
-      const artifactsError = parseArtifactsError(error);
-      if (
-        !artifactsError ||
-        (artifactsError.code !== "FORK_IN_PROGRESS" &&
-          artifactsError.code !== "NOT_FOUND") ||
-        attempt === 9
-      ) {
-        throw error;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-  }
-  throw new Error("Project repository did not become ready");
-}
-
-async function cleanupRepository(
-  repositoryName: string,
-  artifacts: Artifacts,
-): Promise<void> {
-  try {
-    if (!(await artifacts.delete(repositoryName))) {
-      throw new Error("Artifacts did not delete the repository");
-    }
-  } catch (error) {
-    console.error(
-      JSON.stringify({
-        message: "Could not clean up a project repository",
-        repositoryName,
-        error: error instanceof Error ? error.message : String(error),
-      }),
-    );
-  }
-}
-
-function parseArtifactsError(error: BoundaryError) {
-  const parsed = artifactsErrorSchema.safeParse(error);
-  return parsed.success ? parsed.data : undefined;
-}
-
 async function findProject(
   projectId: string,
   ownerEmail: string,
@@ -619,12 +579,20 @@ async function projectFromRow(
       defaultBranch: row.source_default_branch,
       selectedRef: row.source_selected_ref,
     },
-    repository: {
-      name: row.repository_name,
-      remoteUrl: row.repository_remote_url,
-      defaultBranch: row.repository_default_branch,
-      state: row.repository_state,
-    },
+    repository:
+      row.authoring_source_kind === "local"
+        ? {
+            kind: "local",
+            defaultBranch: row.repository_default_branch,
+            state: "initialized",
+          }
+        : {
+            kind: "artifacts",
+            name: row.repository_name,
+            remoteUrl: row.repository_remote_url,
+            defaultBranch: row.repository_default_branch,
+            state: row.repository_state,
+          },
     references: referenceRows.results.map(referenceFromRow),
     brief:
       row.video_brief && row.video_brief_updated_at

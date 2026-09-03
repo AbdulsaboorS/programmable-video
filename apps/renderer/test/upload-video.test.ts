@@ -68,7 +68,7 @@ describe("uploadVideo", () => {
     await writeFile(filePath, "mock-mp4-data");
 
     const server = createServer((_request, response) => {
-      response.writeHead(503).end();
+      response.writeHead(503).end("try later");
     });
     await new Promise<void>((resolve) =>
       server.listen(0, "127.0.0.1", resolve),
@@ -79,7 +79,7 @@ describe("uploadVideo", () => {
           `http://127.0.0.1:${boundTcpPort(server)}/upload`,
           filePath,
         ),
-      ).rejects.toThrow("Stream upload failed with status 503");
+      ).rejects.toThrow("Stream upload failed with status 503: try later");
     } finally {
       server.close();
     }

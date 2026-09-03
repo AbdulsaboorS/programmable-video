@@ -6,6 +6,7 @@ import {
 import { signPreviewCapability } from "./preview-capability";
 
 const previewTtlSeconds = 5 * 60;
+const loopbackHosts = ["localhost", "127.0.0.1", "::1", "[::1]"];
 
 interface ReadyRevisionRow {
   project_id: string;
@@ -36,7 +37,12 @@ export async function createPreviewSession(
   } catch {
     return previewConfigurationError();
   }
-  if (origin.protocol !== "https:" || origin.origin === studioOrigin) {
+  const loopback = loopbackHosts.includes(origin.hostname);
+  if (
+    (origin.protocol !== "https:" &&
+      !(origin.protocol === "http:" && loopback)) ||
+    origin.origin === studioOrigin
+  ) {
     return previewConfigurationError();
   }
   const revision = await readyRevision(
@@ -71,6 +77,20 @@ export async function createPreviewSession(
     }),
     { status: 201 },
   );
+}
+
+export function containerArtifactUrl(
+  previewOrigin: string,
+  revisionId: string,
+): string {
+  const url = new URL(
+    `/artifact/${encodeURIComponent(revisionId)}`,
+    previewOrigin,
+  );
+  if (loopbackHosts.includes(url.hostname)) {
+    url.hostname = "host.docker.internal";
+  }
+  return url.toString();
 }
 
 function previewConfigurationError(): Response {

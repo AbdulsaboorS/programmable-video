@@ -6,6 +6,7 @@ const accessEmailSchema = z.string();
 export interface AccessEnv {
   ACCESS_AUD: string;
   ACCESS_TEAM_DOMAIN: string;
+  LOCAL_OWNER_EMAIL?: string;
 }
 
 export async function accessEmail(
@@ -21,15 +22,32 @@ export async function accessEmail(
   if (contextEmail) return contextEmail;
 
   const token = request.headers.get("cf-access-jwt-assertion");
-  if (!token || !env.ACCESS_AUD || !env.ACCESS_TEAM_DOMAIN) return undefined;
+  if (!token || !env.ACCESS_AUD || !env.ACCESS_TEAM_DOMAIN) {
+    return localOwnerEmail(request, env);
+  }
 
   try {
     const issuer = env.ACCESS_TEAM_DOMAIN.replace(/\/$/, "");
     const jwks = createRemoteJWKSet(new URL(`${issuer}/cdn-cgi/access/certs`));
     return await verifiedAccessEmail(token, env.ACCESS_AUD, issuer, jwks);
   } catch {
+    return localOwnerEmail(request, env);
+  }
+}
+
+function localOwnerEmail(request: Request, env: AccessEnv): string | undefined {
+  const hostname = new URL(request.url).hostname;
+  if (
+    hostname !== "localhost" &&
+    hostname !== "127.0.0.1" &&
+    hostname !== "::1" &&
+    hostname !== "[::1]"
+  ) {
     return undefined;
   }
+  return env.LOCAL_OWNER_EMAIL
+    ? normalizeEmail(env.LOCAL_OWNER_EMAIL)
+    : undefined;
 }
 
 export async function verifiedAccessEmail(

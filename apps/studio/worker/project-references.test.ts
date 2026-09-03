@@ -427,7 +427,7 @@ describe("project reference images", () => {
           STUDIO_ORIGIN: "https://studio.example/private",
         },
       ),
-    ).rejects.toThrow("STUDIO_ORIGIN must be an HTTPS origin");
+    ).rejects.toThrow("Studio origin must use HTTPS or loopback HTTP");
   });
 
   it("rejects expired agent reference downloads", async () => {

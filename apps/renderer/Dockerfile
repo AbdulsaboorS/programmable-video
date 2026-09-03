@@ -10,7 +10,7 @@ ENV NODE_ENV=production \
   PORT=8080
 
 WORKDIR /app
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@11.9.0 --activate
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
 COPY packages/contracts/package.json packages/contracts/tsconfig.json ./packages/contracts/
@@ -19,7 +19,8 @@ COPY packages/composition-registry/package.json packages/composition-registry/ts
 COPY packages/composition-registry/src ./packages/composition-registry/src
 COPY compositions ./compositions
 COPY apps/renderer/package.json apps/renderer/tsconfig.json ./apps/renderer/
-RUN pnpm install --filter @programmable-video/renderer... --prod --frozen-lockfile
+RUN pnpm install --filter @programmable-video/renderer... --prod --frozen-lockfile --ignore-scripts --reporter append-only \
+  && pnpm rebuild esbuild
 
 COPY apps/renderer/src ./apps/renderer/src
 COPY apps/studio/dist ./apps/studio/dist

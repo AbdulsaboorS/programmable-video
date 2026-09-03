@@ -1,3 +1,7 @@
-# Copy to .dev.vars and replace every value. Never commit .dev.vars.
+# Copy to .dev.vars and replace the values your workflow uses. Never commit .dev.vars.
+LOCAL_OWNER_EMAIL=creator@example.com
+# Required only for legacy Cloudflare Artifacts revisions.
 ARTIFACTS_API_TOKEN=replace-with-artifacts-read-token
 PREVIEW_SIGNING_KEY=replace-with-a-random-signing-key
+STREAM_ACCOUNT_ID=replace-with-stream-account-id
+STREAM_API_TOKEN=replace-with-stream-read-write-token

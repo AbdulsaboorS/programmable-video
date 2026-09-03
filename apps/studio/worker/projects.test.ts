@@ -32,6 +32,7 @@ interface StoredProject {
   repository_remote_url: string;
   repository_default_branch: string;
   repository_state: "seeded";
+  authoring_source_kind: "artifacts" | "local";
   video_brief: string | null;
   video_brief_updated_at: string | null;
   created_at: string;
@@ -188,6 +189,7 @@ class FakeDatabase {
         repository_remote_url: value[10],
         repository_default_branch: value[11],
         repository_state: "seeded",
+        authoring_source_kind: "local",
         video_brief: null,
         video_brief_updated_at: null,
         created_at: value[12],
@@ -297,6 +299,7 @@ function storedProject(overrides: Partial<StoredProject> = {}): StoredProject {
     repository_remote_url: `https://artifacts.example/video-${projectId}.git`,
     repository_default_branch: "main",
     repository_state: "seeded",
+    authoring_source_kind: "artifacts",
     video_brief: null,
     video_brief_updated_at: null,
     created_at: "2026-08-20T10:00:00.000Z",
@@ -375,41 +378,41 @@ async function body(response: Response) {
 }
 
 describe("managed project API", () => {
-  it("forks the reviewed starter and persists normalized source metadata", async () => {
+  it("creates a local project without provisioning Artifacts", async () => {
     const { env, database, artifacts } = environment();
     const response = await createProject(
       post("/api/projects", {
         requestId,
         name: "  Product demo  ",
         githubUrl: "https://github.com/team/product-demo.git/",
+        defaultBranch: "trunk",
       }),
       owner,
       env,
     );
 
     expect(response.status).toBe(201);
-    expect(artifacts.get).toHaveBeenCalledWith("product-project-starter-v1");
-    expect(artifacts.fork).toHaveBeenCalledWith(
-      expect.stringMatching(/^video-/),
-      {
-        description: "Video project: Product demo",
-        readOnly: false,
-        defaultBranchOnly: true,
-      },
-    );
-    expect(artifacts.revokeProjectToken).toHaveBeenCalledWith("initial-token");
+    expect(artifacts.get).not.toHaveBeenCalled();
+    expect(artifacts.fork).not.toHaveBeenCalled();
     expect(database.projects[0]).toMatchObject({
       owner_email: owner,
       name: "Product demo",
       source_host: "github.com",
       source_project_path: "team/product-demo",
       source_web_url: "https://github.com/team/product-demo",
+      source_default_branch: "trunk",
+      repository_default_branch: "main",
       repository_state: "seeded",
+      authoring_source_kind: "local",
     });
     expect(await body(response)).toMatchObject({
       name: "Product demo",
       source: { provider: "github" },
-      repository: { state: "seeded", defaultBranch: "main" },
+      repository: {
+        kind: "local",
+        state: "initialized",
+        defaultBranch: "main",
+      },
       references: [],
     });
   });
@@ -450,7 +453,7 @@ describe("managed project API", () => {
     expect(response.status).toBe(413);
   });
 
-  it("deletes an orphaned fork when project persistence fails", async () => {
+  it("does not touch Artifacts when local project persistence fails", async () => {
     const database = new FakeDatabase();
     database.failProjectInsert = true;
     const { env, artifacts } = environment(database);
@@ -465,9 +468,7 @@ describe("managed project API", () => {
     );
 
     expect(response.status).toBe(502);
-    expect(artifacts.remove).toHaveBeenCalledWith(
-      expect.stringMatching(/^video-/),
-    );
+    expect(artifacts.remove).not.toHaveBeenCalled();
   });
 
   it("returns the existing project for an idempotent retry", async () => {
@@ -542,7 +543,7 @@ describe("managed project API", () => {
     expect(artifacts.fork).not.toHaveBeenCalled();
   });
 
-  it("deletes a fork when its initial token cannot be revoked", async () => {
+  it("does not depend on starter token revocation for local projects", async () => {
     const { env, artifacts, database } = environment();
     artifacts.revokeProjectToken.mockResolvedValueOnce(false);
     const response = await createProject(
@@ -555,11 +556,9 @@ describe("managed project API", () => {
       env,
     );
 
-    expect(response.status).toBe(502);
-    expect(artifacts.remove).toHaveBeenCalledWith(
-      expect.stringMatching(/^video-/),
-    );
-    expect(database.projects).toHaveLength(0);
+    expect(response.status).toBe(201);
+    expect(artifacts.remove).not.toHaveBeenCalled();
+    expect(database.projects).toHaveLength(1);
   });
 
   it("lists and reads only the owner's projects", async () => {
@@ -604,6 +603,7 @@ describe("managed project API", () => {
     expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(artifacts.createToken).toHaveBeenCalledWith("write", 3600);
     expect(await body(response)).toEqual({
+      kind: "artifacts",
       remoteUrl: `https://artifacts.example/video-${projectId}.git`,
       token: "temporary-token",
       tokenExpiresAt: artifacts.tokenExpiresAt,
@@ -616,6 +616,23 @@ describe("managed project API", () => {
       scope: "write",
     });
     expect(JSON.stringify(database.handoffs)).not.toContain("temporary-token");
+  });
+
+  it("returns a local handoff without an Artifacts token or audit row", async () => {
+    const { env, database, artifacts } = environment();
+    database.projects.push(storedProject({ authoring_source_kind: "local" }));
+
+    const response = await createHandoff(projectId, owner, env);
+
+    expect(response.status).toBe(201);
+    expect(await body(response)).toMatchObject({
+      kind: "local",
+      projectId,
+      defaultBranch: "main",
+      references: [],
+    });
+    expect(artifacts.createToken).not.toHaveBeenCalled();
+    expect(database.handoffs).toHaveLength(0);
   });
 
   it.each([

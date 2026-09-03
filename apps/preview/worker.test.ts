@@ -142,6 +142,9 @@ describe("isolated preview Worker", () => {
     expect(configuredStudioOrigin("https://studio.example")).toBe(
       "https://studio.example",
     );
+    expect(configuredStudioOrigin("http://localhost:5173")).toBe(
+      "http://localhost:5173",
+    );
     expect(configuredStudioOrigin("http://studio.example")).toBeNull();
     expect(configuredStudioOrigin("https://studio.example/path")).toBeNull();
     expect(configuredStudioOrigin("https://studio.example/")).toBeNull();

@@ -4,6 +4,7 @@ import { finishingSpecSchema } from "./finishing";
 import { isoTimestampSchema, sha256Schema } from "./shared";
 
 export const gitShaSchema = z.string().regex(/^[0-9a-fA-F]{40}$/);
+export const revisionBundleMaxBytes = 25 * 1024 * 1024;
 const boundedIdentifier = z.string().min(1).max(255);
 
 function isValidGitRef(ref: string): boolean {
@@ -46,6 +47,31 @@ export const gitBranchRefSchema = gitRefSchema.refine(
     message: "Expected a valid refs/heads Git ref",
   },
 );
+
+export const revisionBundleSubmissionSchema = z
+  .object({
+    commitSha: gitShaSchema,
+    ref: gitBranchRefSchema,
+    bundleSha256: sha256Schema,
+    bundleSize: z.number().int().positive().max(revisionBundleMaxBytes),
+  })
+  .strict();
+
+export const revisionBundleSubmissionResultSchema = z
+  .object({
+    revisionId: z.uuid(),
+    commitSha: gitShaSchema,
+    status: z.enum(["accepted", "already-submitted"]),
+  })
+  .strict();
+
+export const revisionSubmissionWorkflowCommandSchema = z
+  .object({
+    kind: z.literal("submitted-revision"),
+    projectId: z.uuid(),
+    revisionId: z.uuid(),
+  })
+  .strict();
 
 const gitIdentitySchema = z
   .object({
@@ -407,6 +433,15 @@ export const projectRevisionListSchema = z
 
 export type ArtifactRepoPushedEvent = z.infer<
   typeof artifactRepoPushedEventSchema
+>;
+export type RevisionBundleSubmission = z.infer<
+  typeof revisionBundleSubmissionSchema
+>;
+export type RevisionBundleSubmissionResult = z.infer<
+  typeof revisionBundleSubmissionResultSchema
+>;
+export type RevisionSubmissionWorkflowCommand = z.infer<
+  typeof revisionSubmissionWorkflowCommandSchema
 >;
 export type ProjectRevision = z.infer<typeof projectRevisionSchema>;
 export type RevisionFinding = z.infer<typeof revisionFindingSchema>;

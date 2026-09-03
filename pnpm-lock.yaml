@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@oxlint/plugins':
+        specifier: 1.80.0
+        version: 1.80.0
       '@total-typescript/shoehorn':
         specifier: 0.1.2
         version: 0.1.2
@@ -34,7 +37,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   apps/preview:
     dependencies:
@@ -48,6 +51,22 @@ importers:
       wrangler:
         specifier: 4.125.0
         version: 4.125.0
+
+  apps/project-cli:
+    dependencies:
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@types/node':
+        specifier: 26.0.0
+        version: 26.0.0
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   apps/renderer:
     dependencies:
@@ -75,7 +94,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   apps/studio:
     dependencies:
@@ -132,8 +151,8 @@ importers:
         specifier: 6.0.5
         version: 6.0.5(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
       happy-dom:
-        specifier: 20.8.9
-        version: 20.8.9
+        specifier: 20.8.8
+        version: 20.8.8
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -176,7 +195,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   compositions/support-agent:
     dependencies:
@@ -204,7 +223,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   packages/composition-registry:
     dependencies:
@@ -232,7 +251,7 @@ importers:
         version: 7.0.2
       vitest:
         specifier: 4.1.10
-        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
+        version: 4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
 
   packages/contracts:
     dependencies:
@@ -1006,6 +1025,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@oxlint/plugins@1.80.0':
+    resolution: {integrity: sha512-QRgH1XqQEYNHa4f1vvPQ5fAdNdncHGIUG1ZWLlGIZHky3qwCEeAKYitZNbZMtaXtAQAAFFTOwqUfzESvimqZNA==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
   '@phosphor-icons/react@2.1.10':
     resolution: {integrity: sha512-vt8Tvq8GLjheAZZYa+YG/pW7HDbov8El/MANW8pOAz4eGxrwhnbfrQZq0Cp4q8zBEu8NIhHdnr+r8thnfRSNYA==}
     engines: {node: '>=10'}
@@ -1527,8 +1550,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  happy-dom@20.8.9:
-    resolution: {integrity: sha512-Tz23LR9T9jOGVZm2x1EPdXqwA37G/owYMxRwU0E4miurAtFsPMQ1d2Jc2okUaSjZqAFz2oEn3FLXC5a0a+siyA==}
+  happy-dom@20.8.8:
+    resolution: {integrity: sha512-5/F8wxkNxYtsN0bXfMwIyNLZ9WYsoOYPbmoluqVJqv8KBUbcyKZawJ7uYK4WTX8IHBLYv+VXIwfeNDPy1oKMwQ==}
     engines: {node: '>=20.0.0'}
 
   hast-util-to-html@9.0.5:
@@ -2512,6 +2535,8 @@ snapshots:
   '@oxlint/binding-win32-x64-msvc@1.80.0':
     optional: true
 
+  '@oxlint/plugins@1.80.0': {}
+
   '@phosphor-icons/react@2.1.10(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       react: 19.2.8
@@ -2917,9 +2942,9 @@ snapshots:
 
   expect-type@1.4.0: {}
 
-  fdir@6.5.0(picomatch@4.0.7):
+  fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
-      picomatch: 4.0.7
+      picomatch: 4.0.5
 
   framer-motion@12.43.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
     dependencies:
@@ -2936,7 +2961,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  happy-dom@20.8.9:
+  happy-dom@20.8.8:
     dependencies:
       '@types/node': 26.0.0
       '@types/whatwg-mimetype': 3.0.2
@@ -3287,8 +3312,8 @@ snapshots:
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.7)
-      picomatch: 4.0.7
+      fdir: 6.5.0(picomatch@4.0.5)
+      picomatch: 4.0.5
 
   tinyrainbow@3.1.1: {}
 
@@ -3373,7 +3398,7 @@ snapshots:
   vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
-      picomatch: 4.0.7
+      picomatch: 4.0.5
       postcss: 8.5.26
       rolldown: 1.2.4
       tinyglobby: 0.2.17
@@ -3384,7 +3409,7 @@ snapshots:
       tsx: 4.23.12
       yaml: 2.9.0
 
-  vitest@4.1.10(@types/node@26.0.0)(happy-dom@20.8.9)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)):
+  vitest@4.1.10(@types/node@26.0.0)(happy-dom@20.8.8)(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.10
       '@vitest/mocker': 4.1.10(vite@8.2.1(@types/node@26.0.0)(esbuild@0.28.2)(tsx@4.23.12)(yaml@2.9.0))
@@ -3408,7 +3433,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 26.0.0
-      happy-dom: 20.8.9
+      happy-dom: 20.8.8
     transitivePeerDependencies:
       - msw
 

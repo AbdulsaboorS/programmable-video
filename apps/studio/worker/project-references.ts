@@ -64,14 +64,15 @@ export async function createAgentReferenceDownloads(
   ownerEmail: string,
   expiresAt: string,
   env: AgentReferenceEnv,
+  studioOrigin = env.STUDIO_ORIGIN,
 ) {
   const expiration = Math.floor(new Date(expiresAt).getTime() / 1000);
   if (!Number.isFinite(expiration) || expiration <= 0) {
     throw new Error("Agent handoff expiry is invalid");
   }
-  const origin = configuredReferenceOrigin(env.STUDIO_ORIGIN);
+  const origin = configuredReferenceOrigin(studioOrigin);
   if (!origin) {
-    throw new Error("STUDIO_ORIGIN must be an HTTPS origin");
+    throw new Error("Studio origin must use HTTPS or loopback HTTP");
   }
   const rows = await env.PROJECTS_DB.prepare(
     `SELECT r.id, r.file_name, r.media_type, r.byte_size, r.note,
@@ -115,8 +116,11 @@ export async function createAgentReferenceDownloads(
 function configuredReferenceOrigin(value: string): string | null {
   try {
     const url = new URL(value);
+    const loopback = ["localhost", "127.0.0.1", "::1", "[::1]"].includes(
+      url.hostname,
+    );
     if (
-      url.protocol !== "https:" ||
+      (url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) ||
       url.origin !== value ||
       url.username ||
       url.password

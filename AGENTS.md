@@ -47,7 +47,7 @@ Keep the code easy for humans and agents to read, review, and change.
 
 - Check current Cloudflare documentation before choosing APIs or limits.
 - Prefer bindings and generated platform types over handwritten API shapes.
-- Use Artifacts for versioned project source, R2 for uploaded source assets, and Stream for finished video.
+- Use local Git bundles in R2 for versioned project source and Stream for finished video. Keep Artifacts only for existing compatibility paths.
 - Never commit tokens, account identifiers, or other secrets.
 
 ## Quality

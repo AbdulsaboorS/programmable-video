@@ -10,6 +10,7 @@ import {
   getProjectMediaByCapability,
 } from "./project-media";
 import { streamPollInterval } from "./worker-constants";
+import { publicationStreamService } from "./stream-service";
 
 export async function deliverCaptions(
   target: PublicationWorkflowTarget,
@@ -22,7 +23,7 @@ export async function deliverCaptions(
   await step.do("mark captions processing", async () =>
     recordCaptionState(target.attemptId, "processing", null, env.PROJECTS_DB),
   );
-  const handle = env.STREAM.video(videoId).captions;
+  const handle = publicationStreamService(env).video(videoId).captions;
   if (captions.mode === "uploaded") {
     await step.do("upload English captions", async () => {
       const existing = (await handle.list("en").catch(() => []))[0];
@@ -110,7 +111,7 @@ export async function deliverDownload(
   env: Env,
 ): Promise<void> {
   if (target.downloadStatus === "ready") return;
-  const downloads = env.STREAM.video(videoId).downloads;
+  const downloads = publicationStreamService(env).video(videoId).downloads;
   await step.do("request default MP4 download", async () => {
     const existing = (
       await downloads.get().catch(() => ({ default: undefined }))

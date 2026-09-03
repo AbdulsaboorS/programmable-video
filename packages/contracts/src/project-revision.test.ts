@@ -7,7 +7,11 @@ import {
   projectRevisionListSchema,
   projectRevisionSchema,
   revisionFindingSchema,
+  revisionBundleMaxBytes,
+  revisionBundleSubmissionResultSchema,
+  revisionBundleSubmissionSchema,
   revisionInspectionStatusSchema,
+  revisionSubmissionWorkflowCommandSchema,
   sourceProvenanceSchema,
 } from "./project-revision";
 
@@ -174,6 +178,49 @@ describe("managed renderer request contract", () => {
         },
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("local revision bundle contracts", () => {
+  const submission = {
+    commitSha: lowerSha,
+    ref: "refs/heads/main",
+    bundleSha256: "a".repeat(64),
+    bundleSize: revisionBundleMaxBytes,
+  };
+
+  it("accepts strict bounded bundle submissions", () => {
+    expect(revisionBundleSubmissionSchema.parse(submission)).toEqual(
+      submission,
+    );
+    expect(
+      revisionBundleSubmissionSchema.safeParse({
+        ...submission,
+        bundleSize: revisionBundleMaxBytes + 1,
+      }).success,
+    ).toBe(false);
+    expect(
+      revisionBundleSubmissionSchema.safeParse({ ...submission, extra: true })
+        .success,
+    ).toBe(false);
+  });
+
+  it("accepts submission results and workflow commands", () => {
+    const revisionId = "0198c7d4-a5e6-7000-8000-000000000001";
+    expect(
+      revisionBundleSubmissionResultSchema.safeParse({
+        revisionId,
+        commitSha: lowerSha,
+        status: "already-submitted",
+      }).success,
+    ).toBe(true);
+    expect(
+      revisionSubmissionWorkflowCommandSchema.safeParse({
+        kind: "submitted-revision",
+        projectId: "0198c7d4-a5e6-7000-8000-000000000000",
+        revisionId,
+      }).success,
+    ).toBe(true);
   });
 });
 

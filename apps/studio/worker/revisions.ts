@@ -1,6 +1,9 @@
 import {
   artifactRepoPushedEventSchema,
   projectRevisionListSchema,
+  revisionBundleMaxBytes,
+  revisionBundleSubmissionResultSchema,
+  revisionBundleSubmissionSchema,
   revisionFindingSchema,
   sourceProvenanceSchema,
   type ArtifactRepoPushedEvent,
@@ -9,8 +12,12 @@ import {
   type RevisionBuildStatus,
   type ManagedRenderStatus,
   type RevisionInspectionStatus,
+  type RevisionSubmissionWorkflowCommand,
 } from "@programmable-video/contracts";
+import { createHash } from "node:crypto";
 import { z } from "zod";
+
+import { platformFailure, type BoundaryError } from "./worker-utils";
 
 const inspectionVersion = 1;
 const maxFileBytes = 1024 * 1024;
@@ -31,7 +38,7 @@ const artifactRepoPushInputSchema = z.json();
 type ArtifactRepoPushInput =
   ArtifactRepoPushedEvent | z.input<typeof artifactRepoPushInputSchema>;
 
-class ArtifactsContentError extends Error {
+export class RevisionContentError extends Error {
   constructor(
     message: string,
     readonly kind: "not-found" | "too-large" | "platform",
@@ -45,6 +52,11 @@ export interface RevisionEnv {
   ARTIFACTS_API_TOKEN: string;
   ARTIFACTS_NAMESPACE: string;
   PROJECTS_DB: D1Database;
+}
+
+export interface RevisionSubmissionEnv extends RevisionEnv {
+  REVISION_SOURCES: R2Bucket;
+  REVISION_WORKFLOW: Workflow<RevisionSubmissionWorkflowCommand>;
 }
 
 interface RevisionProjectRow {
@@ -89,9 +101,20 @@ export interface RevisionTarget {
   id: string;
   projectId: string;
   commitSha: string;
-  repositoryName: string;
-  repositoryRemoteUrl: string;
+  ref: string;
   inspectionStatus: RevisionInspectionStatus;
+  source:
+    | {
+        kind: "artifacts";
+        repositoryName: string;
+        repositoryRemoteUrl: string;
+      }
+    | {
+        kind: "r2-bundle";
+        bundleKey: string;
+        bundleDigest: string;
+        bundleSize: number;
+      };
 }
 
 export async function loadRevisionTarget(
@@ -100,31 +123,85 @@ export async function loadRevisionTarget(
 ): Promise<RevisionTarget | null> {
   const row = await db
     .prepare(
-      `SELECT r.id, r.project_id, r.commit_sha, r.inspection_status,
-          p.repository_name, p.repository_remote_url
+      `SELECT r.id, r.project_id, r.commit_sha, r.ref, r.inspection_status,
+          r.source_kind, r.source_bundle_key, r.source_bundle_digest,
+          r.source_bundle_size, p.repository_name, p.repository_remote_url
        FROM project_revisions r
        JOIN projects p ON p.id = r.project_id
        WHERE r.id = ? AND r.inspection_status = 'valid'`,
     )
     .bind(revisionId)
-    .first<{
-      id: string;
-      project_id: string;
-      commit_sha: string;
-      inspection_status: RevisionInspectionStatus;
-      repository_name: string;
-      repository_remote_url: string;
-    }>();
-  return row
-    ? {
-        id: row.id,
-        projectId: row.project_id,
-        commitSha: row.commit_sha,
+    .first<RevisionTargetRow>();
+  return row ? targetFromRow(row) : null;
+}
+
+export async function loadPendingRevisionTarget(
+  revisionId: string,
+  projectId: string,
+  db: D1Database,
+): Promise<RevisionTarget | null> {
+  const row = await db
+    .prepare(
+      `SELECT r.id, r.project_id, r.commit_sha, r.ref, r.inspection_status,
+          r.source_kind, r.source_bundle_key, r.source_bundle_digest,
+          r.source_bundle_size, p.repository_name, p.repository_remote_url
+       FROM project_revisions r
+       JOIN projects p ON p.id = r.project_id
+       WHERE r.id = ? AND r.project_id = ? AND r.source_kind = 'r2-bundle'`,
+    )
+    .bind(revisionId, projectId)
+    .first<RevisionTargetRow>();
+  return row ? targetFromRow(row) : null;
+}
+
+interface RevisionTargetRow {
+  id: string;
+  project_id: string;
+  commit_sha: string;
+  ref: string;
+  inspection_status: RevisionInspectionStatus;
+  source_kind: "artifacts" | "r2-bundle";
+  source_bundle_key: string | null;
+  source_bundle_digest: string | null;
+  source_bundle_size: number | null;
+  repository_name: string;
+  repository_remote_url: string;
+}
+
+function targetFromRow(row: RevisionTargetRow): RevisionTarget {
+  const base = {
+    id: row.id,
+    projectId: row.project_id,
+    commitSha: row.commit_sha,
+    ref: row.ref,
+    inspectionStatus: row.inspection_status,
+  };
+  if (row.source_kind === "artifacts") {
+    return {
+      ...base,
+      source: {
+        kind: "artifacts",
         repositoryName: row.repository_name,
         repositoryRemoteUrl: row.repository_remote_url,
-        inspectionStatus: row.inspection_status,
-      }
-    : null;
+      },
+    };
+  }
+  if (
+    !row.source_bundle_key ||
+    !row.source_bundle_digest ||
+    !row.source_bundle_size
+  ) {
+    throw new Error("Bundle revision source identity is incomplete");
+  }
+  return {
+    ...base,
+    source: {
+      kind: "r2-bundle",
+      bundleKey: row.source_bundle_key,
+      bundleDigest: row.source_bundle_digest,
+      bundleSize: row.source_bundle_size,
+    },
+  };
 }
 
 interface ArtifactsContentTarget {
@@ -136,6 +213,8 @@ interface ProvenanceRevisionRow {
   revision_id: string;
   commit_sha: string;
   repository_name: string;
+  source_kind: "artifacts" | "r2-bundle";
+  source_provenance: string | null;
 }
 
 export type RecordRevisionResult =
@@ -153,6 +232,456 @@ export type RecordRevisionResult =
 export interface InspectionResult {
   status: "valid" | "invalid";
   findings: RevisionFinding[];
+}
+
+export async function submitRevisionBundle(
+  request: Request,
+  projectId: string,
+  ownerEmail: string,
+  env: RevisionSubmissionEnv,
+): Promise<Response> {
+  if (
+    request.headers.get("content-type")?.split(";", 1)[0]?.trim() !==
+    "application/x-git-bundle"
+  ) {
+    return Response.json(
+      { error: "Expected application/x-git-bundle" },
+      { status: 415 },
+    );
+  }
+  const submission = revisionBundleSubmissionSchema.safeParse({
+    commitSha: request.headers.get("x-video-commit-sha"),
+    ref: request.headers.get("x-video-ref"),
+    bundleSha256: request.headers.get("x-video-bundle-sha256"),
+    bundleSize: Number(request.headers.get("content-length")),
+  });
+  if (!submission.success || !request.body) {
+    return Response.json(
+      { error: "Invalid revision bundle submission" },
+      { status: 400 },
+    );
+  }
+  const input = {
+    ...submission.data,
+    commitSha: submission.data.commitSha.toLowerCase(),
+    bundleSha256: submission.data.bundleSha256.toLowerCase(),
+  };
+
+  let project: {
+    id: string;
+    authoring_source_kind: "artifacts" | "local";
+    repository_default_branch: string;
+  } | null;
+  try {
+    project = await env.PROJECTS_DB.prepare(
+      "SELECT id, authoring_source_kind, repository_default_branch FROM projects WHERE id = ? AND owner_email = ?",
+    )
+      .bind(projectId, ownerEmail)
+      .first();
+  } catch (error) {
+    return platformFailure("Could not load the product project", error);
+  }
+  if (!project)
+    return Response.json(
+      { error: "Product project not found" },
+      { status: 404 },
+    );
+  if (project.authoring_source_kind !== "local") {
+    return Response.json(
+      { error: "Project does not accept local revisions" },
+      { status: 409 },
+    );
+  }
+  if (input.ref !== `refs/heads/${project.repository_default_branch}`) {
+    await request.body.cancel();
+    return Response.json(
+      {
+        error: `Revision must be submitted from ${project.repository_default_branch}`,
+      },
+      { status: 409 },
+    );
+  }
+
+  let existing: SubmittedRevisionRow | null;
+  try {
+    existing = await findSubmittedRevision(
+      projectId,
+      input.commitSha,
+      env.PROJECTS_DB,
+    );
+  } catch (error) {
+    return platformFailure("Could not check the project revision", error);
+  }
+  const objectKey = revisionBundleKey(
+    projectId,
+    input.commitSha,
+    input.bundleSha256,
+  );
+  if (
+    existing &&
+    (!sameBundleIdentity(existing, input) ||
+      existing.source_bundle_key !== objectKey)
+  ) {
+    await request.body.cancel();
+    return Response.json(
+      { error: "Commit already has a different revision source" },
+      { status: 409 },
+    );
+  }
+
+  if (existing) {
+    const stored = await env.REVISION_SOURCES.head(objectKey).catch(() => null);
+    if (validBundleObject(stored, projectId, input)) {
+      try {
+        await consumeVerifiedBundle(
+          request.body,
+          input.bundleSize,
+          input.bundleSha256,
+        );
+      } catch (error) {
+        return bundleReadFailure(error);
+      }
+      const dispatch = await dispatchSubmittedRevision(
+        existing.id,
+        projectId,
+        env,
+      );
+      if (dispatch) return dispatch;
+      return submissionResponse(
+        existing.id,
+        input.commitSha,
+        "already-submitted",
+        200,
+      );
+    }
+    await env.REVISION_SOURCES.delete(objectKey).catch(() => undefined);
+  }
+
+  let storedByRequest = false;
+  const temporaryKey = `${objectKey}.upload-${crypto.randomUUID()}`;
+  try {
+    const fixed = new FixedLengthStream(input.bundleSize);
+    const objectOptions = {
+      httpMetadata: {
+        contentType: "application/x-git-bundle",
+        cacheControl: "private, no-store",
+      },
+      customMetadata: {
+        projectId,
+        commitSha: input.commitSha,
+        ref: input.ref,
+        sha256: input.bundleSha256,
+        byteSize: String(input.bundleSize),
+      },
+      sha256: digestBytes(input.bundleSha256),
+    } satisfies R2PutOptions;
+    const upload = env.REVISION_SOURCES.put(
+      temporaryKey,
+      fixed.readable,
+      objectOptions,
+    );
+    const verification = pipeVerifiedBundle(
+      request.body,
+      fixed.writable,
+      input.bundleSize,
+      input.bundleSha256,
+    );
+    const [uploadResult, verificationResult] = await Promise.allSettled([
+      upload,
+      verification,
+    ]);
+    if (verificationResult.status === "rejected") {
+      if (uploadResult.status === "fulfilled" && uploadResult.value) {
+        await env.REVISION_SOURCES.delete(temporaryKey);
+      }
+      throw verificationResult.reason;
+    }
+    if (uploadResult.status === "rejected") throw uploadResult.reason;
+    const temporary = await env.REVISION_SOURCES.get(temporaryKey);
+    if (!temporary || !validBundleObject(temporary, projectId, input)) {
+      throw new Error("Stored revision bundle identity does not match");
+    }
+    const stored = await env.REVISION_SOURCES.put(objectKey, temporary.body, {
+      ...objectOptions,
+      onlyIf: { etagDoesNotMatch: "*" },
+    });
+    storedByRequest = stored !== null;
+    if (!stored) {
+      const object = await env.REVISION_SOURCES.head(objectKey);
+      if (!validBundleObject(object, projectId, input)) {
+        return Response.json(
+          { error: "Revision bundle source conflicts" },
+          { status: 409 },
+        );
+      }
+    }
+  } catch (error) {
+    return bundleReadFailure(error);
+  } finally {
+    await env.REVISION_SOURCES.delete(temporaryKey).catch(() => undefined);
+  }
+
+  const revisionId = crypto.randomUUID();
+  const now = new Date().toISOString();
+  try {
+    await env.PROJECTS_DB.prepare(
+      `INSERT OR IGNORE INTO project_revisions (
+         id, project_id, commit_sha, ref, is_default_branch,
+         inspection_version, inspection_status, inspection_findings,
+         source_kind, source_bundle_key, source_bundle_digest, source_bundle_size,
+         created_at, updated_at
+       ) VALUES (?, ?, ?, ?, 1, ?, 'pending', '[]', 'r2-bundle', ?, ?, ?, ?, ?)`,
+    )
+      .bind(
+        revisionId,
+        projectId,
+        input.commitSha,
+        input.ref,
+        inspectionVersion,
+        objectKey,
+        input.bundleSha256,
+        input.bundleSize,
+        now,
+        now,
+      )
+      .run();
+    const row = await findSubmittedRevision(
+      projectId,
+      input.commitSha,
+      env.PROJECTS_DB,
+    );
+    if (!row) throw new Error("Could not persist project revision");
+    if (!sameBundleIdentity(row, input)) {
+      if (storedByRequest) await env.REVISION_SOURCES.delete(objectKey);
+      return Response.json(
+        { error: "Commit already has a different revision source" },
+        { status: 409 },
+      );
+    }
+    const dispatch = await dispatchSubmittedRevision(row.id, projectId, env);
+    if (dispatch) return dispatch;
+    return submissionResponse(
+      row.id,
+      input.commitSha,
+      row.id === revisionId ? "accepted" : "already-submitted",
+      row.id === revisionId ? 202 : 200,
+    );
+  } catch (error) {
+    const committed = await findSubmittedRevision(
+      projectId,
+      input.commitSha,
+      env.PROJECTS_DB,
+    ).catch(() => null);
+    if (!committed && storedByRequest)
+      await env.REVISION_SOURCES.delete(objectKey).catch(() => undefined);
+    return platformFailure("Could not save the project revision", error);
+  }
+}
+
+interface SubmittedRevisionRow {
+  id: string;
+  source_kind: "artifacts" | "r2-bundle";
+  source_bundle_key: string | null;
+  source_bundle_digest: string | null;
+  source_bundle_size: number | null;
+  ref: string;
+}
+
+class RevisionBundleTooLargeError extends Error {}
+
+async function findSubmittedRevision(
+  projectId: string,
+  commitSha: string,
+  db: D1Database,
+) {
+  return db
+    .prepare(
+      `SELECT id, source_kind, source_bundle_key, source_bundle_digest,
+          source_bundle_size, ref FROM project_revisions
+       WHERE project_id = ? AND commit_sha = ?`,
+    )
+    .bind(projectId, commitSha)
+    .first<SubmittedRevisionRow>();
+}
+
+function sameBundleIdentity(
+  row: SubmittedRevisionRow,
+  input: { ref: string; bundleSha256: string; bundleSize: number },
+): boolean {
+  return (
+    row.source_kind === "r2-bundle" &&
+    row.ref === input.ref &&
+    row.source_bundle_digest === input.bundleSha256 &&
+    row.source_bundle_size === input.bundleSize
+  );
+}
+
+function revisionBundleKey(
+  projectId: string,
+  commitSha: string,
+  digest: string,
+): string {
+  return `projects/${projectId}/revisions/${commitSha}/${digest}.bundle`;
+}
+
+async function consumeVerifiedBundle(
+  stream: ReadableStream<Uint8Array>,
+  expectedSize: number,
+  expectedDigest: string,
+): Promise<void> {
+  const hash = createHash("sha256");
+  const reader = stream.getReader();
+  let bytes = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > revisionBundleMaxBytes || bytes > expectedSize) {
+      await reader.cancel();
+      throw new RevisionBundleTooLargeError();
+    }
+    hash.update(value);
+  }
+  if (bytes !== expectedSize || hash.digest("hex") !== expectedDigest) {
+    throw new Error("Revision bundle identity does not match");
+  }
+}
+
+async function pipeVerifiedBundle(
+  source: ReadableStream<Uint8Array>,
+  destination: WritableStream<Uint8Array>,
+  expectedSize: number,
+  expectedDigest: string,
+): Promise<void> {
+  const hash = createHash("sha256");
+  const reader = source.getReader();
+  const writer = destination.getWriter();
+  let bytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > revisionBundleMaxBytes || bytes > expectedSize) {
+        await reader.cancel();
+        throw new RevisionBundleTooLargeError();
+      }
+      hash.update(value);
+      await writer.write(value);
+    }
+    if (bytes !== expectedSize || hash.digest("hex") !== expectedDigest) {
+      throw new Error("Revision bundle identity does not match");
+    }
+    await writer.close();
+  } catch (error) {
+    await writer.abort(error).catch(() => undefined);
+    throw error;
+  }
+}
+
+function digestBytes(digest: string): ArrayBuffer {
+  const bytes = Uint8Array.from(digest.match(/../g)!, (value) =>
+    Number.parseInt(value, 16),
+  );
+  const result = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(result).set(bytes);
+  return result;
+}
+
+function validBundleObject(
+  object: R2Object | null,
+  projectId: string,
+  input: {
+    commitSha: string;
+    ref: string;
+    bundleSha256: string;
+    bundleSize: number;
+  },
+): boolean {
+  return (
+    object?.size === input.bundleSize &&
+    object.httpMetadata?.contentType === "application/x-git-bundle" &&
+    object.customMetadata?.projectId === projectId &&
+    object.customMetadata.commitSha === input.commitSha &&
+    object.customMetadata.ref === input.ref &&
+    object.customMetadata.sha256 === input.bundleSha256 &&
+    object.customMetadata.byteSize === String(input.bundleSize) &&
+    object.checksums.sha256 !== undefined &&
+    Array.from(new Uint8Array(object.checksums.sha256), (byte) =>
+      byte.toString(16).padStart(2, "0"),
+    ).join("") === input.bundleSha256
+  );
+}
+
+async function dispatchSubmittedRevision(
+  revisionId: string,
+  projectId: string,
+  env: RevisionSubmissionEnv,
+): Promise<Response | undefined> {
+  const instanceId = `revision-${revisionId}`;
+  try {
+    const [created] = await env.REVISION_WORKFLOW.createBatch([
+      {
+        id: instanceId,
+        params: { kind: "submitted-revision", projectId, revisionId },
+      },
+    ]);
+    if (created) return undefined;
+    const existing = await env.REVISION_WORKFLOW.get(instanceId);
+    const status = await existing.status();
+    if (["complete", "errored", "terminated"].includes(status.status)) {
+      await existing.restart();
+    }
+    return undefined;
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        message: "Could not dispatch submitted revision",
+        projectId,
+        revisionId,
+        error: error instanceof Error ? error.message : String(error),
+      }),
+    );
+    return Response.json(
+      {
+        error: "Revision was saved but processing could not be started",
+        revisionId,
+      },
+      { status: 503, headers: { "Retry-After": "1" } },
+    );
+  }
+}
+
+function submissionResponse(
+  revisionId: string,
+  commitSha: string,
+  status: "accepted" | "already-submitted",
+  responseStatus: number,
+): Response {
+  return Response.json(
+    revisionBundleSubmissionResultSchema.parse({
+      revisionId,
+      commitSha,
+      status,
+    }),
+    { status: responseStatus },
+  );
+}
+
+function bundleReadFailure(error: BoundaryError): Response {
+  if (error instanceof RevisionBundleTooLargeError) {
+    return Response.json(
+      { error: "Revision bundle exceeds 25 MiB" },
+      { status: 413 },
+    );
+  }
+  if (
+    error instanceof Error &&
+    error.message === "Revision bundle identity does not match"
+  ) {
+    return Response.json({ error: error.message }, { status: 422 });
+  }
+  return platformFailure("Could not store the revision bundle", error);
 }
 
 export async function recordPushedRevision(
@@ -184,7 +713,8 @@ export async function recordPushedRevision(
 
   const project = await env.PROJECTS_DB.prepare(
     `SELECT id, repository_name, repository_default_branch, repository_remote_url
-       FROM projects WHERE repository_name = ?`,
+       FROM projects
+       WHERE repository_name = ? AND authoring_source_kind = 'artifacts'`,
   )
     .bind(event.source.repoName)
     .first<RevisionProjectRow>();
@@ -230,9 +760,13 @@ export async function recordPushedRevision(
     id: row.id,
     projectId: project.id,
     commitSha: row.commit_sha,
-    repositoryName: project.repository_name,
-    repositoryRemoteUrl: project.repository_remote_url,
+    ref: row.ref,
     inspectionStatus: row.inspection_status,
+    source: {
+      kind: "artifacts" as const,
+      repositoryName: project.repository_name,
+      repositoryRemoteUrl: project.repository_remote_url,
+    },
   };
   return row.inspection_status === "pending"
     ? { kind: "pending", target }
@@ -244,21 +778,48 @@ export async function inspectRevision(
   env: RevisionEnv,
   fetcher: typeof fetch = fetch,
 ): Promise<InspectionResult> {
+  if (target.source.kind !== "artifacts") {
+    throw new Error("Bundle revisions must be inspected in Sandbox");
+  }
+  const source = target.source;
+  await readCommit(
+    {
+      commitSha: target.commitSha,
+      repositoryName: source.repositoryName,
+    },
+    env,
+    fetcher,
+  );
+  return inspectRevisionStructure((path) =>
+    readFile(
+      {
+        commitSha: target.commitSha,
+        repositoryName: source.repositoryName,
+      },
+      path,
+      env,
+      fetcher,
+    ),
+  );
+}
+
+export async function inspectRevisionStructure(
+  read: (path: string) => Promise<string>,
+): Promise<InspectionResult> {
   const findings: RevisionFinding[] = [];
-  await readCommit(target, env, fetcher);
 
   let packageText: string;
   try {
-    packageText = await readFile(target, "package.json", env, fetcher);
+    packageText = await read("package.json");
   } catch (error) {
-    if (error instanceof ArtifactsContentError && error.kind === "too-large") {
+    if (error instanceof RevisionContentError && error.kind === "too-large") {
       return invalid(
         "package.too-large",
         "package.json exceeds the 1 MB inspection limit",
         "package.json",
       );
     }
-    if (error instanceof ArtifactsContentError && error.kind === "not-found") {
+    if (error instanceof RevisionContentError && error.kind === "not-found") {
       return invalid(
         "package.missing",
         "package.json is required",
@@ -309,13 +870,13 @@ export async function inspectRevision(
   }
 
   const fileResults = await Promise.allSettled(
-    requiredFiles.map((path) => readFile(target, path, env, fetcher)),
+    requiredFiles.map((path) => read(path)),
   );
   for (let index = 0; index < fileResults.length; index += 1) {
     const result = fileResults[index];
     if (result?.status === "rejected") {
       if (
-        !(result.reason instanceof ArtifactsContentError) ||
+        !(result.reason instanceof RevisionContentError) ||
         result.reason.kind === "platform"
       ) {
         throw result.reason;
@@ -344,15 +905,23 @@ export async function finishRevisionInspection(
   revisionId: string,
   result: { status: RevisionInspectionStatus; findings: RevisionFinding[] },
   db: D1Database,
+  sourceProvenance?: string,
 ): Promise<boolean> {
   const findings = JSON.stringify(result.findings.slice(0, 100));
   const updated = await db
     .prepare(
       `UPDATE project_revisions
-         SET inspection_status = ?, inspection_findings = ?, updated_at = ?
-         WHERE id = ? AND inspection_status = 'pending'`,
+          SET inspection_status = ?, inspection_findings = ?,
+              source_provenance = COALESCE(?, source_provenance), updated_at = ?
+          WHERE id = ? AND inspection_status IN ('pending', 'error')`,
     )
-    .bind(result.status, findings, new Date().toISOString(), revisionId)
+    .bind(
+      result.status,
+      findings,
+      sourceProvenance ?? null,
+      new Date().toISOString(),
+      revisionId,
+    )
     .run();
   if (!updated.success) throw new Error("Could not update revision inspection");
   return updated.meta.changes === 1;
@@ -415,7 +984,8 @@ export async function getRevisionSourceProvenance(
   fetcher: typeof fetch = fetch,
 ): Promise<Response> {
   const revision = await env.PROJECTS_DB.prepare(
-    `SELECT r.id AS revision_id, r.commit_sha, p.repository_name
+    `SELECT r.id AS revision_id, r.commit_sha, r.source_kind,
+        r.source_provenance, p.repository_name
        FROM projects p
        JOIN project_revisions r ON r.project_id = p.id
        JOIN revision_builds b ON b.revision_id = r.id
@@ -426,26 +996,31 @@ export async function getRevisionSourceProvenance(
   if (!revision) return provenanceNotFound();
 
   let markdown: string;
-  try {
-    markdown = await readFile(
-      {
-        commitSha: revision.commit_sha,
-        repositoryName: revision.repository_name,
-      },
-      "SOURCE_PROVENANCE.md",
-      env,
-      fetcher,
-    );
-  } catch (error) {
-    if (error instanceof ArtifactsContentError) {
-      if (error.kind === "not-found") return provenanceNotFound();
-      if (error.kind === "too-large") return invalidProvenance();
-      return Response.json(
-        { error: "Source provenance is temporarily unavailable" },
-        { status: 502 },
+  if (revision.source_kind === "r2-bundle") {
+    if (!revision.source_provenance) return provenanceNotFound();
+    markdown = revision.source_provenance;
+  } else {
+    try {
+      markdown = await readFile(
+        {
+          commitSha: revision.commit_sha,
+          repositoryName: revision.repository_name,
+        },
+        "SOURCE_PROVENANCE.md",
+        env,
+        fetcher,
       );
+    } catch (error) {
+      if (error instanceof RevisionContentError) {
+        if (error.kind === "not-found") return provenanceNotFound();
+        if (error.kind === "too-large") return invalidProvenance();
+        return Response.json(
+          { error: "Source provenance is temporarily unavailable" },
+          { status: 502 },
+        );
+      }
+      throw error;
     }
-    throw error;
   }
 
   const parsed = sourceProvenanceSchema.safeParse({
@@ -584,7 +1159,7 @@ async function artifactsRequest(
   });
   if (!response.ok) {
     await response.body?.cancel();
-    throw new ArtifactsContentError(
+    throw new RevisionContentError(
       `Artifacts content request returned HTTP ${response.status}`,
       response.status === 404 ? "not-found" : "platform",
     );
@@ -613,7 +1188,7 @@ async function readBoundedText(response: Response): Promise<string> {
   const declaredSize = Number(response.headers.get("content-length"));
   if (Number.isFinite(declaredSize) && declaredSize > maxFileBytes) {
     await response.body?.cancel();
-    throw new ArtifactsContentError("Artifacts file exceeds 1 MB", "too-large");
+    throw new RevisionContentError("Artifacts file exceeds 1 MB", "too-large");
   }
   if (!response.body) return "";
 
@@ -626,7 +1201,7 @@ async function readBoundedText(response: Response): Promise<string> {
     size += value.byteLength;
     if (size > maxFileBytes) {
       await reader.cancel();
-      throw new ArtifactsContentError(
+      throw new RevisionContentError(
         "Artifacts file exceeds 1 MB",
         "too-large",
       );
