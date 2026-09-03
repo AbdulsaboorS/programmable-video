@@ -51,7 +51,7 @@ The agent-facing workflow should follow five principles demonstrated well by too
 4. Make variations change story and timing before changing accepted product visuals.
 5. Lead agent documentation with one concise reference and one working example; keep detailed architecture documentation secondary.
 
-The Voice second-repository test showed that the generated handoff was repetitive, verification required several commands, review lacked a correction path, and the exact-commit build was constrained by a `lite` Sandbox. The handoff now keeps dynamic task and access context, the starter exposes `pnpm verify`, review can issue revision-specific external-agent feedback, and saved revisions build on `basic` while retaining independent managed checks.
+The second-repository test showed that the generated handoff was repetitive, verification required several commands, review lacked a correction path, and the exact-commit build was constrained by a `lite` Sandbox. The handoff now keeps dynamic task and access context, the starter exposes `pnpm verify`, review can issue revision-specific external-agent feedback, and saved revisions build on `basic` while retaining independent managed checks.
 
 ## Delivery Order
 
@@ -60,7 +60,7 @@ The Voice second-repository test showed that the generated handoff was repetitiv
 3. Persist briefs and feedback, accept reference screenshots, and surface source provenance during product-match review.
 4. Make the reusable product-visual and video-specific boundaries explicit in the managed project starter.
 5. Request a second video from one accepted product visual version and measure creator time, changed files, fidelity, and code reuse.
-6. Run an unassisted DevRel creator test, then address build queuing, retry, isolation, egress, and launch documentation. See [Internal Beta Launch Plan](internal-beta-launch-plan.md).
+6. Run an unassisted creator test, then address build queuing, retry, isolation, egress, and launch documentation.
 
 ## Not Now
 
@@ -69,4 +69,4 @@ The Voice second-repository test showed that the generated handoff was repetitiv
 - Live drafts that can bypass exact-commit approval
 - Additional output formats, clip editing, or local publishing
 - Replacing Stream or the managed renderer
-- Platform integration or a managed in-Studio agent during the internal-beta window
+- Platform integration or a managed in-Studio agent

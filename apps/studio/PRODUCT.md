@@ -8,15 +8,15 @@ web
 
 ## Users
 
-The primary beta user is a Cloudflare Developer Relations teammate creating a short product video for a launch, use case, or technical explanation. They need to complete the journey without training or help from the prototype author and should not need to understand browser automation, FFmpeg, codecs, or video delivery.
+The primary user is a developer or technical creator making a short product video for a launch, use case, or technical explanation. They need to complete the journey without help from the prototype author and should not need to understand browser automation, FFmpeg, codecs, or video delivery.
 
-Product managers, documentation and education teams, product and design teams, and technical marketing teams are adjacent users when the workflow expands beyond the internal beta.
+Product managers, documentation and education teams, product and design teams, and technical marketing teams are adjacent users.
 
 ## Product Purpose
 
 Programmable Video turns a real product repository into accurate, reusable product videos. A creator provides product source, references, and a brief; a coding agent builds a deterministic React composition from the product's real interface; and the creator reviews, approves, finishes, and publishes the result through Stream.
 
-Success for the internal beta means a first-time creator can independently produce and publish a faithful video while recovering from common failures without losing the latest usable draft.
+Success means a first-time creator can independently produce and publish a faithful video while recovering from common failures without losing the latest usable draft.
 
 ## Positioning
 
@@ -30,7 +30,7 @@ After approval, the creator can trim the video, choose an output profile and fit
 
 ## Capabilities and Constraints
 
-- The internal beta is restricted to Access-authenticated Cloudflare users.
+- Local operation is intended for one trusted creator. A deployed Studio must use an explicit authentication boundary such as Cloudflare Access.
 - Each project records one read-only GitHub product repository as source context. Studio does not verify repository access. Generated composition code lives separately and never writes to the product repository.
 - Source videos are 1280x720 at 30 fps and are 12 or 15 seconds long.
 - Video visuals must use the product's real components, styles, fonts, icons, assets, labels, spacing, and geometry. Screenshots are fidelity references, not substitutes for usable source.
@@ -49,7 +49,7 @@ Primary interface language uses Draft, Review, Finish, Published video, Draft hi
 ## Evidence on Hand
 
 - `docs/product-overview.md` records the product vision, audiences, mechanism, and ideal journey.
-- `docs/deployment-runbook.md` defines the supported deployment contract and required platform configuration.
+- `docs/deployment-runbook.md` defines the advanced managed deployment path and required platform configuration.
 - `docs/finishing-and-delivery-slice.md` defines finishing, publication, delivery, and deferred capabilities.
 - `docs/studio-design-direction.md` is the accepted source of truth for the Studio redesign.
 - The automated tests and deployment smoke test establish the create-to-Stream path. No public customer claims, benchmarks, or testimonials are established.

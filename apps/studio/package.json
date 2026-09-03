@@ -8,7 +8,7 @@
     "db:migrate:local": "wrangler d1 migrations apply PROJECTS_DB --local --persist-to \"${PV_PERSIST_PATH:-../../.wrangler/state}\"",
     "dev": "vite --port \"${PV_STUDIO_PORT:-5173}\" --strictPort",
     "test:worker": "vitest run worker",
-    "types:worker": "wrangler types worker/worker-configuration.d.ts",
+    "types:worker": "wrangler types worker/worker-configuration.d.ts --env-file .dev.vars.example",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -164,6 +164,7 @@ Run the complete gate:
 pnpm format:check
 pnpm lint
 pnpm typecheck
+pnpm types:check
 pnpm test
 pnpm build
 pnpm --dir starters/product-project verify

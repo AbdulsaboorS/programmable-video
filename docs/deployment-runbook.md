@@ -6,7 +6,7 @@ This guide deploys the complete Programmable Video reference application into yo
 
 You need Workers Paid, Workflows, Containers, Sandbox, Artifacts, D1, R2, Stream, and Zero Trust Access. Containers and Sandbox require Workers Paid, which starts at $5 USD per month. Stream is paid separately. Artifacts is in private beta and must be enabled for your account. This project also pins a prerelease Sandbox SDK version.
 
-The deployment creates billable compute, storage, and video resources. The [README cost table](../README.md#deploy-the-complete-studio) links to current pricing. Delete test projects, Containers, R2 objects, and Stream videos when you no longer need them.
+The deployment creates billable compute, storage, and video resources. Check current Cloudflare pricing before deploying. Delete test projects, Containers, R2 objects, and Stream videos when you no longer need them.
 
 ## Local Requirements
 
@@ -56,12 +56,13 @@ The completed binding must contain the returned identifier:
 }
 ```
 
-Create the three private R2 buckets:
+Create the four private R2 buckets:
 
 ```sh
 pnpm --filter @programmable-video/studio exec wrangler r2 bucket create programmable-video-previews
 pnpm --filter @programmable-video/studio exec wrangler r2 bucket create programmable-video-references
 pnpm --filter @programmable-video/studio exec wrangler r2 bucket create programmable-video-media
+pnpm --filter @programmable-video/studio exec wrangler r2 bucket create programmable-video-revision-sources
 ```
 
 Apply every D1 migration before deploying project APIs:
@@ -146,6 +147,7 @@ pnpm --filter @programmable-video/preview types:worker
 pnpm format:check
 pnpm lint
 pnpm typecheck
+pnpm types:check
 pnpm test
 pnpm build
 ```

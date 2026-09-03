@@ -6,13 +6,14 @@
   "packageManager": "pnpm@11.9.0",
   "scripts": {
     "build": "pnpm --recursive --if-present run build",
-    "dev": "pnpm --filter @programmable-video/studio db:migrate:local && pnpm --parallel --filter @programmable-video/studio --filter @programmable-video/preview dev",
+    "dev": "pnpm --filter @programmable-video/studio build && pnpm --filter @programmable-video/studio db:migrate:local && pnpm --parallel --filter @programmable-video/studio --filter @programmable-video/preview dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "oxlint .",
     "prepare": "husky",
     "project": "tsx apps/project-cli/src/cli.ts",
     "test": "vitest run --exclude \"starters/product-project/**\"",
+    "types:check": "pnpm --filter @programmable-video/studio run types:worker --check && pnpm --filter @programmable-video/preview run types:worker --check",
     "typecheck": "pnpm --recursive --if-present run typecheck",
     "video": "tsx apps/renderer/src/cli.ts",
     "verify:support-agent-frames": "pnpm --filter @programmable-video/renderer verify:support-agent-frames"
