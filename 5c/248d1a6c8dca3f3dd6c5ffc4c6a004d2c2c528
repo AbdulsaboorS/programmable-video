@@ -1,0 +1,35 @@
+README.md
+  s_bee996d02c7245::t_ded0b8e36adc54 167
+apps/preview/package.json
+  s_bee996d02c7245::t_47c2ed53a781d1 10
+apps/preview/worker-configuration.d.ts
+  s_bee996d02c7245::t_a5101052ac783c 2,7,20
+apps/studio/PRODUCT.md
+  s_bee996d02c7245::t_3f9d0ba1eee00e 11,13,19,33,52
+apps/studio/package.json
+  s_bee996d02c7245::t_7ab852a561a34c 11
+apps/studio/worker/worker-configuration.d.ts
+  s_bee996d02c7245::t_dd74b65582372d 2,5-29,32-36,40,43
+docs/deployment-runbook.md
+  s_bee996d02c7245::t_1dbe5c2166b5ba 9,59,65,150
+docs/iteration-model.md
+  s_bee996d02c7245::t_2a3a7c39f8b9b2 54,63,72
+package.json
+  s_bee996d02c7245::t_819d5d61d8c48b 9,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "5c248d1a6c8dca3f3dd6c5ffc4c6a004d2c2c528",
+  "prompts": {},
+  "sessions": {
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
