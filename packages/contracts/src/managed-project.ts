@@ -8,7 +8,6 @@ import { gitBranchRefSchema } from "./project-revision";
 import { isoTimestampSchema } from "./shared";
 
 const boundedName = z.string().trim().min(1).max(80);
-const boundedText = z.string().trim().min(1).max(500);
 const videoInstruction = z.string().trim().min(1).max(1500);
 
 const referenceMetadataMaxBytes = 25 * 1024 * 1024;
@@ -52,17 +51,7 @@ export const createManagedProjectRequestSchema = z
   })
   .strict();
 
-export const artifactsManagedRepositorySchema = z
-  .object({
-    kind: z.literal("artifacts"),
-    name: z.string().min(1),
-    remoteUrl: z.url(),
-    defaultBranch: z.string().min(1),
-    state: z.literal("seeded"),
-  })
-  .strict();
-
-export const localManagedRepositorySchema = z
+export const managedRepositorySchema = z
   .object({
     kind: z.literal("local"),
     defaultBranch: z.string().min(1),
@@ -70,10 +59,7 @@ export const localManagedRepositorySchema = z
   })
   .strict();
 
-export const managedRepositorySchema = z.discriminatedUnion("kind", [
-  artifactsManagedRepositorySchema,
-  localManagedRepositorySchema,
-]);
+export const localManagedRepositorySchema = managedRepositorySchema;
 
 const referenceMetadataBaseSchema = z
   .object({
@@ -199,18 +185,7 @@ const agentHandoffReferenceSchema = z
   })
   .strict();
 
-export const artifactsAgentHandoffSchema = z
-  .object({
-    kind: z.literal("artifacts"),
-    remoteUrl: z.url(),
-    token: boundedText,
-    tokenExpiresAt: isoTimestampSchema,
-    defaultBranch: z.string().min(1),
-    references: z.array(agentHandoffReferenceSchema),
-  })
-  .strict();
-
-export const localAgentHandoffSchema = z
+export const agentHandoffSchema = z
   .object({
     kind: z.literal("local"),
     projectId: z.uuid(),
@@ -220,13 +195,9 @@ export const localAgentHandoffSchema = z
   })
   .strict();
 
-export const agentHandoffSchema = z.discriminatedUnion("kind", [
-  artifactsAgentHandoffSchema,
-  localAgentHandoffSchema,
-]);
+export const localAgentHandoffSchema = agentHandoffSchema;
 
 export type AgentHandoff = z.infer<typeof agentHandoffSchema>;
-export type ArtifactsAgentHandoff = z.infer<typeof artifactsAgentHandoffSchema>;
 export type LocalAgentHandoff = z.infer<typeof localAgentHandoffSchema>;
 export type CreateManagedProjectRequest = z.infer<
   typeof createManagedProjectRequestSchema
@@ -236,9 +207,6 @@ export type CreateProjectFeedbackRequest = z.infer<
 >;
 export type ManagedProject = z.infer<typeof managedProjectSchema>;
 export type ManagedRepository = z.infer<typeof managedRepositorySchema>;
-export type ArtifactsManagedRepository = z.infer<
-  typeof artifactsManagedRepositorySchema
->;
 export type LocalManagedRepository = z.infer<
   typeof localManagedRepositorySchema
 >;

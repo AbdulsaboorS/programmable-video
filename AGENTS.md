@@ -25,7 +25,7 @@ Keep the code easy for humans and agents to read, review, and change.
 - Keep domain contracts explicit and independent from infrastructure.
 - Validate all data that crosses a system boundary.
 - Keep composition, rendering, orchestration, and media concerns separate.
-- Keep connected source repositories read-only. Store generated composition code in managed project repositories.
+- Keep connected source repositories read-only. Store generated composition code in separate local Git repositories.
 - Treat an approved Git commit as the source of truth for preview and final render.
 - Choose durable boundaries without building speculative capability.
 - Prefer established libraries when they reduce total complexity.
@@ -47,7 +47,7 @@ Keep the code easy for humans and agents to read, review, and change.
 
 - Check current Cloudflare documentation before choosing APIs or limits.
 - Prefer bindings and generated platform types over handwritten API shapes.
-- Use local Git bundles in R2 for versioned project source and Stream for finished video. Keep Artifacts only for existing compatibility paths.
+- Use immutable local Git bundles in R2 as the only revision source. Use Stream only to publish finished video.
 - Never commit tokens, account identifiers, or other secrets.
 
 ## Quality

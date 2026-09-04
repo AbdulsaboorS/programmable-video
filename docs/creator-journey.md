@@ -11,7 +11,7 @@ A creator should always understand:
 - Whether the preview matches the real product.
 - What will happen after they select the next action.
 
-The interface must explain the creative workflow in product language. It must not require users to understand Artifacts, manifests, Workflows, Containers, hashes, or build infrastructure.
+The interface must explain the creative workflow in product language. It must not require users to understand manifests, Workflows, Containers, hashes, or build infrastructure.
 
 ## User-Facing Terms
 
@@ -82,7 +82,7 @@ The current step includes a short explanation. Completed steps remain visible. T
 
 Progress must come from persisted backend or agent events, not decorative animation. For every long-running operation, show when it started, the latest activity time, elapsed time, the last completed step, the current named step, and what happens next. If no event arrives within the expected interval, say that updates are delayed and offer refresh, retry, or details instead of appearing frozen.
 
-External coding-agent work belongs in the same progress model. The agent should report milestones such as source inspection, implementation, checks, commit, and push. Until that reporting channel exists, Studio must clearly say that it is waiting for the external agent's first pushed revision and cannot observe work inside the agent session.
+External coding-agent work belongs in the same progress model. The agent should report milestones such as source inspection, implementation, checks, and commit. Until that reporting channel exists, Studio must clearly say that it is waiting for the creator to submit the agent's committed revision and cannot observe work inside the agent session.
 
 The source-use panel lists components, styles, fonts, icons, and assets as the agent selects them. Any source item the agent cannot use is shown immediately with the reason and proposed fallback. The agent cannot silently replace it.
 
@@ -90,7 +90,7 @@ The source-use panel lists components, styles, fonts, icons, and assets as the a
 
 The video preview is the largest object on the screen. It supports play, pause, frame seeking, current time, duration, and full-screen viewing.
 
-For the internal beta, this is an embedded review canvas around the exact built revision, not a general editor. Pausing or seeking selects a frame. A change request records that frame and timestamp before issuing the external-agent handoff.
+This is an embedded review canvas around the exact built revision, not a general editor. Pausing or seeking selects a frame. A change request records that frame and timestamp before issuing the external-agent handoff.
 
 The creator can request changes in plain language. Common controls support:
 
@@ -104,9 +104,9 @@ This is not a general timeline editor. The agent edits the composition and retur
 
 Review must provide an explicit **Request changes** action before approval. It preserves the current usable preview, captures frame-specific feedback when available, and starts or resumes agent work on a newer draft. Approval must never be the only clear way forward from a preview.
 
-The target editing experience places the agent conversation beside the preview. A creator can pause on a frame, describe a change, and see the latest compile-valid draft without leaving Studio. Agent work happens in an isolated persistent workspace so incremental changes do not require a clean install and Git push before every preview.
+The target editing experience places the agent conversation beside the preview. A creator can pause on a frame, describe a change, and see the latest compile-valid draft without leaving Studio. Agent work happens in an isolated persistent workspace so incremental changes do not require a clean install and new bundle submission before every preview.
 
-A live draft is not an approval boundary. The agent saves an immutable revision and the system runs clean exact-commit checks before the creator can approve or render it. Studio keeps the latest valid preview visible while the agent works or a newer draft fails. See [Prompt-Driven Iteration Model](iteration-model.md) for the target loop and delivery order.
+A live draft is not an approval boundary. The agent saves an immutable local Git commit, and the creator submits it as a bundle. The bundle stored in local R2 is the only revision source, and the system runs clean exact-commit checks before the creator can approve or render it. Studio keeps the latest valid preview visible while the agent works or a newer draft fails. See [Prompt-Driven Iteration Model](iteration-model.md) for the target loop and delivery order.
 
 ### 6. Check Product Match
 
@@ -124,7 +124,7 @@ The main action is disabled while an unresolved visual mismatch exists. The crea
 
 ### 7. Render And Publish
 
-After approval, the interface explains that the approved draft is locked and rendering will not change it.
+After approval, the interface explains that the approved draft is locked and rendering will not change it. Stream is used only when the creator publishes the finished video; it is not involved in drafting, revision storage, preview, or approval.
 
 Progress is shown as:
 
@@ -155,7 +155,7 @@ The completed screen leads with the playable Stream video. Secondary actions exp
 
 ## Implemented Frontend Slice
 
-The first redesign consumes validated project and revision API data while preserving the existing backend actions for handoff, preview, approval, render, and Stream playback.
+The first redesign consumes validated project and revision API data while preserving the existing backend actions for local handoff, bundle submission, preview, approval, render, and Stream playback.
 
 The slice includes:
 
@@ -167,8 +167,8 @@ The slice includes:
 - Manual product-match confirmation with source-use and automated comparison clearly labeled as unimplemented
 - Immutable approval, render retry, and embedded Stream playback
 
-Persisted briefs, reference uploads, and revision-specific feedback are implemented through validated backend data. Automated source-use evidence, side-by-side comparison, and external-agent milestone events remain future slices.
+Side-by-side comparison and external-agent milestone events remain future slices. They must replace the labeled gaps through validated backend data rather than fixture progress.
 
-Managed agent conversation, live compile-valid drafts, and low-latency incremental preview remain future slices. The request-changes action includes the selected exact-build frame when available and hands persisted feedback to an external coding agent; pushed Git revisions remain the preview and approval boundary.
+Managed agent conversation, live compile-valid drafts, and low-latency incremental preview remain future slices. The implemented request-changes action includes the selected exact-build frame when available and hands persisted feedback to an external coding agent; submitted Git bundles remain the preview and approval boundary.
 
-The next product work prioritizes reference comparison, source provenance, second-video reuse, and an unassisted creator test. Managed agent conversation and live drafts are explicitly deferred.
+Current work prioritizes persisted briefs and frame-specific feedback, reference comparison, source provenance, and second-video reuse. Managed agent conversation and live drafts are explicitly deferred.

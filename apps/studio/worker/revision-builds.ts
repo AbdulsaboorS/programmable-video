@@ -34,7 +34,6 @@ const maxOutputBytes = 20 * 1024 * 1024;
 const maxArchiveBytes = 25 * 1024 * 1024;
 const maxFiles = 1_000;
 const diagnosticBytes = 65_536;
-const tokenTtlSeconds = 5 * 60;
 const maxSourceFileBytes = 1024 * 1024;
 const maxSourceBlobBytes = 5 * 1024 * 1024;
 const maxSourceBytes = 50 * 1024 * 1024;
@@ -165,9 +164,6 @@ export async function inspectBundledRevision(
   target: RevisionTarget,
   env: Env,
 ): Promise<{ inspection: InspectionResult; sourceProvenance?: string }> {
-  if (target.source.kind !== "r2-bundle") {
-    throw new Error("Expected a bundle revision target");
-  }
   const sandbox = getSandbox(env.SANDBOX, `revision-inspection-${target.id}`);
   try {
     await checkoutRevision(sandbox, target, env);
@@ -252,71 +248,7 @@ export async function checkoutRevision(
   target: RevisionTarget,
   env: Env,
 ): Promise<void> {
-  if (target.source.kind === "r2-bundle") {
-    await checkoutBundleRevision(sandbox, target, env.REVISION_SOURCES);
-    return;
-  }
-  const repository = await env.ARTIFACTS.get(target.source.repositoryName);
-  const token = await repository.createToken("read", tokenTtlSeconds);
-  try {
-    await sandbox.mkdir(projectDirectory, { recursive: true });
-    await sandbox.writeFile(
-      "/workspace/git-askpass.sh",
-      '#!/bin/sh\ncase "$1" in *Username*) printf x;; *) printf %s "$ARTIFACTS_GIT_TOKEN";; esac\n',
-    );
-    await expectSuccess(
-      await sandbox.exec(["chmod", "700", "/workspace/git-askpass.sh"]),
-      30_000,
-    );
-    const gitEnv = {
-      ARTIFACTS_GIT_TOKEN: token.plaintext,
-      GIT_ASKPASS: "/workspace/git-askpass.sh",
-      GIT_TERMINAL_PROMPT: "0",
-    };
-    const commands: ReadonlyArray<readonly [string, ...string[]]> = [
-      ["git", "init", projectDirectory],
-      [
-        "git",
-        "-C",
-        projectDirectory,
-        "remote",
-        "add",
-        "origin",
-        target.source.repositoryRemoteUrl,
-      ],
-      [
-        "git",
-        "-C",
-        projectDirectory,
-        "fetch",
-        "--depth",
-        "1",
-        "origin",
-        target.commitSha,
-      ],
-      ["git", "-C", projectDirectory, "checkout", "--detach", target.commitSha],
-    ];
-    for (const command of commands) {
-      await expectSuccess(
-        await sandbox.exec(command, { env: gitEnv, timeout: 120_000 }),
-        120_000,
-      );
-    }
-    const head = await collect(
-      await sandbox.exec(["git", "-C", projectDirectory, "rev-parse", "HEAD"], {
-        timeout: 30_000,
-      }),
-      30_000,
-    );
-    if (
-      head.exitCode !== 0 ||
-      head.stdout.trim().toLowerCase() !== target.commitSha
-    ) {
-      throw new Error("Exact revision checkout verification failed");
-    }
-  } finally {
-    await repository.revokeToken(token.id).catch(() => undefined);
-  }
+  await checkoutBundleRevision(sandbox, target, env.REVISION_SOURCES);
 }
 
 async function checkoutBundleRevision(
@@ -324,22 +256,19 @@ async function checkoutBundleRevision(
   target: RevisionTarget,
   bucket: R2Bucket,
 ): Promise<void> {
-  if (target.source.kind !== "r2-bundle")
-    throw new Error("Expected a bundle revision target");
-  const source = target.source;
-  const object = await bucket.get(source.bundleKey);
+  const object = await bucket.get(target.bundleKey);
   if (
     !object ||
-    object.size !== source.bundleSize ||
+    object.size !== target.bundleSize ||
     object.size > revisionBundleMaxBytes ||
     object.httpMetadata?.contentType !== "application/x-git-bundle" ||
     object.customMetadata?.projectId !== target.projectId ||
     object.customMetadata?.commitSha !== target.commitSha ||
     object.customMetadata?.ref !== target.ref ||
-    object.customMetadata?.sha256 !== source.bundleDigest ||
-    object.customMetadata?.byteSize !== String(source.bundleSize) ||
+    object.customMetadata?.sha256 !== target.bundleDigest ||
+    object.customMetadata?.byteSize !== String(target.bundleSize) ||
     !object.checksums.sha256 ||
-    hex(new Uint8Array(object.checksums.sha256)) !== source.bundleDigest
+    hex(new Uint8Array(object.checksums.sha256)) !== target.bundleDigest
   ) {
     await object?.body.cancel();
     throw new Error("Revision bundle identity does not match");
@@ -351,7 +280,7 @@ async function checkoutBundleRevision(
     new TransformStream<Uint8Array, Uint8Array>({
       transform(chunk, controller) {
         bytes += chunk.byteLength;
-        if (bytes > revisionBundleMaxBytes || bytes > source.bundleSize) {
+        if (bytes > revisionBundleMaxBytes || bytes > target.bundleSize) {
           controller.error(new Error("Revision bundle exceeds 25 MiB"));
           return;
         }
@@ -360,8 +289,8 @@ async function checkoutBundleRevision(
       },
       flush(controller) {
         if (
-          bytes !== source.bundleSize ||
-          hash.digest("hex") !== source.bundleDigest
+          bytes !== target.bundleSize ||
+          hash.digest("hex") !== target.bundleDigest
         ) {
           controller.error(
             new Error("Revision bundle identity does not match"),

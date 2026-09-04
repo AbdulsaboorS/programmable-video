@@ -12,7 +12,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve, sep } from "node:path";
+import { dirname, join, resolve, sep } from "node:path";
 import { promisify } from "node:util";
 import { z } from "zod";
 
@@ -161,6 +161,7 @@ async function initializeProject(
       "Destination cannot be the starter directory or one of its descendants",
     );
   }
+  await requireOutsideGitWorktree(options.directory);
   await requireAbsentOrEmptyDirectory(options.directory);
   await mkdir(options.directory, { recursive: true });
   await cp(starterDirectory, options.directory, {
@@ -203,6 +204,39 @@ async function initializeProject(
   ]);
 
   return { directory: options.directory, projectId: options.projectId };
+}
+
+async function requireOutsideGitWorktree(directory: string): Promise<void> {
+  let existingParent = dirname(directory);
+  while (true) {
+    try {
+      await stat(existingParent);
+      break;
+    } catch (error) {
+      const parsedError = nodeErrorSchema.safeParse(error);
+      if (!parsedError.success || parsedError.data.code !== "ENOENT")
+        throw error;
+      const parent = dirname(existingParent);
+      if (parent === existingParent) return;
+      existingParent = parent;
+    }
+  }
+
+  try {
+    await execFileAsync(
+      "git",
+      ["-C", existingParent, "rev-parse", "--show-toplevel"],
+      {
+        encoding: "utf8",
+        env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+      },
+    );
+  } catch {
+    return;
+  }
+  throw new ProjectCommandError(
+    "Destination must be outside every existing Git worktree",
+  );
 }
 
 async function submitProject(

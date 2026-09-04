@@ -81,8 +81,6 @@ export {
 
 export {
   agentHandoffSchema,
-  artifactsAgentHandoffSchema,
-  artifactsManagedRepositorySchema,
   createProjectFeedbackRequestSchema,
   createManagedProjectRequestSchema,
   createReferenceUploadRequestSchema,
@@ -100,8 +98,6 @@ export {
   referenceImageMaxPixels,
   saveProjectBriefRequestSchema,
   type AgentHandoff,
-  type ArtifactsAgentHandoff,
-  type ArtifactsManagedRepository,
   type CreateManagedProjectRequest,
   type CreateProjectFeedbackRequest,
   type ManagedProject,
@@ -115,8 +111,6 @@ export {
 } from "./managed-project";
 
 export {
-  artifactRepoPushCommitSchema,
-  artifactRepoPushedEventSchema,
   gitBranchRefSchema,
   gitShaSchema,
   managedRenderStatusSchema,
@@ -139,7 +133,6 @@ export {
   revisionBundleSubmissionSchema,
   revisionSubmissionWorkflowCommandSchema,
   sourceProvenanceSchema,
-  type ArtifactRepoPushedEvent,
   type ProjectRevision,
   type ManagedRenderStatus,
   type PreviewSession,

@@ -24,9 +24,7 @@ const localDefaultBranch = "main";
 const handoffTtlSeconds = 60 * 60;
 
 export interface ProjectApiEnv extends AgentReferenceEnv {
-  ARTIFACTS: Artifacts;
   PROJECTS_DB: D1Database;
-  STARTER_REPOSITORY: string;
 }
 
 interface ProjectRow {
@@ -39,11 +37,7 @@ interface ProjectRow {
   source_web_url: string;
   source_default_branch: string;
   source_selected_ref: string;
-  repository_name: string;
-  repository_remote_url: string;
-  repository_default_branch: string;
-  repository_state: "seeded";
-  authoring_source_kind: "artifacts" | "local";
+  default_branch: string;
   video_brief: string | null;
   video_brief_updated_at: string | null;
   created_at: string;
@@ -147,8 +141,6 @@ export async function createProject(
   }
 
   const id = crypto.randomUUID();
-  const repositoryName = `local-${id}`;
-  const repositoryRemoteUrl = `https://local.invalid/${id}`;
   const now = new Date().toISOString();
 
   try {
@@ -157,10 +149,9 @@ export async function createProject(
         id, owner_email, request_id, name, status,
         source_host, source_project_path, source_web_url,
         source_default_branch, source_selected_ref,
-        repository_name, repository_remote_url,
-        repository_default_branch, repository_state, authoring_source_kind,
+        default_branch,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, 'ready', ?, ?, ?, ?, ?, ?, ?, ?, 'seeded', 'local', ?, ?)`,
+      ) VALUES (?, ?, ?, ?, 'ready', ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
       .bind(
         id,
@@ -172,8 +163,6 @@ export async function createProject(
         source.webUrl,
         source.defaultBranch,
         source.selectedRef,
-        repositoryName,
-        repositoryRemoteUrl,
         localDefaultBranch,
         now,
         now,
@@ -359,106 +348,31 @@ export async function createHandoff(
   }
   if (!project) return notFound();
 
-  if (project.authoring_source_kind === "local") {
-    const tokenExpiresAt = new Date(
-      Date.now() + handoffTtlSeconds * 1000,
-    ).toISOString();
-    try {
-      const references = await createAgentReferenceDownloads(
-        projectId,
-        ownerEmail,
-        tokenExpiresAt,
-        env,
-        studioOrigin,
-      );
-      const response = agentHandoffSchema.parse({
-        kind: "local",
-        projectId,
-        defaultBranch: project.repository_default_branch,
-        tokenExpiresAt,
-        references,
-      });
-      return Response.json(response, {
-        status: 201,
-        headers: { "Cache-Control": "private, no-store" },
-      });
-    } catch (error) {
-      return platformFailure("Could not create an agent handoff", error);
-    }
-  }
-
-  let repository: ArtifactsRepo;
-  let token: ArtifactsCreateTokenResult;
+  const tokenExpiresAt = new Date(
+    Date.now() + handoffTtlSeconds * 1000,
+  ).toISOString();
   try {
-    repository = await env.ARTIFACTS.get(project.repository_name);
-    token = await repository.createToken("write", handoffTtlSeconds);
-  } catch (error) {
-    return platformFailure("Could not create an agent handoff", error);
-  }
-
-  const now = Date.now();
-  const expiration = Date.parse(token.expiresAt);
-  if (
-    !Number.isFinite(expiration) ||
-    expiration <= now ||
-    expiration > now + (handoffTtlSeconds + 60) * 1000
-  ) {
-    await repository.revokeToken(token.id).catch(() => undefined);
-    return platformFailure(
-      "Could not create an agent handoff",
-      new Error("Artifacts returned an invalid token expiry"),
-    );
-  }
-
-  let references: Awaited<ReturnType<typeof createAgentReferenceDownloads>>;
-  try {
-    references = await createAgentReferenceDownloads(
+    const references = await createAgentReferenceDownloads(
       projectId,
       ownerEmail,
-      token.expiresAt,
+      tokenExpiresAt,
       env,
+      studioOrigin,
     );
+    const response = agentHandoffSchema.parse({
+      kind: "local",
+      projectId,
+      defaultBranch: project.default_branch,
+      tokenExpiresAt,
+      references,
+    });
+    return Response.json(response, {
+      status: 201,
+      headers: { "Cache-Control": "private, no-store" },
+    });
   } catch (error) {
-    await repository.revokeToken(token.id).catch(() => undefined);
     return platformFailure("Could not create an agent handoff", error);
   }
-
-  const response = agentHandoffSchema.safeParse({
-    kind: "artifacts",
-    remoteUrl: project.repository_remote_url,
-    token: token.plaintext,
-    tokenExpiresAt: token.expiresAt,
-    defaultBranch: project.repository_default_branch,
-    references,
-  });
-  if (!response.success) {
-    await repository.revokeToken(token.id).catch(() => undefined);
-    return platformFailure("Could not create an agent handoff", response.error);
-  }
-
-  try {
-    await env.PROJECTS_DB.prepare(
-      `INSERT INTO agent_handoffs (
-        id, project_id, token_id, scope, expires_at, created_at
-      ) VALUES (?, ?, ?, 'write', ?, ?)`,
-    )
-      .bind(
-        crypto.randomUUID(),
-        projectId,
-        token.id,
-        token.expiresAt,
-        new Date().toISOString(),
-      )
-      .run();
-  } catch (error) {
-    await repository.revokeToken(token.id).catch(() => undefined);
-    return platformFailure("Could not record the agent handoff", error);
-  }
-
-  return Response.json(response.data, {
-    status: 201,
-    headers: { "Cache-Control": "private, no-store" },
-  });
 }
 
 function parseGitHubSource(githubUrl: string, defaultBranch: string) {
@@ -579,20 +493,11 @@ async function projectFromRow(
       defaultBranch: row.source_default_branch,
       selectedRef: row.source_selected_ref,
     },
-    repository:
-      row.authoring_source_kind === "local"
-        ? {
-            kind: "local",
-            defaultBranch: row.repository_default_branch,
-            state: "initialized",
-          }
-        : {
-            kind: "artifacts",
-            name: row.repository_name,
-            remoteUrl: row.repository_remote_url,
-            defaultBranch: row.repository_default_branch,
-            state: row.repository_state,
-          },
+    repository: {
+      kind: "local",
+      defaultBranch: row.default_branch,
+      state: "initialized",
+    },
     references: referenceRows.results.map(referenceFromRow),
     brief:
       row.video_brief && row.video_brief_updated_at

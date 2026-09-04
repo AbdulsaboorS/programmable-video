@@ -5,7 +5,6 @@ import { isoTimestampSchema, sha256Schema } from "./shared";
 
 export const gitShaSchema = z.string().regex(/^[0-9a-fA-F]{40}$/);
 export const revisionBundleMaxBytes = 25 * 1024 * 1024;
-const boundedIdentifier = z.string().min(1).max(255);
 
 function isValidGitRef(ref: string): boolean {
   if (!ref.startsWith("refs/") || ref.length > 1024) {
@@ -72,97 +71,6 @@ export const revisionSubmissionWorkflowCommandSchema = z
     revisionId: z.uuid(),
   })
   .strict();
-
-const gitIdentitySchema = z
-  .object({
-    name: z.string().min(1).max(256),
-    email: z.email().max(320),
-  })
-  .strict();
-
-export const artifactRepoPushCommitSchema = z
-  .object({
-    id: gitShaSchema,
-    message: z.string().max(10_000),
-    messageTruncated: z.boolean(),
-    timestamp: isoTimestampSchema,
-    author: gitIdentitySchema,
-    committer: gitIdentitySchema,
-    parents: z.array(gitShaSchema).max(64),
-  })
-  .strict();
-
-const artifactPushSourceSchema = z
-  .object({
-    namespace: boundedIdentifier,
-    repoName: boundedIdentifier,
-  })
-  .strict();
-
-const artifactPushPayloadSchema = z
-  .object({
-    ref: gitRefSchema,
-    before: gitShaSchema,
-    after: gitShaSchema,
-    commits: z.array(artifactRepoPushCommitSchema).max(1_000),
-    totalCommitsCount: z.number().int().nonnegative().max(1_000_000),
-    commitsTruncated: z.boolean(),
-  })
-  .strict()
-  .superRefine((payload, context) => {
-    if (payload.commits.length > payload.totalCommitsCount) {
-      context.addIssue({
-        code: "custom",
-        message: "Commit entries cannot exceed totalCommitsCount",
-        path: ["commits"],
-      });
-    }
-
-    if (
-      !payload.commitsTruncated &&
-      payload.commits.length !== payload.totalCommitsCount
-    ) {
-      context.addIssue({
-        code: "custom",
-        message: "A complete commit list must match totalCommitsCount",
-        path: ["commits"],
-      });
-    }
-  });
-
-const documentedArtifactPushEventSchema = z
-  .object({
-    type: z.literal("cf.artifacts.repo.pushed"),
-    source: artifactPushSourceSchema
-      .extend({
-        type: z.literal("artifacts.repo"),
-      })
-      .strict(),
-    payload: artifactPushPayloadSchema,
-    metadata: z
-      .object({
-        accountId: z.string().regex(/^[0-9a-fA-F]{32}$/),
-        eventSubscriptionId: z.string().regex(/^[0-9a-fA-F]{32}$/),
-        eventSchemaVersion: z.number().int().positive().max(1_000),
-        eventTimestamp: isoTimestampSchema,
-      })
-      .strict(),
-  })
-  .strict();
-
-const workflowArtifactPushEventSchema = z
-  .object({
-    id: boundedIdentifier,
-    type: z.literal("cf.artifacts.repo.pushed"),
-    source: artifactPushSourceSchema,
-    payload: artifactPushPayloadSchema,
-  })
-  .strict();
-
-export const artifactRepoPushedEventSchema = z.union([
-  documentedArtifactPushEventSchema,
-  workflowArtifactPushEventSchema,
-]);
 
 export const revisionInspectionStatusSchema = z.enum([
   "pending",
@@ -431,9 +339,6 @@ export const projectRevisionListSchema = z
   .object({ revisions: z.array(projectRevisionSchema).max(1_000) })
   .strict();
 
-export type ArtifactRepoPushedEvent = z.infer<
-  typeof artifactRepoPushedEventSchema
->;
 export type RevisionBundleSubmission = z.infer<
   typeof revisionBundleSubmissionSchema
 >;

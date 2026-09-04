@@ -78,7 +78,7 @@ Media Transformations is not the primary renderer for this slice. It operates on
 - **Download MP4** uses Stream's asynchronous per-video downloadable MP4 generation and appears only when ready.
 - The filename is derived from the project and publication and sanitized to Stream's filename rules.
 - **Copy share link** copies the ready Stream player URL.
-- For the internal beta, the share URL is a bearer link, matching the accepted preview and Stream security model.
+- The share URL is a bearer link, matching the accepted preview and Stream security model.
 - Expiring links, revocation, named recipients, and a public watch page are later managed-sharing work.
 
 ## Data And API Shape

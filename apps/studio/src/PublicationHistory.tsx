@@ -183,7 +183,7 @@ export function PublicationCard({
       </div>
       {playback && (
         <p className="bearer-link-note">
-          Anyone with the Stream player link can view this internal-beta video.
+          Anyone with the Stream player link can view this video.
         </p>
       )}
     </article>

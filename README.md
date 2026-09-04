@@ -25,8 +25,8 @@ The product repository stays read-only. Generated composition code lives in a se
 - pnpm 11.9.0
 - Git
 - Docker Desktop
-- A Cloudflare account with Stream enabled
-- A Cloudflare API token with Stream Read and Stream Edit permissions
+- A Cloudflare account with Stream enabled when you are ready to publish
+- A Cloudflare API token with Stream Read and Stream Edit permissions when publishing
 - FFmpeg and ffprobe when using the lower-level `pnpm video render` command
 
 Install the workspace:
@@ -34,7 +34,6 @@ Install the workspace:
 ```sh
 corepack enable
 pnpm install --frozen-lockfile
-pnpm --filter @programmable-video/renderer exec playwright install chromium
 ```
 
 Create local environment files:
@@ -44,7 +43,7 @@ cp apps/studio/.dev.vars.example apps/studio/.dev.vars
 cp apps/preview/.dev.vars.example apps/preview/.dev.vars
 ```
 
-Set `LOCAL_OWNER_EMAIL`, `STREAM_ACCOUNT_ID`, and `STREAM_API_TOKEN` in the Studio file. Generate one random `PREVIEW_SIGNING_KEY` and use it in both files. The Artifacts token is needed only for legacy managed-repository revisions.
+Set `LOCAL_OWNER_EMAIL` in the Studio file. Generate a signing key with `openssl rand -hex 32` and use it as `PREVIEW_SIGNING_KEY` in both files. Add `STREAM_ACCOUNT_ID` and `STREAM_API_TOKEN` to the Studio file only when you want to publish; drafting, revision submission, preview, and approval do not require Stream.
 
 Start Studio and Preview:
 
@@ -64,24 +63,11 @@ Never commit `.dev.vars` or a CA certificate.
 
 ### Create A Video Project
 
-Create a project in Studio and copy its project ID. Initialize a separate composition repository from the maintained starter:
+Create a project in Studio, add a brief and any PNG references, then choose **Give brief to agent**. Copy the generated instructions into your coding agent while the agent is running from this repository. The instructions initialize a separate composition repository outside every existing Git worktree, run its checks, commit the result, and submit the exact commit to Studio. Reuse that same repository for later change requests.
 
-```sh
-pnpm project init ../my-product-video --project <project-id>
-pnpm --dir ../my-product-video install --frozen-lockfile
-```
+The CLI creates a bounded Git bundle, records its SHA-256 digest, and submits the exact `main` commit. Studio stores the immutable bundle in local R2 as the only revision source. Sandbox checks out that bundle, verifies the commit, builds the preview, and starts the review flow.
 
-Give `../my-product-video` and the Studio handoff to your coding agent. The agent should work on `main`, commit every accepted change, and leave the worktree clean.
-
-Submit the current commit to Studio:
-
-```sh
-pnpm project submit ../my-product-video
-```
-
-The CLI creates a bounded Git bundle, records its SHA-256 digest, and submits the exact `main` commit. Studio stores the bundle in local R2, checks it out in Sandbox, verifies the commit, builds the preview, and starts the review flow.
-
-Approve the draft in Studio, choose finishing settings, and publish. A successful publication becomes playable and downloadable from Stream.
+Approve the draft in Studio and choose finishing settings. Publishing requires Stream credentials; a successful publication becomes playable and downloadable from Stream. Without Stream, the workflow ends at an approved local preview rather than a final MP4.
 
 ## Architecture
 
@@ -105,17 +91,16 @@ flowchart LR
     Stream --> Studio
 ```
 
-| Component            | Responsibility                                                        |
-| -------------------- | --------------------------------------------------------------------- |
-| Studio Worker        | Creator API, local identity, orchestration, and static application    |
-| Project CLI          | Local repository setup and exact-commit bundle submission             |
-| Workflows            | Durable revision checks and managed render execution                  |
-| Sandbox SDK          | Isolated checkout, validation, testing, and build                     |
-| Containers           | Chrome frame capture and FFmpeg rendering                             |
-| D1                   | Projects, revisions, approvals, jobs, and publication state           |
-| R2                   | Git bundles, built previews, references, and finishing media          |
-| Stream               | Video ingestion, encoding, playback, captions, and MP4 delivery       |
-| Cloudflare Artifacts | Compatibility for older managed-repository revisions; not the default |
+| Component     | Responsibility                                                            |
+| ------------- | ------------------------------------------------------------------------- |
+| Studio Worker | Creator API, local identity, orchestration, and static application        |
+| Project CLI   | Local repository setup and exact-commit bundle submission                 |
+| Workflows     | Durable revision checks and managed render execution                      |
+| Sandbox SDK   | Isolated checkout, validation, testing, and build                         |
+| Containers    | Chrome frame capture and FFmpeg rendering                                 |
+| D1            | Projects, revisions, approvals, jobs, and publication state               |
+| R2            | Sole revision source, built previews, references, and finishing media     |
+| Stream        | Published-video ingestion, encoding, playback, captions, and MP4 delivery |
 
 ## Repository Map
 
@@ -154,7 +139,7 @@ Use `--props ./props.json` to provide validated composition properties.
 - Preview and Stream URLs are bearer capabilities in this prototype.
 - `.dev.vars` contains credentials and must stay untracked.
 
-See [SECURITY.md](SECURITY.md) before operating this outside a trusted local environment. The [deployment runbook](docs/deployment-runbook.md) documents the older managed deployment path for experienced Cloudflare operators; local operation is the supported primary path.
+See [SECURITY.md](SECURITY.md) before operating this outside a trusted local environment. The [deployment runbook](docs/deployment-runbook.md) documents the supported local Git bundle workflow.
 
 ## Quality
 

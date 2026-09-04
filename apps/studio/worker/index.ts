@@ -26,14 +26,11 @@ import { accessEmail } from "./access";
 import {
   finishRevisionInspection,
   getRevisionSourceProvenance,
-  inspectRevision,
   listProjectRevisions,
   loadPendingRevisionTarget,
   loadRevisionTarget,
-  recordPushedRevision,
   revisionErrorFinding,
   submitRevisionBundle,
-  type ArtifactRepoPushedEvent,
 } from "./revisions";
 import {
   createHandoff,
@@ -414,19 +411,15 @@ export class ManagedRenderWorkflow extends WorkflowEntrypoint<
 
 export class RevisionWorkflow extends WorkflowEntrypoint<
   Env,
-  | ArtifactRepoPushedEvent
-  | RevisionBuildRetryCommand
-  | RevisionSubmissionWorkflowCommand
+  RevisionBuildRetryCommand | RevisionSubmissionWorkflowCommand
 > {
   async run(
     event: WorkflowEvent<
-      | ArtifactRepoPushedEvent
-      | RevisionBuildRetryCommand
-      | RevisionSubmissionWorkflowCommand
+      RevisionBuildRetryCommand | RevisionSubmissionWorkflowCommand
     >,
     step: WorkflowStep,
   ): Promise<void> {
-    if (isRevisionSubmission(event.payload)) {
+    if (event.payload.kind === "submitted-revision") {
       const command = event.payload;
       const target = await step.do("load submitted revision", async () =>
         loadPendingRevisionTarget(
@@ -474,60 +467,12 @@ export class RevisionWorkflow extends WorkflowEntrypoint<
       await this.runBuild(target, queued.attempt, event.instanceId, step);
       return;
     }
-    if (isRevisionBuildRetry(event.payload)) {
-      const command = event.payload;
-      const target = await step.do("load retry revision", async () =>
-        loadRevisionTarget(command.revisionId, this.env.PROJECTS_DB),
-      );
-      if (!target || target.projectId !== command.projectId) return;
-      await this.runBuild(target, command.attempt, event.instanceId, step);
-      return;
-    }
-
-    const recorded = await step.do("record pushed revision", async () =>
-      recordPushedRevision(event.payload, this.env, event.timestamp),
+    const command = event.payload;
+    const target = await step.do("load retry revision", async () =>
+      loadRevisionTarget(command.revisionId, this.env.PROJECTS_DB),
     );
-    if (recorded.kind === "ignored") return;
-
-    let status = recorded.target.inspectionStatus;
-    if (recorded.kind === "pending") {
-      let inspection;
-      try {
-        inspection = await step.do(
-          "inspect revision structure",
-          { retries: { limit: 2, delay: "5 seconds" }, timeout: "1 minute" },
-          async () => inspectRevision(recorded.target, this.env),
-        );
-      } catch {
-        inspection = {
-          status: "error" as const,
-          findings: [revisionErrorFinding()],
-        };
-      }
-      const recordedInspection = await step.do(
-        "record revision inspection",
-        async () =>
-          finishRevisionInspection(
-            recorded.target.id,
-            inspection,
-            this.env.PROJECTS_DB,
-          ),
-      );
-      if (!recordedInspection) return;
-      status = inspection.status;
-    }
-    if (status !== "valid") return;
-
-    const queued = await step.do("queue initial revision build", async () =>
-      queueInitialRevisionBuild(recorded.target.id, this.env.PROJECTS_DB),
-    );
-    if (!queued) return;
-    await this.runBuild(
-      recorded.target,
-      queued.attempt,
-      event.instanceId,
-      step,
-    );
+    if (!target || target.projectId !== command.projectId) return;
+    await this.runBuild(target, command.attempt, event.instanceId, step);
   }
 
   private async runBuild(
@@ -963,24 +908,6 @@ export default {
     return Response.json({ error: "Not found" }, { status: 404 });
   },
 } satisfies ExportedHandler<Env>;
-
-function isRevisionBuildRetry(
-  payload:
-    | ArtifactRepoPushedEvent
-    | RevisionBuildRetryCommand
-    | RevisionSubmissionWorkflowCommand,
-): payload is RevisionBuildRetryCommand {
-  return "kind" in payload && payload.kind === "retry-build";
-}
-
-function isRevisionSubmission(
-  payload:
-    | ArtifactRepoPushedEvent
-    | RevisionBuildRetryCommand
-    | RevisionSubmissionWorkflowCommand,
-): payload is RevisionSubmissionWorkflowCommand {
-  return "kind" in payload && payload.kind === "submitted-revision";
-}
 
 async function sha256(bytes: Uint8Array): Promise<string> {
   const buffer = new ArrayBuffer(bytes.byteLength);

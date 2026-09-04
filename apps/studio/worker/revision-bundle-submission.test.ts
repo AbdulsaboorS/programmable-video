@@ -29,15 +29,12 @@ interface StoredRevision {
   project_id: string;
   commit_sha: string;
   ref: string;
-  source_kind: "r2-bundle";
   source_bundle_key: string;
   source_bundle_digest: string;
   source_bundle_size: number;
 }
 
-function environment(
-  options: { owner?: string; kind?: "local" | "artifacts" } = {},
-) {
+function environment(options: { owner?: string } = {}) {
   const revisions: StoredRevision[] = [];
   const objects = new Map<string, R2ObjectBody>();
   const prepare = vi.fn((sql: string) => ({
@@ -47,8 +44,7 @@ function environment(
           return values[1] === (options.owner ?? owner)
             ? {
                 id: projectId,
-                authoring_source_kind: options.kind ?? "local",
-                repository_default_branch: "main",
+                default_branch: "main",
               }
             : null;
         }
@@ -94,7 +90,6 @@ function environment(
               project_id: storedProjectId,
               commit_sha: sha,
               ref: storedRef,
-              source_kind: "r2-bundle",
               source_bundle_key: key,
               source_bundle_digest: storedDigest,
               source_bundle_size: size,
@@ -206,9 +201,8 @@ describe("local revision bundle submission", () => {
     expect(createBatch).toHaveBeenCalledTimes(2);
   });
 
-  it("rejects unowned and Artifacts projects before storing", async () => {
+  it("rejects an unowned project before storing", async () => {
     const unowned = environment();
-    const artifacts = environment({ kind: "artifacts" });
 
     expect(
       (
@@ -220,12 +214,7 @@ describe("local revision bundle submission", () => {
         )
       ).status,
     ).toBe(404);
-    expect(
-      (await submitRevisionBundle(request(), projectId, owner, artifacts.env))
-        .status,
-    ).toBe(409);
     expect(unowned.put).not.toHaveBeenCalled();
-    expect(artifacts.put).not.toHaveBeenCalled();
   });
 
   it("rejects revisions from a non-default branch before storing", async () => {

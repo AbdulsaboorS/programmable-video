@@ -21,4 +21,4 @@ Record the exact product-source commit, reused files and assets, adaptations, an
 pnpm verify
 ```
 
-This command runs formatting, type checking, tests, and the production build in order. Push a reviewed revision through the provided handoff. Studio independently reruns each check at that exact commit in an isolated Sandbox, publishes `index.html` for exact-frame review, and uses `render.html` to capture the same bundled story after approval.
+This command runs formatting, type checking, tests, and the production build in order. Commit the reviewed revision, then submit it with the command in the Studio handoff. Studio independently reruns each check at that exact commit in an isolated Sandbox, publishes `index.html` for exact-frame review, and uses `render.html` to capture the same bundled story after approval.

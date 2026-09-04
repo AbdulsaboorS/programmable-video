@@ -26,10 +26,6 @@ export default defineConfig(({ command }) => {
               workerConfig.vars.CONTAINER_EXTRA_CA_CERT =
                 process.env.CONTAINER_EXTRA_CA_CERT;
             }
-            Reflect.deleteProperty(workerConfig, "artifacts");
-            if (workerConfig.triggers) {
-              Reflect.deleteProperty(workerConfig.triggers, "events");
-            }
           },
         })
       : cloudflare({ persistState });

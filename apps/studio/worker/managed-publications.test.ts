@@ -334,6 +334,27 @@ function validateProvenance() {
 }
 
 describe("managed publications", () => {
+  it("explains required Stream credentials before local publication", async () => {
+    const { env, create } = environment();
+    Object.assign(env, { LOCAL_OWNER_EMAIL: owner });
+
+    const response = await createManagedPublication(
+      publicationRequest("publish-local"),
+      projectId,
+      revisionId,
+      owner,
+      env,
+      validateProvenance,
+    );
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      error:
+        "Add STREAM_ACCOUNT_ID and STREAM_API_TOKEN to apps/studio/.dev.vars before publishing",
+    });
+    expect(create).not.toHaveBeenCalled();
+  });
+
   it("reuses a persisted Stream reservation when a Workflow step replays", async () => {
     const createDirectUpload = vi.fn();
     const database = new FakeDatabase();

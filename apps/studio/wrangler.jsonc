@@ -6,11 +6,8 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "BUILD_ID": "development",
-    "STARTER_REPOSITORY": "product-project-starter-v1",
     "ACCESS_AUD": "replace-with-access-audience",
     "ACCESS_TEAM_DOMAIN": "https://example.cloudflareaccess.com",
-    "ARTIFACTS_ACCOUNT_ID": "replace-with-account-id",
-    "ARTIFACTS_NAMESPACE": "programmable-video",
     "PREVIEW_ORIGIN": "https://programmable-video-preview.example.workers.dev",
     "STUDIO_ORIGIN": "https://programmable-video-studio.example.workers.dev",
   },
@@ -30,13 +27,6 @@
       "binding": "PROJECTS_DB",
       "database_name": "programmable-video-projects",
       "migrations_dir": "migrations",
-    },
-  ],
-  "artifacts": [
-    {
-      "binding": "ARTIFACTS",
-      "namespace": "programmable-video",
-      "remote": true,
     },
   ],
   "r2_buckets": [
@@ -74,20 +64,6 @@
       "class_name": "ManagedRenderWorkflow",
     },
   ],
-  "triggers": {
-    "events": [
-      {
-        "type": "cf.artifacts.repo.pushed",
-        "filter": { "namespace": "programmable-video" },
-        "targets": [
-          {
-            "type": "workflow",
-            "workflow_name": "studio-revision-workflow",
-          },
-        ],
-      },
-    ],
-  },
   "containers": [
     {
       "class_name": "RendererContainer",

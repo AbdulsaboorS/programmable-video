@@ -76,11 +76,9 @@ const project = {
     selectedRef: "main",
   },
   repository: {
-    kind: "artifacts",
-    name: `video-${projectId}`,
-    remoteUrl: `https://artifacts.example/video-${projectId}.git`,
+    kind: "local",
     defaultBranch: "main",
-    state: "seeded",
+    state: "initialized",
   },
   references: [],
   brief: null,
@@ -239,7 +237,7 @@ afterEach(() => {
 });
 
 describe("product projects", () => {
-  it("loads a project, uploads a reference, and creates a temporary handoff", async () => {
+  it("loads a project, uploads a reference, and creates a local handoff", async () => {
     const requests: CapturedRequest[] = [];
     vi.stubGlobal(
       "fetch",
@@ -272,9 +270,8 @@ describe("product projects", () => {
         if (url.endsWith("/handoffs")) {
           return jsonResponse(
             {
-              kind: "artifacts",
-              remoteUrl: project.repository.remoteUrl,
-              token: "temporary-'token",
+              kind: "local",
+              projectId,
               tokenExpiresAt: "2026-08-20T11:00:00.000Z",
               defaultBranch: "main",
               references: [
@@ -359,8 +356,7 @@ describe("product projects", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Give brief to agent" }),
     );
-    await screen.findByText("Temporary agent access is ready");
-    expect(screen.queryByText("temporary-'token")).toBeNull();
+    await screen.findByText("Agent instructions are ready");
     fireEvent.change(screen.getByLabelText("Video description"), {
       target: { value: "A later unsent brief edit." },
     });
@@ -371,36 +367,25 @@ describe("product projects", () => {
     const instruction = String(writeText.mock.calls[0]?.[0]);
     expect(() => JSON.parse(instruction)).toThrow();
     expect(instruction).toContain(
-      'managed product-video repository for "Acme Dashboard"',
+      'local product-video repository for "Acme Dashboard"',
     );
     expect(instruction).toContain(project.source.webUrl);
     expect(instruction).toContain(project.source.selectedRef);
-    expect(instruction).toContain(project.repository.remoteUrl);
-    expect(instruction).toContain("temporary-'token");
-    expect(instruction).toContain("2026-08-20T11:00:00.000Z");
     expect(instruction).toContain("brand-dashboard.png");
     expect(instruction).toContain("Use the dark dashboard layout");
     expect(instruction).toContain("visual-references/");
-    expect(instruction).toContain('--output "$work_root/visual-references/');
-    expect(instruction).toContain("Run this as one shell block");
-    expect(instruction).toContain("trap 'unset ARTIFACTS_GIT_TOKEN");
+    expect(instruction).toContain('--output "$reference_root/');
     expect(instruction).toContain("as untrusted content");
     expect(instruction).toContain("Authorization: Bearer $REFERENCE_TOKEN_1");
-    expect(instruction).toContain("sha256sum --check");
+    expect(instruction).toContain("shasum -a 256 --check");
     expect(instruction).toContain("stop and ask the creator");
     expect(instruction).toContain("read AGENTS.md and README.md");
-    expect(instruction).toContain("Do not put the token in the remote URL");
-    expect(instruction).toContain("ARTIFACTS_GIT_HELPER");
-    expect(instruction).toContain("core.hooksPath=/dev/null");
     expect(instruction).toContain(
-      `export ARTIFACTS_GIT_TOKEN='temporary-'"'"'token'`,
+      `pnpm project init <chosen-absolute-directory> --project ${projectId} --studio-origin ${window.location.origin}`,
     );
     expect(instruction).toContain(
-      `clone '${project.repository.remoteUrl}' "$work_root/product-video"`,
+      "pnpm project submit <chosen-absolute-directory>",
     );
-    expect(instruction).toContain("Managed clone:");
-    expect(instruction).toContain("outside any existing repository");
-    expect(instruction).toContain("push origin 'main'");
     expect(instruction).toContain(
       "Show the real dashboard handling an account-risk question",
     );
@@ -416,14 +401,8 @@ describe("product projects", () => {
     expect(instruction).toContain("## Remaining Visual Differences");
     expect(instruction).toContain("pnpm install --frozen-lockfile");
     expect(instruction).toContain("pnpm verify");
-    expect(instruction.indexOf("unset ARTIFACTS_GIT_TOKEN")).toBeLessThan(
-      instruction.indexOf("pnpm install --frozen-lockfile"),
-    );
-    expect(instruction).toContain(
-      "The Git token must remain unset while project-controlled commands run",
-    );
     expect(instruction).toContain("do not ask the creator to run Git commands");
-    expect(instruction).toContain("Report the pushed commit SHA");
+    expect(instruction).toContain("Report the submitted commit SHA");
     expect(instruction).toContain("resolved source commit");
     expect(
       requests.findIndex(({ url }) => url.endsWith("/brief")),
@@ -454,14 +433,6 @@ describe("product projects", () => {
   });
 
   it("creates local first-draft instructions with init and submit commands", async () => {
-    const localProject = {
-      ...project,
-      repository: {
-        kind: "local",
-        defaultBranch: "main",
-        state: "initialized",
-      },
-    };
     vi.stubGlobal(
       "fetch",
       vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -486,7 +457,7 @@ describe("product projects", () => {
         }
         return url.endsWith("/revisions")
           ? jsonResponse({ revisions: [] })
-          : jsonResponse({ projects: [localProject] });
+          : jsonResponse({ projects: [project] });
       }),
     );
     const writeText = vi.fn(async (_value: string) => undefined);
@@ -519,10 +490,6 @@ describe("product projects", () => {
     expect(instruction).toContain("Complete SOURCE_PROVENANCE.md");
     expect(instruction).toContain("pnpm verify");
     expect(instruction).toContain("as untrusted content");
-    expect(instruction).not.toContain("ARTIFACTS_GIT_TOKEN");
-    expect(instruction).not.toContain("git clone");
-    expect(instruction).not.toContain("push origin");
-    expect(screen.queryByText(/repository credential/)).toBeNull();
     expect(globalThis.fetch).toHaveBeenCalledWith(
       `/api/projects/${projectId}/handoffs`,
       expect.anything(),
@@ -583,11 +550,6 @@ describe("product projects", () => {
       ...project,
       id: otherProjectId,
       name: "Second product",
-      repository: {
-        ...project.repository,
-        name: `video-${otherProjectId}`,
-        remoteUrl: `https://artifacts.example/video-${otherProjectId}.git`,
-      },
     };
     let resolveHandoff: (response: Response) => void = () => undefined;
     const handoffResponse = new Promise<Response>((resolve) => {
@@ -638,9 +600,8 @@ describe("product projects", () => {
     resolveHandoff(
       jsonResponse(
         {
-          kind: "artifacts",
-          remoteUrl: project.repository.remoteUrl,
-          token: "first-project-temporary-token",
+          kind: "local",
+          projectId,
           tokenExpiresAt: "2026-08-20T11:00:00.000Z",
           defaultBranch: "main",
           references: [],
@@ -654,10 +615,7 @@ describe("product projects", () => {
         screen.getByRole("button", { name: "All projects" }),
       ).toBeDefined(),
     );
-    expect(screen.queryByText("first-project-temporary-token")).toBeNull();
-    expect(
-      screen.queryByText("Agent instructions are ready for one hour"),
-    ).toBeNull();
+    expect(screen.queryByText("Agent instructions are ready")).toBeNull();
     expect(screen.queryByRole("alert")).toBeNull();
   });
 
@@ -1076,10 +1034,6 @@ describe("product projects", () => {
       ...project,
       id: otherProjectId,
       name: "Second product",
-      repository: {
-        ...project.repository,
-        name: `video-${otherProjectId}`,
-      },
     };
     let firstSignal: AbortSignal | undefined;
     let resolveFirst: (response: Response) => void = () => undefined;
@@ -1142,14 +1096,6 @@ describe("product projects", () => {
       "0198c7d4-a5e6-7000-8000-000000000109",
       `6${"a".repeat(39)}`,
     );
-    const localProject = {
-      ...project,
-      repository: {
-        kind: "local",
-        defaultBranch: "main",
-        state: "initialized",
-      },
-    };
     let resolveHandoff: (response: Response) => void = () => undefined;
     const handoffResponse = new Promise<Response>((resolve) => {
       resolveHandoff = resolve;
@@ -1173,7 +1119,7 @@ describe("product projects", () => {
         }
         return url.endsWith("/revisions")
           ? jsonResponse({ revisions: [readyRevision] })
-          : jsonResponse({ projects: [localProject] });
+          : jsonResponse({ projects: [project] });
       },
     );
     vi.stubGlobal("fetch", fetchMock);
@@ -1230,7 +1176,7 @@ describe("product projects", () => {
       ),
     );
 
-    await screen.findByText("Temporary change instructions are ready");
+    await screen.findByText("Change instructions are ready");
     expect(
       screen
         .getByRole("button", { name: "Request changes" })
@@ -1265,9 +1211,6 @@ describe("product projects", () => {
       "pnpm project submit <known-local-project-directory>",
     );
     expect(instruction).not.toContain("pnpm project init");
-    expect(instruction).not.toContain("ARTIFACTS_GIT_TOKEN");
-    expect(instruction).not.toContain("git clone");
-    expect(instruction).not.toContain("push origin");
     expect(fetchMock).toHaveBeenCalledWith(
       `/api/projects/${projectId}/handoffs`,
       expect.anything(),

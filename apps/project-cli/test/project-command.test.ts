@@ -66,6 +66,24 @@ describe("project command", () => {
     ).toBe(starterPackage);
   });
 
+  it("rejects a destination inside an existing Git worktree", async () => {
+    const parent = await temporaryDirectory();
+    await git(parent, ["init", "-b", "main"]);
+    const command = harness();
+
+    expect(
+      await command.run([
+        "init",
+        join(parent, "product-video"),
+        "--project",
+        projectId,
+      ]),
+    ).toBe(1);
+    expect(command.output().stderr).toContain(
+      "outside every existing Git worktree",
+    );
+  });
+
   it("rejects a dirty worktree before submitting", async () => {
     const parent = await temporaryDirectory();
     const destination = join(parent, "product-video");

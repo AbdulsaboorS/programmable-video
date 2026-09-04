@@ -97,6 +97,18 @@ export async function createManagedPublication(
   env: Env,
   validateProvenance: () => Promise<Response>,
 ): Promise<Response> {
+  if (
+    env.LOCAL_OWNER_EMAIL &&
+    (!env.STREAM_ACCOUNT_ID?.trim() || !env.STREAM_API_TOKEN?.trim())
+  ) {
+    return Response.json(
+      {
+        error:
+          "Add STREAM_ACCOUNT_ID and STREAM_API_TOKEN to apps/studio/.dev.vars before publishing",
+      },
+      { status: 503 },
+    );
+  }
   const input = createPublicationRequestSchema.safeParse(
     await request.json().catch(() => undefined),
   );

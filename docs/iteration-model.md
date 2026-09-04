@@ -2,7 +2,7 @@
 
 ## Decision
 
-Programmable Video remains source-backed. A creator connects a product repository and provides at least one screenshot for internal-beta fidelity review. Screenshots help the agent and creator judge fidelity; they do not replace usable source code. Later product versions may make references optional when another reliable comparison source exists.
+Programmable Video remains source-backed. A creator connects a product repository and provides at least one screenshot for fidelity review. Screenshots help the agent and creator judge fidelity; they do not replace usable source code. Later product versions may make references optional when another reliable comparison source exists.
 
 Creators adjust videos by prompting an agent. Studio will not become a general timeline editor. Small controls may later expose common changes such as text, timing, captions, audio, and output shape, but they should update typed inputs or send structured agent instructions rather than create a separate editing model.
 

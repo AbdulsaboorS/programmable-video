@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { createNoOpFinishingSpec } from "./finishing";
 import {
-  artifactRepoPushedEventSchema,
   managedContainerRenderRequestSchema,
   projectRevisionListSchema,
   projectRevisionSchema,
@@ -17,39 +16,6 @@ import {
 
 const lowerSha = "0123456789abcdef0123456789abcdef01234567";
 const upperSha = "ABCDEF0123456789ABCDEF0123456789ABCDEF01";
-
-const pushedEvent = {
-  type: "cf.artifacts.repo.pushed",
-  source: {
-    type: "artifacts.repo",
-    namespace: "programmable-video",
-    repoName: "project-0198c7d4",
-  },
-  payload: {
-    ref: "refs/heads/main",
-    before: lowerSha,
-    after: upperSha,
-    commits: [
-      {
-        id: upperSha,
-        message: "Add launch composition",
-        messageTruncated: false,
-        timestamp: "2026-08-20T12:00:00.000Z",
-        author: { name: "Agent", email: "agent@example.com" },
-        committer: { name: "Agent", email: "agent@example.com" },
-        parents: [lowerSha],
-      },
-    ],
-    totalCommitsCount: 1,
-    commitsTruncated: false,
-  },
-  metadata: {
-    accountId: "0123456789abcdef0123456789abcdef",
-    eventSubscriptionId: "ABCDEF0123456789ABCDEF0123456789",
-    eventSchemaVersion: 1,
-    eventTimestamp: "2026-08-20T12:00:01.000Z",
-  },
-} as const;
 
 const revision = {
   id: "0198c7d4-a5e6-7000-8000-000000000001",
@@ -205,6 +171,29 @@ describe("local revision bundle contracts", () => {
     ).toBe(false);
   });
 
+  it.each([
+    "0123456789abcdef0123456789abcdef0123456",
+    "0123456789abcdef0123456789abcdef012345678",
+    "g123456789abcdef0123456789abcdef01234567",
+  ])("rejects invalid 40-character hex SHA %s", (commitSha) => {
+    expect(
+      revisionBundleSubmissionSchema.safeParse({ ...submission, commitSha })
+        .success,
+    ).toBe(false);
+  });
+
+  it.each([
+    "main",
+    "refs/notes/ai",
+    "refs/heads/feature..name",
+    "refs/heads/release.lock",
+    "refs/heads/has space",
+  ])("rejects a non-branch or invalid Git ref %s", (ref) => {
+    expect(
+      revisionBundleSubmissionSchema.safeParse({ ...submission, ref }).success,
+    ).toBe(false);
+  });
+
   it("accepts submission results and workflow commands", () => {
     const revisionId = "0198c7d4-a5e6-7000-8000-000000000001";
     expect(
@@ -219,122 +208,6 @@ describe("local revision bundle contracts", () => {
         kind: "submitted-revision",
         projectId: "0198c7d4-a5e6-7000-8000-000000000000",
         revisionId,
-      }).success,
-    ).toBe(true);
-  });
-});
-
-describe("Artifacts pushed event contract", () => {
-  it("accepts the documented strict event shape and either SHA case", () => {
-    expect(artifactRepoPushedEventSchema.parse(pushedEvent)).toEqual(
-      pushedEvent,
-    );
-  });
-
-  it("accepts the direct Workflow event shape and non-branch refs", () => {
-    const { metadata: _metadata, ...event } = pushedEvent;
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...event,
-        id: "0198c7d4-a5e6-7000-8000-000000000000",
-        source: {
-          namespace: event.source.namespace,
-          repoName: event.source.repoName,
-        },
-        payload: { ...event.payload, ref: "refs/notes/ai" },
-      }).success,
-    ).toBe(true);
-  });
-
-  it.each([
-    "0123456789abcdef0123456789abcdef0123456",
-    "0123456789abcdef0123456789abcdef012345678",
-    "g123456789abcdef0123456789abcdef01234567",
-  ])("rejects invalid 40-character hex SHA %s", (after) => {
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: { ...pushedEvent.payload, after },
-      }).success,
-    ).toBe(false);
-  });
-
-  it.each([
-    "main",
-    "refs/heads/feature..name",
-    "refs/heads/release.lock",
-    "refs/heads/has space",
-  ])("rejects an invalid Git ref %s", (ref) => {
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: { ...pushedEvent.payload, ref },
-      }).success,
-    ).toBe(false);
-  });
-
-  it("rejects unknown fields at every event boundary", () => {
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: { ...pushedEvent.payload, repositoryToken: "secret" },
-      }).success,
-    ).toBe(false);
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        source: { ...pushedEvent.source, accountId: "hidden" },
-      }).success,
-    ).toBe(false);
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: {
-          ...pushedEvent.payload,
-          commits: [
-            { ...pushedEvent.payload.commits[0], signature: "untrusted" },
-          ],
-        },
-      }).success,
-    ).toBe(false);
-  });
-
-  it("bounds event collections and text", () => {
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        source: { ...pushedEvent.source, repoName: "r".repeat(256) },
-      }).success,
-    ).toBe(false);
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: {
-          ...pushedEvent.payload,
-          commits: Array.from(
-            { length: 1_001 },
-            () => pushedEvent.payload.commits[0],
-          ),
-        },
-      }).success,
-    ).toBe(false);
-  });
-
-  it("requires complete commit entries to match the reported count", () => {
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: { ...pushedEvent.payload, totalCommitsCount: 2 },
-      }).success,
-    ).toBe(false);
-    expect(
-      artifactRepoPushedEventSchema.safeParse({
-        ...pushedEvent,
-        payload: {
-          ...pushedEvent.payload,
-          totalCommitsCount: 2,
-          commitsTruncated: true,
-        },
       }).success,
     ).toBe(true);
   });

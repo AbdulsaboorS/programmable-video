@@ -1,12 +1,10 @@
 import {
-  artifactRepoPushedEventSchema,
   projectRevisionListSchema,
   revisionBundleMaxBytes,
   revisionBundleSubmissionResultSchema,
   revisionBundleSubmissionSchema,
   revisionFindingSchema,
   sourceProvenanceSchema,
-  type ArtifactRepoPushedEvent,
   type ProjectRevision,
   type RevisionFinding,
   type RevisionBuildStatus,
@@ -20,8 +18,6 @@ import { z } from "zod";
 import { platformFailure, type BoundaryError } from "./worker-utils";
 
 const inspectionVersion = 1;
-const maxFileBytes = 1024 * 1024;
-const requestTimeoutMs = 10_000;
 const requiredFiles = [
   "index.html",
   "render.html",
@@ -34,10 +30,6 @@ const requiredScripts = ["format:check", "typecheck", "test", "build"] as const;
 const packageObjectSchema = z.looseObject({});
 const requiredScriptSchema = z.string().trim().min(1);
 
-const artifactRepoPushInputSchema = z.json();
-type ArtifactRepoPushInput =
-  ArtifactRepoPushedEvent | z.input<typeof artifactRepoPushInputSchema>;
-
 export class RevisionContentError extends Error {
   constructor(
     message: string,
@@ -48,22 +40,12 @@ export class RevisionContentError extends Error {
 }
 
 export interface RevisionEnv {
-  ARTIFACTS_ACCOUNT_ID: string;
-  ARTIFACTS_API_TOKEN: string;
-  ARTIFACTS_NAMESPACE: string;
   PROJECTS_DB: D1Database;
 }
 
 export interface RevisionSubmissionEnv extends RevisionEnv {
   REVISION_SOURCES: R2Bucket;
   REVISION_WORKFLOW: Workflow<RevisionSubmissionWorkflowCommand>;
-}
-
-interface RevisionProjectRow {
-  id: string;
-  repository_name: string;
-  repository_default_branch: string;
-  repository_remote_url: string;
 }
 
 interface RevisionRow {
@@ -103,18 +85,9 @@ export interface RevisionTarget {
   commitSha: string;
   ref: string;
   inspectionStatus: RevisionInspectionStatus;
-  source:
-    | {
-        kind: "artifacts";
-        repositoryName: string;
-        repositoryRemoteUrl: string;
-      }
-    | {
-        kind: "r2-bundle";
-        bundleKey: string;
-        bundleDigest: string;
-        bundleSize: number;
-      };
+  bundleKey: string;
+  bundleDigest: string;
+  bundleSize: number;
 }
 
 export async function loadRevisionTarget(
@@ -124,10 +97,9 @@ export async function loadRevisionTarget(
   const row = await db
     .prepare(
       `SELECT r.id, r.project_id, r.commit_sha, r.ref, r.inspection_status,
-          r.source_kind, r.source_bundle_key, r.source_bundle_digest,
-          r.source_bundle_size, p.repository_name, p.repository_remote_url
+          r.source_bundle_key, r.source_bundle_digest,
+          r.source_bundle_size
        FROM project_revisions r
-       JOIN projects p ON p.id = r.project_id
        WHERE r.id = ? AND r.inspection_status = 'valid'`,
     )
     .bind(revisionId)
@@ -143,11 +115,10 @@ export async function loadPendingRevisionTarget(
   const row = await db
     .prepare(
       `SELECT r.id, r.project_id, r.commit_sha, r.ref, r.inspection_status,
-          r.source_kind, r.source_bundle_key, r.source_bundle_digest,
-          r.source_bundle_size, p.repository_name, p.repository_remote_url
+          r.source_bundle_key, r.source_bundle_digest,
+          r.source_bundle_size
        FROM project_revisions r
-       JOIN projects p ON p.id = r.project_id
-       WHERE r.id = ? AND r.project_id = ? AND r.source_kind = 'r2-bundle'`,
+       WHERE r.id = ? AND r.project_id = ?`,
     )
     .bind(revisionId, projectId)
     .first<RevisionTargetRow>();
@@ -160,74 +131,29 @@ interface RevisionTargetRow {
   commit_sha: string;
   ref: string;
   inspection_status: RevisionInspectionStatus;
-  source_kind: "artifacts" | "r2-bundle";
-  source_bundle_key: string | null;
-  source_bundle_digest: string | null;
-  source_bundle_size: number | null;
-  repository_name: string;
-  repository_remote_url: string;
+  source_bundle_key: string;
+  source_bundle_digest: string;
+  source_bundle_size: number;
 }
 
 function targetFromRow(row: RevisionTargetRow): RevisionTarget {
-  const base = {
+  return {
     id: row.id,
     projectId: row.project_id,
     commitSha: row.commit_sha,
     ref: row.ref,
     inspectionStatus: row.inspection_status,
+    bundleKey: row.source_bundle_key,
+    bundleDigest: row.source_bundle_digest,
+    bundleSize: row.source_bundle_size,
   };
-  if (row.source_kind === "artifacts") {
-    return {
-      ...base,
-      source: {
-        kind: "artifacts",
-        repositoryName: row.repository_name,
-        repositoryRemoteUrl: row.repository_remote_url,
-      },
-    };
-  }
-  if (
-    !row.source_bundle_key ||
-    !row.source_bundle_digest ||
-    !row.source_bundle_size
-  ) {
-    throw new Error("Bundle revision source identity is incomplete");
-  }
-  return {
-    ...base,
-    source: {
-      kind: "r2-bundle",
-      bundleKey: row.source_bundle_key,
-      bundleDigest: row.source_bundle_digest,
-      bundleSize: row.source_bundle_size,
-    },
-  };
-}
-
-interface ArtifactsContentTarget {
-  commitSha: string;
-  repositoryName: string;
 }
 
 interface ProvenanceRevisionRow {
   revision_id: string;
   commit_sha: string;
-  repository_name: string;
-  source_kind: "artifacts" | "r2-bundle";
   source_provenance: string | null;
 }
-
-export type RecordRevisionResult =
-  | {
-      kind: "ignored";
-      reason:
-        | "namespace-mismatch"
-        | "branch-deletion"
-        | "unknown-repository"
-        | "non-default-ref";
-    }
-  | { kind: "complete"; target: RevisionTarget }
-  | { kind: "pending"; target: RevisionTarget };
 
 export interface InspectionResult {
   status: "valid" | "invalid";
@@ -269,12 +195,11 @@ export async function submitRevisionBundle(
 
   let project: {
     id: string;
-    authoring_source_kind: "artifacts" | "local";
-    repository_default_branch: string;
+    default_branch: string;
   } | null;
   try {
     project = await env.PROJECTS_DB.prepare(
-      "SELECT id, authoring_source_kind, repository_default_branch FROM projects WHERE id = ? AND owner_email = ?",
+      "SELECT id, default_branch FROM projects WHERE id = ? AND owner_email = ?",
     )
       .bind(projectId, ownerEmail)
       .first();
@@ -286,17 +211,11 @@ export async function submitRevisionBundle(
       { error: "Product project not found" },
       { status: 404 },
     );
-  if (project.authoring_source_kind !== "local") {
-    return Response.json(
-      { error: "Project does not accept local revisions" },
-      { status: 409 },
-    );
-  }
-  if (input.ref !== `refs/heads/${project.repository_default_branch}`) {
+  if (input.ref !== `refs/heads/${project.default_branch}`) {
     await request.body.cancel();
     return Response.json(
       {
-        error: `Revision must be submitted from ${project.repository_default_branch}`,
+        error: `Revision must be submitted from ${project.default_branch}`,
       },
       { status: 409 },
     );
@@ -428,9 +347,9 @@ export async function submitRevisionBundle(
       `INSERT OR IGNORE INTO project_revisions (
          id, project_id, commit_sha, ref, is_default_branch,
          inspection_version, inspection_status, inspection_findings,
-         source_kind, source_bundle_key, source_bundle_digest, source_bundle_size,
+         source_bundle_key, source_bundle_digest, source_bundle_size,
          created_at, updated_at
-       ) VALUES (?, ?, ?, ?, 1, ?, 'pending', '[]', 'r2-bundle', ?, ?, ?, ?, ?)`,
+       ) VALUES (?, ?, ?, ?, 1, ?, 'pending', '[]', ?, ?, ?, ?, ?)`,
     )
       .bind(
         revisionId,
@@ -480,7 +399,6 @@ export async function submitRevisionBundle(
 
 interface SubmittedRevisionRow {
   id: string;
-  source_kind: "artifacts" | "r2-bundle";
   source_bundle_key: string | null;
   source_bundle_digest: string | null;
   source_bundle_size: number | null;
@@ -496,7 +414,7 @@ async function findSubmittedRevision(
 ) {
   return db
     .prepare(
-      `SELECT id, source_kind, source_bundle_key, source_bundle_digest,
+      `SELECT id, source_bundle_key, source_bundle_digest,
           source_bundle_size, ref FROM project_revisions
        WHERE project_id = ? AND commit_sha = ?`,
     )
@@ -509,7 +427,6 @@ function sameBundleIdentity(
   input: { ref: string; bundleSha256: string; bundleSize: number },
 ): boolean {
   return (
-    row.source_kind === "r2-bundle" &&
     row.ref === input.ref &&
     row.source_bundle_digest === input.bundleSha256 &&
     row.source_bundle_size === input.bundleSize
@@ -682,125 +599,6 @@ function bundleReadFailure(error: BoundaryError): Response {
     return Response.json({ error: error.message }, { status: 422 });
   }
   return platformFailure("Could not store the revision bundle", error);
-}
-
-export async function recordPushedRevision(
-  input: ArtifactRepoPushInput,
-  env: RevisionEnv,
-  workflowTimestamp?: Date,
-): Promise<RecordRevisionResult> {
-  if (!env.ARTIFACTS_ACCOUNT_ID.trim()) {
-    throw new Error("ARTIFACTS_ACCOUNT_ID is required");
-  }
-  if (!env.ARTIFACTS_NAMESPACE.trim()) {
-    throw new Error("ARTIFACTS_NAMESPACE is required");
-  }
-  const parsed = artifactRepoPushedEventSchema.safeParse(input);
-  if (!parsed.success) {
-    const issues = parsed.error.issues
-      .slice(0, 5)
-      .map((issue) => `${issue.path.join(".") || "event"}: ${issue.message}`)
-      .join("; ");
-    throw new Error(`Invalid Artifacts push event: ${issues}`);
-  }
-  const event = parsed.data;
-  if (event.source.namespace !== env.ARTIFACTS_NAMESPACE) {
-    return { kind: "ignored", reason: "namespace-mismatch" };
-  }
-  if (/^0{40}$/.test(event.payload.after)) {
-    return { kind: "ignored", reason: "branch-deletion" };
-  }
-
-  const project = await env.PROJECTS_DB.prepare(
-    `SELECT id, repository_name, repository_default_branch, repository_remote_url
-       FROM projects
-       WHERE repository_name = ? AND authoring_source_kind = 'artifacts'`,
-  )
-    .bind(event.source.repoName)
-    .first<RevisionProjectRow>();
-  if (!project) return { kind: "ignored", reason: "unknown-repository" };
-
-  const defaultRef = `refs/heads/${project.repository_default_branch}`;
-  if (event.payload.ref !== defaultRef) {
-    return { kind: "ignored", reason: "non-default-ref" };
-  }
-
-  const now =
-    "metadata" in event
-      ? event.metadata.eventTimestamp
-      : workflowTimestamp?.toISOString();
-  if (!now) throw new Error("Workflow timestamp is required");
-  const revisionId = crypto.randomUUID();
-  const inserted = await env.PROJECTS_DB.prepare(
-    `INSERT OR IGNORE INTO project_revisions (
-       id, project_id, commit_sha, ref, is_default_branch,
-       inspection_version, inspection_status, inspection_findings,
-       created_at, updated_at
-     ) VALUES (?, ?, ?, ?, 1, ?, 'pending', '[]', ?, ?)`,
-  )
-    .bind(
-      revisionId,
-      project.id,
-      event.payload.after.toLowerCase(),
-      event.payload.ref,
-      inspectionVersion,
-      now,
-      now,
-    )
-    .run();
-  if (!inserted.success) throw new Error("Could not persist project revision");
-  const row = await env.PROJECTS_DB.prepare(
-    `SELECT * FROM project_revisions
-       WHERE project_id = ? AND commit_sha = ?`,
-  )
-    .bind(project.id, event.payload.after.toLowerCase())
-    .first<RevisionRow>();
-  if (!row) throw new Error("Could not persist project revision");
-  const target = {
-    id: row.id,
-    projectId: project.id,
-    commitSha: row.commit_sha,
-    ref: row.ref,
-    inspectionStatus: row.inspection_status,
-    source: {
-      kind: "artifacts" as const,
-      repositoryName: project.repository_name,
-      repositoryRemoteUrl: project.repository_remote_url,
-    },
-  };
-  return row.inspection_status === "pending"
-    ? { kind: "pending", target }
-    : { kind: "complete", target };
-}
-
-export async function inspectRevision(
-  target: RevisionTarget,
-  env: RevisionEnv,
-  fetcher: typeof fetch = fetch,
-): Promise<InspectionResult> {
-  if (target.source.kind !== "artifacts") {
-    throw new Error("Bundle revisions must be inspected in Sandbox");
-  }
-  const source = target.source;
-  await readCommit(
-    {
-      commitSha: target.commitSha,
-      repositoryName: source.repositoryName,
-    },
-    env,
-    fetcher,
-  );
-  return inspectRevisionStructure((path) =>
-    readFile(
-      {
-        commitSha: target.commitSha,
-        repositoryName: source.repositoryName,
-      },
-      path,
-      env,
-      fetcher,
-    ),
-  );
 }
 
 export async function inspectRevisionStructure(
@@ -981,11 +779,9 @@ export async function getRevisionSourceProvenance(
   revisionId: string,
   ownerEmail: string,
   env: RevisionEnv,
-  fetcher: typeof fetch = fetch,
 ): Promise<Response> {
   const revision = await env.PROJECTS_DB.prepare(
-    `SELECT r.id AS revision_id, r.commit_sha, r.source_kind,
-        r.source_provenance, p.repository_name
+    `SELECT r.id AS revision_id, r.commit_sha, r.source_provenance
        FROM projects p
        JOIN project_revisions r ON r.project_id = p.id
        JOIN revision_builds b ON b.revision_id = r.id
@@ -995,38 +791,12 @@ export async function getRevisionSourceProvenance(
     .first<ProvenanceRevisionRow>();
   if (!revision) return provenanceNotFound();
 
-  let markdown: string;
-  if (revision.source_kind === "r2-bundle") {
-    if (!revision.source_provenance) return provenanceNotFound();
-    markdown = revision.source_provenance;
-  } else {
-    try {
-      markdown = await readFile(
-        {
-          commitSha: revision.commit_sha,
-          repositoryName: revision.repository_name,
-        },
-        "SOURCE_PROVENANCE.md",
-        env,
-        fetcher,
-      );
-    } catch (error) {
-      if (error instanceof RevisionContentError) {
-        if (error.kind === "not-found") return provenanceNotFound();
-        if (error.kind === "too-large") return invalidProvenance();
-        return Response.json(
-          { error: "Source provenance is temporarily unavailable" },
-          { status: 502 },
-        );
-      }
-      throw error;
-    }
-  }
+  if (!revision.source_provenance) return provenanceNotFound();
 
   const parsed = sourceProvenanceSchema.safeParse({
     revisionId: revision.revision_id,
     commitSha: revision.commit_sha,
-    markdown,
+    markdown: revision.source_provenance,
   });
   if (!parsed.success) return invalidProvenance();
   return Response.json(parsed.data);
@@ -1116,57 +886,6 @@ function renderFromRow(row: RevisionRow): ManagedRenderStatus | null {
   return { id: row.render_id, status: row.render_status };
 }
 
-async function readCommit(
-  target: ArtifactsContentTarget,
-  env: RevisionEnv,
-  fetcher: typeof fetch,
-): Promise<void> {
-  const response = await artifactsRequest(
-    target,
-    `commit/${target.commitSha}`,
-    env,
-    fetcher,
-  );
-  await response.body?.cancel();
-}
-
-async function readFile(
-  target: ArtifactsContentTarget,
-  path: string,
-  env: RevisionEnv,
-  fetcher: typeof fetch,
-): Promise<string> {
-  const query = new URLSearchParams({ ref: target.commitSha, path });
-  const response = await artifactsRequest(
-    target,
-    `file?${query.toString()}`,
-    env,
-    fetcher,
-  );
-  return readBoundedText(response);
-}
-
-async function artifactsRequest(
-  target: ArtifactsContentTarget,
-  suffix: string,
-  env: RevisionEnv,
-  fetcher: typeof fetch,
-): Promise<Response> {
-  const base = `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(env.ARTIFACTS_ACCOUNT_ID)}/artifacts/namespaces/${encodeURIComponent(env.ARTIFACTS_NAMESPACE)}/repos/${encodeURIComponent(target.repositoryName)}`;
-  const response = await fetcher(`${base}/${suffix}`, {
-    headers: { authorization: `Bearer ${env.ARTIFACTS_API_TOKEN}` },
-    signal: AbortSignal.timeout(requestTimeoutMs),
-  });
-  if (!response.ok) {
-    await response.body?.cancel();
-    throw new RevisionContentError(
-      `Artifacts content request returned HTTP ${response.status}`,
-      response.status === 404 ? "not-found" : "platform",
-    );
-  }
-  return response;
-}
-
 function provenanceNotFound(): Response {
   return Response.json(
     { error: "Source provenance not found" },
@@ -1182,39 +901,6 @@ function invalidProvenance(): Response {
     },
     { status: 422 },
   );
-}
-
-async function readBoundedText(response: Response): Promise<string> {
-  const declaredSize = Number(response.headers.get("content-length"));
-  if (Number.isFinite(declaredSize) && declaredSize > maxFileBytes) {
-    await response.body?.cancel();
-    throw new RevisionContentError("Artifacts file exceeds 1 MB", "too-large");
-  }
-  if (!response.body) return "";
-
-  const reader = response.body.getReader();
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    size += value.byteLength;
-    if (size > maxFileBytes) {
-      await reader.cancel();
-      throw new RevisionContentError(
-        "Artifacts file exceeds 1 MB",
-        "too-large",
-      );
-    }
-    chunks.push(value);
-  }
-  const bytes = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return new TextDecoder().decode(bytes);
 }
 
 function invalid(
@@ -1235,5 +921,3 @@ export function revisionErrorFinding(): RevisionFinding {
     message: "The revision could not be inspected",
   };
 }
-
-export type { ArtifactRepoPushedEvent };

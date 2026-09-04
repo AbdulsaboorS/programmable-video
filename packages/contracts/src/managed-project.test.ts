@@ -115,11 +115,10 @@ describe("managed project contracts", () => {
     ).toBe(false);
   });
 
-  it("requires secure reference downloads in agent handoffs", () => {
+  it("requires secure reference downloads in local agent handoffs", () => {
     const handoff = {
-      kind: "artifacts",
-      remoteUrl: "https://artifacts.example/video.git",
-      token: "git-token",
+      kind: "local",
+      projectId: "0198c7d4-a5e6-7000-8000-000000000000",
       tokenExpiresAt: "2026-08-20T11:00:00.000Z",
       defaultBranch: "main",
       references: [
@@ -147,16 +146,15 @@ describe("managed project contracts", () => {
     ).toBe(false);
   });
 
-  it("distinguishes artifacts and local authoring contracts", () => {
+  it("accepts strict local repository and handoff contracts", () => {
     expect(
       managedRepositorySchema.safeParse({
-        kind: "artifacts",
-        name: "project-video",
-        remoteUrl: "https://artifacts.example/video.git",
+        kind: "remote",
+        remoteUrl: "https://example.com/video.git",
         defaultBranch: "main",
         state: "seeded",
       }).success,
-    ).toBe(true);
+    ).toBe(false);
     expect(
       managedRepositorySchema.safeParse({
         kind: "local",
@@ -175,8 +173,18 @@ describe("managed project contracts", () => {
     expect(agentHandoffSchema.parse(localHandoff)).toEqual(localHandoff);
     expect(
       agentHandoffSchema.safeParse({
+        kind: "remote",
+        remoteUrl: "https://example.com/video.git",
+        token: "git-token",
+        tokenExpiresAt: localHandoff.tokenExpiresAt,
+        defaultBranch: "main",
+        references: [],
+      }).success,
+    ).toBe(false);
+    expect(
+      agentHandoffSchema.safeParse({
         ...localHandoff,
-        remoteUrl: "https://artifacts.example/video.git",
+        remoteUrl: "https://example.com/video.git",
       }).success,
     ).toBe(false);
   });
