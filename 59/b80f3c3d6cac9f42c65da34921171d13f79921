@@ -1,0 +1,33 @@
+apps/studio/src/App.test.tsx
+  s_89648359dead1e::t_bf5ee5134ab6d5 19,21-22
+apps/studio/src/App.tsx
+  s_89648359dead1e::t_c4b7a03dde5074 14-20,24
+apps/studio/src/FinishVideoPanel.tsx
+  s_89648359dead1e::t_a0f6dbc7825f0e 676-677,683-708
+apps/studio/src/ProjectPanel.test.tsx
+  s_89648359dead1e::t_5b5db165f10af5 642-644,675-677
+apps/studio/src/ProjectPanel.tsx
+  s_89648359dead1e::t_6def6a0adb6697 72-88,940-948,1021-1031,1046-1053,1066-1080,1083-1096,1224-1252,1763-1771
+apps/studio/src/RevisionReviewCanvas.tsx
+  s_89648359dead1e::t_11d5703dff596e 235
+apps/studio/src/app.css
+  s_89648359dead1e::t_dd214b5b8cab4f 219-222,224-240,253-260,267-282,2179-3001
+apps/studio/src/studio/workspace-presentation.tsx
+  s_89648359dead1e::t_ae9caa7d4c2a49 120,123-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "59b80f3c3d6cac9f42c65da34921171d13f79921",
+  "prompts": {},
+  "sessions": {
+    "s_89648359dead1e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f82c21ae2ffeu5ngviuS3rK3Sq",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
