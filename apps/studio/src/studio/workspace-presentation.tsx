@@ -117,9 +117,11 @@ export function TechnicalDetailsDialog({
       <Button
         size="sm"
         variant="secondary"
+        aria-label="Technical details"
         onClick={() => dialogRef.current?.showModal()}
       >
-        Technical details
+        <span className="technical-details-label">Technical details</span>
+        <span className="technical-details-label-short">Details</span>
       </Button>
       <dialog
         ref={dialogRef}

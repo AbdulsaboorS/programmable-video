@@ -125,6 +125,7 @@ const panelProps: ComponentProps<typeof FinishVideoPanel> = {
   durationInFrames: 360,
   mobileView: "preview",
   onPublicationCreated,
+  onReviewRequested: vi.fn(),
   operations,
   PreviewComponent: Preview,
 };
@@ -368,6 +369,7 @@ describe("FinishVideoPanel", () => {
         durationInFrames={360}
         mobileView="preview"
         onPublicationCreated={onPublicationCreated}
+        onReviewRequested={vi.fn()}
         PreviewComponent={Preview}
       />,
     );
@@ -405,6 +407,7 @@ describe("FinishVideoPanel", () => {
   });
 
   it("shows controls loading while the exact approved duration is unavailable", () => {
+    const onReviewRequested = vi.fn();
     render(
       <FinishVideoPanel
         projectId={publication.projectId}
@@ -413,6 +416,7 @@ describe("FinishVideoPanel", () => {
         commitSha={`a${"b".repeat(39)}`}
         mobileView="controls"
         onPublicationCreated={onPublicationCreated}
+        onReviewRequested={onReviewRequested}
         operations={operations}
       />,
     );
@@ -424,6 +428,8 @@ describe("FinishVideoPanel", () => {
     expect(
       screen.getByRole("complementary").getAttribute("data-mobile-active"),
     ).toBe("true");
+    fireEvent.click(screen.getByRole("button", { name: "Return to Review" }));
+    expect(onReviewRequested).toHaveBeenCalledOnce();
   });
 
   it("loads a requested prior spec and resets confirmation and idempotency", async () => {

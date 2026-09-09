@@ -69,13 +69,13 @@ Inter is intentionally retained as part of Kumo and Cloudflare consistency. Head
 
 ## Layout
 
-Projects use a centered `960px` maximum reading width. A project workspace fills the viewport below the `56px` header and pairs a flexible preview canvas with a `360-400px` controls panel. At `760px` and below, Preview and Controls become mutually exclusive panes with a full-width segmented switch. Controls and touch targets are at least `44px` high.
+Projects use a centered `1120px` maximum reading width. A project workspace fills the viewport below the `64px` desktop header and pairs a flexible preview canvas with a `340-380px` controls panel. At `760px` and below, the header becomes `56px`, Preview and Controls become mutually exclusive panes with a full-width segmented switch, and controls and touch targets remain at least `44px` high.
 
 Spacing follows a compact 4/8/16/24/32px rhythm. Related labels and values stay tight; stage boundaries and primary decisions receive larger separation.
 
 ## Elevation & Depth
 
-The system is flat by default. Borders and tonal surface changes establish hierarchy. Shadows are limited to temporary elevation, such as the project creation form or a sticky Finish action, and use soft blur rather than hard offsets.
+The system is flat by default. Borders and tonal surface changes establish hierarchy. Restrained gradients, translucency, and soft shadows may distinguish the application shell, screening surfaces, and temporary elevation without competing with the video.
 
 ## Shapes
 
@@ -113,4 +113,4 @@ Technical details use a native modal dialog presented as a right drawer. Escape 
 - **Don't** compress preview and controls side by side on mobile.
 - **Don't** expose infrastructure vocabulary in the primary creator journey.
 - **Don't** detach primary actions from the panel containing their inputs.
-- **Don't** add decorative animation, gradients, glass effects, or a second component system.
+- **Don't** add decorative animation, high-contrast effects, or a second component system. Keep gradients and translucency restrained to structural screening-room surfaces.

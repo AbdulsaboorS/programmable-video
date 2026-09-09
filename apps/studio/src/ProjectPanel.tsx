@@ -69,6 +69,23 @@ import {
 
 const visibleRevisionLimit = 10;
 const studioStages: StudioStage[] = ["draft", "review", "finish", "published"];
+const projectDateFormatter = new Intl.DateTimeFormat(undefined, {
+  day: "numeric",
+  month: "short",
+});
+
+function projectUpdatedLabel(value: string): string {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Updated recently"
+    : `Updated ${projectDateFormatter.format(date)}`;
+}
+
+function projectStatusLabel(status: ManagedProject["status"]): string {
+  if (status === "provisioning") return "Connecting";
+  if (status === "failed") return "Needs attention";
+  return "Ready";
+}
 
 function isStudioStage(value: string | null): value is StudioStage {
   return studioStages.some((stage) => stage === value);
@@ -920,6 +937,15 @@ export function ProjectPanel({
     setPauseRequest(0);
   }, [draftRevision?.id]);
 
+  const startCreatingProject = () => {
+    setCreating(true);
+    setBriefAgentTask(undefined);
+    setChangeAgentTask(undefined);
+    setSubmittedBrief(undefined);
+    setVideoBrief("");
+    setChangeRequest("");
+  };
+
   const projectCreation = (
     <section
       className="project-creation-screen"
@@ -992,22 +1018,17 @@ export function ProjectPanel({
             Create and manage videos made from your real product UI.
           </p>
         </div>
-        <Button
-          size="sm"
-          variant="primary"
-          icon={Plus}
-          disabled={!projectsLoaded || busy || revisionBusy !== undefined}
-          onClick={() => {
-            setCreating(true);
-            setBriefAgentTask(undefined);
-            setChangeAgentTask(undefined);
-            setSubmittedBrief(undefined);
-            setVideoBrief("");
-            setChangeRequest("");
-          }}
-        >
-          New video
-        </Button>
+        {projectsLoaded && projects.length > 0 && (
+          <Button
+            size="sm"
+            variant="primary"
+            icon={Plus}
+            disabled={busy || revisionBusy !== undefined}
+            onClick={startCreatingProject}
+          >
+            New video
+          </Button>
+        )}
       </div>
       {!projectsLoaded ? (
         <div className="projects-empty" role="status">
@@ -1022,6 +1043,14 @@ export function ProjectPanel({
           <p>
             Start by connecting the product repository for your first video.
           </p>
+          <Button
+            size="sm"
+            variant="primary"
+            icon={Plus}
+            onClick={startCreatingProject}
+          >
+            Connect your first product
+          </Button>
         </div>
       ) : (
         <div className="recent-projects">
@@ -1034,12 +1063,37 @@ export function ProjectPanel({
                   className="project-list-button"
                   onClick={() => openProject(project.id)}
                 >
-                  <FolderOpen size={20} weight="duotone" />
-                  <span>
-                    <strong>{project.name}</strong>
-                    <small>
+                  <span className="project-list-preview" aria-hidden="true">
+                    <span>{project.name.charAt(0)}</span>
+                    <small>Source</small>
+                  </span>
+                  <span className="project-list-details">
+                    <span className="project-list-title">
+                      <strong>{project.name}</strong>
+                      <span
+                        className="project-status"
+                        data-status={project.status}
+                      >
+                        {projectStatusLabel(project.status)}
+                      </span>
+                    </span>
+                    <small className="project-source">
                       {project.source.host}/{project.source.projectPath}
                     </small>
+                    <span className="project-list-metadata">
+                      <span>
+                        {project.brief ? "Brief ready" : "Brief needed"}
+                      </span>
+                      <span>
+                        {project.references.length}{" "}
+                        {project.references.length === 1
+                          ? "reference"
+                          : "references"}
+                      </span>
+                      <time dateTime={project.updatedAt}>
+                        {projectUpdatedLabel(project.updatedAt)}
+                      </time>
+                    </span>
                   </span>
                 </button>
               </li>
@@ -1167,6 +1221,35 @@ export function ProjectPanel({
                         )}
                       </div>
                     </div>
+                    <section
+                      className="mobile-preview-context"
+                      aria-label="Current project"
+                    >
+                      <div>
+                        <p className="eyebrow">Current project</p>
+                        <strong>{selected.name}</strong>
+                        <small>
+                          {selected.source.host}/{selected.source.projectPath}
+                        </small>
+                      </div>
+                      <dl>
+                        <div>
+                          <dt>Brief</dt>
+                          <dd>{selected.brief ? "Ready" : "Needed"}</dd>
+                        </div>
+                        <div>
+                          <dt>References</dt>
+                          <dd>{selected.references.length}</dd>
+                        </div>
+                      </dl>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => setMobileView("controls")}
+                      >
+                        Open controls
+                      </Button>
+                    </section>
                   </div>
                   <aside
                     className="stage-controls draft-controls"
@@ -1677,9 +1760,15 @@ export function ProjectPanel({
                         <div className="approved-draft-action" role="status">
                           <div>
                             <CheckCircle weight="fill" />
-                            <strong>
-                              This draft is approved and ready to finish.
-                            </strong>
+                            <div>
+                              <strong>
+                                Approval saved for this exact draft.
+                              </strong>
+                              <p>
+                                Continue to Finish, or reopen the preview for
+                                another look.
+                              </p>
+                            </div>
                           </div>
                           <Button
                             size="sm"
@@ -1771,19 +1860,6 @@ export function ProjectPanel({
                   <p className="eyebrow">Finish</p>
                   <h2 id="finish-stage-title">Prepare the approved video</h2>
                 </div>
-                {model.exactApproval &&
-                  draftRevision &&
-                  reviewPosition?.revisionId !== draftRevision.id && (
-                    <div className="render-progress" role="status">
-                      <span className="activity-dot" />
-                      <div>
-                        <strong>Loading finishing controls</strong>
-                        <p>
-                          The approved preview is reporting its exact duration.
-                        </p>
-                      </div>
-                    </div>
-                  )}
                 <div
                   className="stage-layout finish-stage-layout"
                   data-mobile-view={mobileView}
@@ -1794,6 +1870,7 @@ export function ProjectPanel({
                     projectId={selected.id}
                     projectName={selected.name}
                     onPublicationCreated={publicationCreated}
+                    onReviewRequested={() => selectStage("review")}
                     {...(requestedSpec ? { requestedSpec } : {})}
                     {...(model.exactApproval &&
                     draftRevision &&

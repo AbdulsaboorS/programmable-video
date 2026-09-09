@@ -639,7 +639,9 @@ describe("product projects", () => {
     render(<ProjectPanel />);
     await screen.findByRole("heading", { name: "Projects" });
     await screen.findByRole("heading", { name: "No projects yet" });
-    fireEvent.click(screen.getByRole("button", { name: "New video" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Connect your first product" }),
+    );
     await screen.findByLabelText("Project name");
     fireEvent.change(screen.getByLabelText("Project name"), {
       target: { value: "Acme Dashboard" },
@@ -670,7 +672,9 @@ describe("product projects", () => {
     render(<ProjectPanel />);
 
     await screen.findByText(/Authentication required/);
-    fireEvent.click(screen.getByRole("button", { name: "New video" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Connect your first product" }),
+    );
     expect(screen.getByLabelText("Project name")).toBeDefined();
   });
 

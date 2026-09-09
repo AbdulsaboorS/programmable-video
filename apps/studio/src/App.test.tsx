@@ -16,7 +16,10 @@ describe("Studio shell", () => {
     );
 
     expect(screen.getByText("Programmable Video")).toBeDefined();
+    expect(screen.getByText("Studio")).toBeDefined();
     expect(screen.getByText("Creator workspace")).toBeDefined();
+    expect(screen.queryByText("Ready")).toBeNull();
+    expect(screen.queryByText("Prototype")).toBeNull();
     expect(screen.getByLabelText("Product projects")).toBeDefined();
     expect(screen.queryByText("Story inspector")).toBeNull();
     expect(screen.queryByRole("button", { name: "Render video" })).toBeNull();

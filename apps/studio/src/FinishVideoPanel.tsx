@@ -58,6 +58,7 @@ interface FinishVideoPanelProps {
   projectName: string;
   revisionId?: string;
   onPublicationCreated: (publication: ManagedPublication) => void;
+  onReviewRequested: () => void;
   requestedSpec?: { key: string; spec: FinishingSpec };
   operations?: FinishVideoPanelOperations;
   PreviewComponent?: ComponentType<FinishedOutputPreviewProps>;
@@ -88,6 +89,7 @@ export function FinishVideoPanel({
   projectId,
   revisionId,
   onPublicationCreated,
+  onReviewRequested,
   requestedSpec,
   operations = defaultOperations,
   PreviewComponent = FinishedOutputPreview,
@@ -673,12 +675,42 @@ export function FinishVideoPanel({
             </p>
           </section>
         ) : (
-          <div className="render-progress" role="status">
+          <div className="render-progress finish-loading-state" role="status">
+            <span className="status-kicker">Approved draft</span>
             <span className="activity-dot" />
             <div>
               <strong>Loading finishing controls</strong>
               <p>The approved preview is reporting its exact duration.</p>
             </div>
+            <span className="finish-loading-track" aria-hidden="true">
+              <span />
+            </span>
+            <ol className="finish-loading-steps">
+              <li data-state="complete">
+                <span aria-hidden="true" />
+                <div>
+                  <small>Source</small>
+                  <strong>Approved</strong>
+                </div>
+              </li>
+              <li data-state="current">
+                <span aria-hidden="true" />
+                <div>
+                  <small>Duration</small>
+                  <strong>Reading preview</strong>
+                </div>
+              </li>
+              <li data-state="waiting">
+                <span aria-hidden="true" />
+                <div>
+                  <small>Controls</small>
+                  <strong>Next</strong>
+                </div>
+              </li>
+            </ol>
+            <Button size="sm" variant="secondary" onClick={onReviewRequested}>
+              Return to Review
+            </Button>
           </div>
         )}
       </aside>
