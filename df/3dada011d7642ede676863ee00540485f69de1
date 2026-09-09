@@ -1,0 +1,30 @@
+apps/studio/src/App.test.tsx
+  s_bee996d02c7245::t_1904d71fe42b6c 21
+apps/studio/src/ProjectPanel.tsx
+  s_bee996d02c7245::t_1904d71fe42b6c 1873
+apps/studio/DESIGN.md
+  s_bee996d02c7245::t_1904d71fe42b6c 72,78,116
+apps/studio/src/FinishVideoPanel.test.tsx
+  s_bee996d02c7245::t_759772c725aab9 372
+  s_bee996d02c7245::t_1904d71fe42b6c 128,410,419,431-432
+apps/studio/src/FinishVideoPanel.tsx
+  s_bee996d02c7245::t_1904d71fe42b6c 61,92,711-713
+apps/studio/src/app.css
+  s_bee996d02c7245::t_1904d71fe42b6c 2179,2285,2902
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "df3dada011d7642ede676863ee00540485f69de1",
+  "prompts": {},
+  "sessions": {
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
