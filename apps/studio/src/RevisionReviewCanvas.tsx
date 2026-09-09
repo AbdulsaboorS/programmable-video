@@ -232,6 +232,7 @@ export function RevisionReviewCanvas({
           />
         ) : (
           <div className="review-stage-status" role="status">
+            <span className="status-kicker">Exact build</span>
             <span className="activity-dot" />
             <strong>
               {error ? "Preview unavailable" : "Loading exact build"}

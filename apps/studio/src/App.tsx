@@ -1,4 +1,3 @@
-import { Badge, CloudflareLogo } from "@cloudflare/kumo";
 import type { ComponentType } from "react";
 
 import { ProjectPanel } from "./ProjectPanel";
@@ -12,15 +11,17 @@ export function App({
     <div className="studio-shell">
       <header className="studio-header">
         <div className="brand-lockup">
-          <CloudflareLogo variant="glyph" className="brand-mark" />
-          <span className="brand-name">Programmable Video</span>
-          <Badge variant="beta">Prototype</Badge>
+          <span className="brand-mark" aria-hidden="true">
+            PV
+          </span>
+          <span className="brand-wordmark">
+            <span className="brand-name">Programmable Video</span>
+            <span className="brand-edition">Studio</span>
+          </span>
         </div>
         <div className="header-meta">
           <span>Creator workspace</span>
-          <Badge appearance="dot" variant="success">
-            Live
-          </Badge>
+          <div className="header-status">Ready</div>
         </div>
       </header>
 
