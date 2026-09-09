@@ -58,6 +58,7 @@ interface FinishVideoPanelProps {
   projectName: string;
   revisionId?: string;
   onPublicationCreated: (publication: ManagedPublication) => void;
+  onReviewRequested: () => void;
   requestedSpec?: { key: string; spec: FinishingSpec };
   operations?: FinishVideoPanelOperations;
   PreviewComponent?: ComponentType<FinishedOutputPreviewProps>;
@@ -88,6 +89,7 @@ export function FinishVideoPanel({
   projectId,
   revisionId,
   onPublicationCreated,
+  onReviewRequested,
   requestedSpec,
   operations = defaultOperations,
   PreviewComponent = FinishedOutputPreview,
@@ -706,6 +708,9 @@ export function FinishVideoPanel({
                 </div>
               </li>
             </ol>
+            <Button size="sm" variant="secondary" onClick={onReviewRequested}>
+              Return to Review
+            </Button>
           </div>
         )}
       </aside>

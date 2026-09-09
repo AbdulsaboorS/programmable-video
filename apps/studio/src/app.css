@@ -264,22 +264,6 @@ ol {
   font-size: 0.75rem;
 }
 
-.header-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--studio-text-strong);
-  font-weight: 600;
-}
-
-.header-status::before {
-  inline-size: 6px;
-  block-size: 6px;
-  border-radius: 50%;
-  background: var(--studio-success);
-  content: "";
-}
-
 .studio-content {
   inline-size: 100%;
   min-width: 0;
@@ -2192,7 +2176,7 @@ section.workspace-card {
   --studio-text-subtle: #66635d;
   --studio-media: #111313;
   --studio-media-raised: #191b1b;
-  --screening-accent: #e85d24;
+  --screening-accent: #c84a17;
   --screening-warm: #746f66;
   --screening-status: #8a5a16;
   --screening-status-bg: #f3ead7;
@@ -2298,7 +2282,7 @@ body {
   font-weight: 650;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  content: "Screening room  /  Ready";
+  content: "Screening room";
 }
 
 .projects-empty::after {
@@ -2915,7 +2899,7 @@ body {
   }
 
   .studio-stage-stepper button {
-    min-block-size: 40px;
+    min-block-size: 44px;
   }
 
   .mobile-workspace-toggle {

@@ -21,7 +21,6 @@ export function App({
         </div>
         <div className="header-meta">
           <span>Creator workspace</span>
-          <div className="header-status">Ready</div>
         </div>
       </header>
 

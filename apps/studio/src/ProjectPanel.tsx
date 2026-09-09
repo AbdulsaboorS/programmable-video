@@ -1870,6 +1870,7 @@ export function ProjectPanel({
                     projectId={selected.id}
                     projectName={selected.name}
                     onPublicationCreated={publicationCreated}
+                    onReviewRequested={() => selectStage("review")}
                     {...(requestedSpec ? { requestedSpec } : {})}
                     {...(model.exactApproval &&
                     draftRevision &&
