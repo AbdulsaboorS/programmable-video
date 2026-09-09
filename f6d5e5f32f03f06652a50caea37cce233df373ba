@@ -1,0 +1,47 @@
+CONTRIBUTING.md
+  s_4df2129ccaa1fa::t_39fa546485aa5b 1-17
+LICENSE
+  s_4df2129ccaa1fa::t_0ea1c329bb043d 1-201
+README.md
+  s_4df2129ccaa1fa::t_e97465a5c27728 1-169
+SECURITY.md
+  s_4df2129ccaa1fa::t_b5563690ef60c3 1-11
+docs/creator-journey.md
+  s_e74336aa5f684d::t_0c0bf9484c2709 1-174
+docs/deployment-runbook.md
+  s_4df2129ccaa1fa::t_15947c67d35673 1-206
+docs/finishing-and-delivery-slice.md
+  s_4df2129ccaa1fa::t_fd99a61735134a 1-123
+docs/iteration-model.md
+  s_e74336aa5f684d::t_f95d42984f7785 1-72
+docs/product-overview.md
+  s_4df2129ccaa1fa::t_3d907ab0000a4d 1-74
+docs/stage-4-agent-authoring.md
+  s_e74336aa5f684d::t_4608c9f1063dcc 1-189
+docs/studio-design-direction.md
+  s_4df2129ccaa1fa::t_7191d0db093da1 1-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f6d5e5f32f03f06652a50caea37cce233df373ba",
+  "prompts": {},
+  "sessions": {
+    "s_4df2129ccaa1fa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa6b23773ffeq5OtUgb04lkNZA",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_e74336aa5f684d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa68f97f7ffel6lRxhMuhWKrZh",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}

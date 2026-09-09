@@ -1,0 +1,19 @@
+README.md
+  s_dd9d8a9b8c75d7::t_59e610f3145510 11,13,22,26-31,33,108,114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2f185e4eefae0a8db4c2810302e056c062f43465",
+  "prompts": {},
+  "sessions": {
+    "s_dd9d8a9b8c75d7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f9ce050b1ffeiG15Sez9uts6OX",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}

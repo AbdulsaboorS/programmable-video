@@ -1,0 +1,35 @@
+.github/workflows/verify.yml
+  s_e74336aa5f684d::t_cbf612fdcd4da2 1-32
+.gitignore
+  s_4df2129ccaa1fa::t_415667bb85aba7 1-15
+.husky/pre-commit
+  s_4df2129ccaa1fa::t_0b383d3de8e4c5 1
+.lintstagedrc.json
+  s_4df2129ccaa1fa::t_b85401efe12057 1-4
+.prettierignore
+  s_e74336aa5f684d::t_f8e64e9dc8f41e 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f76dd543a6c673660621884f98cfbb9c35327c32",
+  "prompts": {},
+  "sessions": {
+    "s_4df2129ccaa1fa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa6b23773ffeq5OtUgb04lkNZA",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    },
+    "s_e74336aa5f684d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa68f97f7ffel6lRxhMuhWKrZh",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}

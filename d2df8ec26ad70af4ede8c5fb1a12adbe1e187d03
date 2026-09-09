@@ -1,0 +1,57 @@
+AGENTS.md
+  s_bee996d02c7245::t_dd70f7a5f3c5db 28,50
+README.md
+  s_bee996d02c7245::t_dd2d75e6061a92 28-29,46,66,68,70,94-103,142
+apps/project-cli/src/project-command.ts
+  s_bee996d02c7245::t_7fd1faf0e08b32 15,164,209-241
+apps/project-cli/test/project-command.test.ts
+  s_bee996d02c7245::t_bd6f4be07a14e7 69-86
+apps/studio/.dev.vars.example
+  s_bee996d02c7245::t_9a0c4b5efdf6a3 4
+apps/studio/src/ProjectPanel.test.tsx
+  s_bee996d02c7245::t_5ef0d67df476bd 79,81,240,273-274,359,370,377,380,384,387,405,460,603-604,618,1122,1179
+apps/studio/src/ProjectPanel.tsx
+  s_bee996d02c7245::t_5d9ec8bfb204e1 209,211,251,1206,1228,1231-1233,1286-1287,1701,1706-1707
+apps/studio/worker/index.ts
+  s_bee996d02c7245::t_08749d18cb1847 414,418,422,470-472,474-475
+apps/studio/worker/projects.test.ts
+  s_bee996d02c7245::t_96b9b6967218bd 2,31,171,174-175,262,300-301,321,335-336,370,373,388,405,420,423,444-445,488-489,495,504-505
+apps/studio/worker/projects.ts
+  s_bee996d02c7245::t_15827c089fe7a6 40,152,154,351-353,355,358,360,362-372,496-500
+apps/studio/worker/revision-builds.ts
+  s_bee996d02c7245::t_25fe6815a93e25 251,259,262,268-269,271,283,292-293
+apps/studio/worker/revision-bundle-submission.test.ts
+  s_bee996d02c7245::t_4ee91ed61b8ce3 37,47,204
+apps/studio/worker/revision-provenance.test.ts
+  s_bee996d02c7245::t_59b53c82c0d5e4 33,66,87-88
+apps/studio/worker/revisions.test.ts
+  s_bee996d02c7245::t_8ec68e7b51c8a9 2,6,21-23,59-60,176,178-179,181,195-197
+apps/studio/worker/revisions.ts
+  s_bee996d02c7245::t_9d873b149dee62 88-90,100-101,118-119,121,134-136,140,146-148,198,202,214,218,350,352,417,784,794,799
+apps/studio/worker/worker-configuration.d.ts
+  s_bee996d02c7245::t_e56b124752573c 2,36
+docs/deployment-runbook.md
+  s_bee996d02c7245::t_5e3804b0499820 1,3,5,7-13,15,17,24,26,29-30,33,35,37-39,42,45,47,49,51,53,56,59,61,63-65,68,71,73,75,77,79,82,85,87,89-97,99,101,103,112
+packages/contracts/src/managed-project.test.ts
+  s_bee996d02c7245::t_11cad5ae8b3a4e 118,120-121,149,152-153,157,174-183,187
+packages/contracts/src/managed-project.ts
+  s_bee996d02c7245::t_d51d1a7d98d874 54,62,188,198
+packages/contracts/src/project-revision.test.ts
+  s_bee996d02c7245::t_53091e823670e6 178,180-181,187,191,193,197-198,200-203,205,207-210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d2df8ec26ad70af4ede8c5fb1a12adbe1e187d03",
+  "prompts": {},
+  "sessions": {
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
