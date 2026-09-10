@@ -107,7 +107,7 @@ interface RendererEnvironmentVariables {
 
 export class RendererContainer extends Container<Env> {
   defaultPort = 8080;
-  sleepAfter = "2m";
+  sleepAfter = "10m";
   envVars: RendererEnvironmentVariables = {
     CONTAINER_EXTRA_CA_CERT: this.env.CONTAINER_EXTRA_CA_CERT ?? "",
   };
