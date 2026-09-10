@@ -1,0 +1,22 @@
+apps/studio/src/RevisionReviewCanvas.test.tsx
+  s_bee996d02c7245::t_a1041e0cca5e71 144-156,163-164
+  s_bee996d02c7245::t_07b0ab2ebae62a 157-162
+apps/studio/src/RevisionReviewCanvas.tsx
+  s_bee996d02c7245::t_07b0ab2ebae62a 41-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "30b9738416accc5b306e6a1c14a15c3da2f72833",
+  "prompts": {},
+  "sessions": {
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
