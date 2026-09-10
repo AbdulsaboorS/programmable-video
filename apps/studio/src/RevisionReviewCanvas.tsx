@@ -38,7 +38,17 @@ export function safePreviewOrigin(
   studioOrigin: string,
 ): string {
   const url = new URL(sessionUrl);
-  if (url.protocol !== "https:" || url.origin === studioOrigin) {
+  const studioUrl = new URL(studioOrigin);
+  const loopbackHosts = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
+  const localDevelopment =
+    url.protocol === "http:" &&
+    studioUrl.protocol === "http:" &&
+    loopbackHosts.has(url.hostname) &&
+    loopbackHosts.has(studioUrl.hostname);
+  if (
+    (url.protocol !== "https:" && !localDevelopment) ||
+    url.origin === studioUrl.origin
+  ) {
     throw new Error("Preview session must use a separate secure origin");
   }
   return url.origin;

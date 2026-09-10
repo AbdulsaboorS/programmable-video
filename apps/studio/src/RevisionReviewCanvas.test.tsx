@@ -141,6 +141,27 @@ describe("revision review canvas", () => {
     ).toThrow("separate secure origin");
   });
 
+  it("allows distinct HTTP loopback origins for local development", () => {
+    expect(
+      safePreviewOrigin(
+        "http://localhost:5174/launch",
+        "http://localhost:5173",
+      ),
+    ).toBe("http://localhost:5174");
+    expect(() =>
+      safePreviewOrigin(
+        "http://preview.example/launch",
+        "http://localhost:5173",
+      ),
+    ).toThrow("separate secure origin");
+    expect(() =>
+      safePreviewOrigin(
+        "http://localhost:5173/launch",
+        "http://localhost:5173",
+      ),
+    ).toThrow("separate secure origin");
+  });
+
   it("embeds the exact session with only the required sandbox permissions", async () => {
     vi.stubGlobal(
       "fetch",
