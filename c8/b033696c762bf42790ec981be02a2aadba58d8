@@ -1,0 +1,20 @@
+docs/launch-handoff.md
+  s_bee996d02c7245::t_28516d07348dad 7-8,19,40,45,51-55,57,73,77,91,102,110,118,136,139,145
+  s_bee996d02c7245::t_bbee5f283fc8ba 1-6,9-18,20-39,41-44,46-50,56,58-72,74-76,78-90,92-101,103-109,111-117,119-135,137-138,140-144,146-149
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c8b033696c762bf42790ec981be02a2aadba58d8",
+  "prompts": {},
+  "sessions": {
+    "s_bee996d02c7245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f98164713ffeXJSOgfaKdQg446",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "abdulsaboor <abdulsaboor@cloudflare.com>"
+    }
+  }
+}
