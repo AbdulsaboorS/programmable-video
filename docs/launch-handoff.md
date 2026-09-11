@@ -6,6 +6,8 @@ This is a temporary handoff. Keep its pull request in draft, and close it withou
 
 Status date: September 11, 2026. The maintainer owns the launch and all public posting decisions. An agent may prepare assets and changes, but must receive explicit maintainer approval before posting, merging, or closing the handoff pull request.
 
+Draft handoff pull request: <https://github.com/AbdulsaboorS/programmable-video/pull/2>
+
 ## Product In One Sentence
 
 Programmable Video turns a product repository, visual references, and a short brief into a deterministic React video that can be reviewed locally at an exact Git commit and published to Cloudflare Stream.
